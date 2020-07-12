@@ -1,0 +1,67 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: vouch
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - vouch.joshcorp.co
+    secretName: vouch-joshcorp-tls
+  rules:
+  - host: vouch.joshcorp.co
+    http:
+      paths:
+      - backend:
+          serviceName: vouch
+          servicePort: http
+        path: /
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vouch
+spec:
+  selector:
+    app: vouch
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vouch
+spec:
+  selector:
+    matchLabels:
+      app: vouch
+  template:
+    metadata:
+      labels:
+        app: vouch
+    spec:
+      containers:
+      - name: vouch
+        image: voucher/vouch-proxy:latest-arm
+        resources:
+          limits:
+            memory: "32Mi"
+            cpu: "50m"
+        ports:
+        - name: http
+          containerPort: 9090
+        env:
+        - name: VOUCH_PORT
+          value: '9090'
+        volumeMounts:
+          - name: vouch-config
+            mountPath: /config
+            readOnly: true
+      volumes:
+        - name: vouch-config
+          configMap:
+            name: vouch-config

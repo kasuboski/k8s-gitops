@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vouch-config
+data:
+  config.yml: |
+    vouch:
+      port: 9090
+      
+      cookie:
+        domain: joshcorp.co
+
+      # set allowAllUsers: true to use Vouch Proxy to just accept anyone who can authenticate at the configured provider
+      allowAllUsers: true
+
+      # Setting publicAccess: true will accept all requests, even without a cookie. 
+      publicAccess: false
+
+    oauth:
+      # IndieAuth
+      # https://indielogin.com/api
+      provider: indieauth
+      client_id: https://joshcorp.co
+      auth_url: https://indieauth.com/auth?me=https://www.joshkasuboski.com
+      callback_url: https://vouch.joshcorp.co/auth

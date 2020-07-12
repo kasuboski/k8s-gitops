@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ekster
+  labels:
+    app.kubernetes.io/name: ekster
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - microsub.joshcorp.co
+    secretName: microsub-joshcorp-tls
+  rules:
+  - host: microsub.joshcorp.co
+    http:
+      paths:
+      - backend:
+          serviceName: ekster
+          servicePort: http
+        path: /

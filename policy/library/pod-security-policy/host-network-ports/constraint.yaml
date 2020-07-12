@@ -1,0 +1,19 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sPSPHostNetworkingPorts
+metadata:
+  name: psp-host-network-ports
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    labelSelector:
+      matchExpressions:
+      - key: app
+        operator: NotIn
+        values: ["openebs"]
+      - key: component
+        operator: NotIn
+        values: ["ndm"]
+  parameters:
+    hostNetwork: false

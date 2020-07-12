@@ -1,0 +1,107 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ekster
+  labels:
+    app: ekster
+    app.kubernetes.io/name: ekster
+    app.kubernetes.io/part-of: ekster
+spec:
+  selector:
+    app.kubernetes.io/name: ekster
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ekster
+  labels:
+    app: ekster
+    app.kubernetes.io/name: ekster
+    app.kubernetes.io/part-of: ekster
+spec:
+  selector:
+      matchLabels:
+        app.kubernetes.io/name: ekster
+  template:
+    metadata:
+      labels:
+        app: ekster
+        app.kubernetes.io/name: ekster
+        app.kubernetes.io/part-of: ekster
+    spec:
+      containers:
+      - name: ekster
+        image: kasuboski/ekster
+        args:
+        - "-port"
+        - "8080"
+        - "-templates"
+        - "/app/templates"
+        workingDir: /opt/microsub
+        env:
+          - name: EKSTER_BASEURL
+            value: "https://microsub.joshcorp.co"
+        ports:
+          - name: http
+            containerPort: 8080
+        volumeMounts:
+          - name: data
+            mountPath: /opt/microsub
+        resources:
+          limits:
+            cpu: 100m
+            memory: 64Mi
+      volumes:
+        - name: data
+          configMap:
+              name: ekster-backend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  labels:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/part-of: ekster
+    app: redis
+spec:
+  selector:
+    app.kubernetes.io/name: redis
+  ports:
+  - port: 6379
+    targetPort: redis
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  labels:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/part-of: ekster
+    app: redis
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: redis
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: redis
+        app.kubernetes.io/part-of: ekster
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: eqalpha/keydb
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "100m"
+        ports:
+        - name: redis
+          containerPort: 6379
