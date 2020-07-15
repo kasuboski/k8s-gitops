@@ -1,0 +1,4 @@
+resources:
+  - cert-manager.yaml
+  - clusterissuer-letsencrypt-prod.yaml
+  - clusterissuer-letsencrypt-staging.yaml

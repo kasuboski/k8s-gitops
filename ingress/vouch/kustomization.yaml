@@ -1,0 +1,3 @@
+resources:
+- vouch-cm.yaml
+- vouch-deploy.yaml

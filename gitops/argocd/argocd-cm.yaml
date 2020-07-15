@@ -6,3 +6,13 @@ data:
   users.anonymous.enabled: "true"
   admin.enabled: "false"
   statusbadge.enabled: "true"
+  resource.customizations: |
+    apiextensions.k8s.io/CustomResourceDefinition:
+      ignoreDifferences: |
+        jsonPointers:
+        - /status
+    admissionregistration.k8s.io/ValidatingWebhookConfiguration:
+      ignoreDifferences: |
+        jsonPointers:
+        - /webhooks/0/clientConfig/caBundle
+        - /webhooks/1/clientConfig/caBundle
