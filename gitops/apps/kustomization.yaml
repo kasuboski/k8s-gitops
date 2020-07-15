@@ -1,0 +1,6 @@
+resources:
+  - default-project.yaml
+  - indieweb-app.yaml
+  - ingress-app.yaml
+  - policy-app.yaml
+  - upgrades-app.yaml
