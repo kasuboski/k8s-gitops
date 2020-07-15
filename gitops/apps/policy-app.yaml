@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: policy
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/kasuboski/k8s-gitops.git
+    targetRevision: master
+    path: policy
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: gatekeeper-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

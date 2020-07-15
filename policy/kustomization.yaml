@@ -1,0 +1,12 @@
+resources:
+- gatekeeper.yaml
+- library/pod-security-policy/host-filesystem/constraint.yaml
+- library/pod-security-policy/host-filesystem/template.yaml
+- library/pod-security-policy/host-namespaces/constraint.yaml
+- library/pod-security-policy/host-namespaces/template.yaml
+- library/pod-security-policy/host-network-ports/constraint.yaml
+- library/pod-security-policy/host-network-ports/template.yaml
+- library/pod-security-policy/privileged-containers/constraint.yaml
+- library/pod-security-policy/privileged-containers/template.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
