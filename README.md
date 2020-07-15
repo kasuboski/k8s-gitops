@@ -1,5 +1,7 @@
 # Managing Kubernetes with GitOps
-This isn't fully automated, but it should represent all of the yaml used on my home k3s cluster.
+[![](https://argocd.joshcorp.co/api/badge?name=apps&revision=true)](https://argocd.joshcorp.co/applications/apps)
+
+This repo uses [ArgoCD](https://argoproj.github.io/projects/argo-cd) to sync this repo with the cluster. Not everything is automatic, mainly things with a secret and helm charts.
 
 That cluster is described more [here](https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/).
 
