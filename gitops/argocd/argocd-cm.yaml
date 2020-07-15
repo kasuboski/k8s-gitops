@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+data:
+  users.anonymous.enabled: "true"
+  admin.enabled: "false"
+  statusbadge.enabled: "true"
