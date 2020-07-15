@@ -1,7 +1,7 @@
 # Managing Kubernetes with GitOps
 [![](https://argocd.joshcorp.co/api/badge?name=apps&revision=true)](https://argocd.joshcorp.co/applications/apps)
 
-This repo uses [ArgoCD](https://argoproj.github.io/projects/argo-cd) to sync this repo with the cluster. Not everything is automatic, mainly things with a secret and helm charts.
+This repo is synced with the cluster using [ArgoCD](https://argoproj.github.io/projects/argo-cd). Not everything is automatic, mainly things with a secret and helm charts.
 
 That cluster is described more [here](https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/).
 
