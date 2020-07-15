@@ -47,9 +47,6 @@ spec:
       containers:
       - name: vouch
         image: voucher/vouch-proxy:latest-arm
-        args:
-        - --config
-        - "/config/config.yml"
         resources:
           limits:
             memory: "32Mi"
@@ -58,19 +55,13 @@ spec:
         - name: http
           containerPort: 9090
         env:
-        - name: VOUCH_ROOT
-          value: /store
         - name: VOUCH_PORT
           value: '9090'
         volumeMounts:
           - name: vouch-config
             mountPath: /config
             readOnly: true
-          - name: empty
-            mountPath: /store/config
       volumes:
         - name: vouch-config
           configMap:
             name: vouch-config
-        - name: empty
-          emptyDir: {}
