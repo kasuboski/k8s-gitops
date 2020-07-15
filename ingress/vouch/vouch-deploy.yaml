@@ -67,7 +67,7 @@ spec:
             mountPath: /config
             readOnly: true
           - name: empty
-            mountPath: /store
+            mountPath: /store/config
       volumes:
         - name: vouch-config
           configMap:
