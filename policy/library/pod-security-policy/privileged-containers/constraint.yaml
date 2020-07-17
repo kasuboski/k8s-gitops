@@ -9,3 +9,4 @@ spec:
         kinds: ["Pod"]
     excludedNamespaces:
     - openebs
+    - system-upgrade

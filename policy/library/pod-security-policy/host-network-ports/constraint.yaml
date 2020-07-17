@@ -15,5 +15,7 @@ spec:
       - key: component
         operator: NotIn
         values: ["ndm"]
+    excludedNamespaces:
+      - system-upgrade
   parameters:
     hostNetwork: false
