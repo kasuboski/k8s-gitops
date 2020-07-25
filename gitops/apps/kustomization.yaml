@@ -3,4 +3,5 @@ resources:
   - indieweb-app.yaml
   - ingress-app.yaml
   - policy-app.yaml
+  - secrets-app.yaml
   - upgrades-app.yaml
