@@ -97,7 +97,7 @@ spec:
     spec:
       containers:
       - name: redis
-        image: eqalpha/keydb
+        image: redis
         resources:
           limits:
             memory: "256Mi"
