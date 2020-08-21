@@ -22,3 +22,4 @@ metadata:
       - name: ReplicaCount
         value: "1"
 provisioner: openebs.io/provisioner-iscsi
+reclaimPolicy: Retain

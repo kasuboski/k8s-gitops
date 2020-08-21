@@ -1,5 +1,20 @@
 ---
 apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fathom
+  labels:
+    app: fathom
+    app.kubernetes.io/name: fathom
+spec:
+  storageClassName: openebs-cstor-1-replica-disk
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: fathom
@@ -41,16 +56,17 @@ spec:
             containerPort: 8080
         volumeMounts:
           - name: data
-            mountPath: /var/data/fathom
+            mountPath: /var/data
           - name: config
             mountPath: /etc/fathom
         resources:
           limits:
             cpu: 100m
-            memory: 1Gi # huge for emptyDir
+            memory: 64Mi
       volumes:
         - name: data
-          emptyDir: {}
+          persistentVolumeClaim:
+              claimName: fathom
         - name: config
           secret:
             secretName: fathom-config
