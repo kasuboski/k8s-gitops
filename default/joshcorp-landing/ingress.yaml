@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: joshcorp-landing
+  labels:
+    app.kubernetes.io/name: joshcorp-landing
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - joshcorp.co
+    secretName: root-joshcorp-tls
+  rules:
+  - host: joshcorp.co
+    http:
+      paths:
+      - backend:
+          serviceName: joshcorp-landing
+          servicePort: http
+        path: /
