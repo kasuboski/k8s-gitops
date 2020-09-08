@@ -1,0 +1,3 @@
+resources:
+  - transmission-sealed-secret.json
+  - transmission.yaml
