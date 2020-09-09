@@ -1,0 +1,94 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: radarr
+  labels:
+    app: radarr
+    app.kubernetes.io/name: radarr
+spec:
+  storageClassName: openebs-cstor-1-replica-disk
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: radarr
+  labels:
+    app: radarr
+    app.kubernetes.io/name: radarr
+spec:
+  selector:
+    app.kubernetes.io/name: radarr
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: radarr
+  labels:
+    app: radarr
+    app.kubernetes.io/name: radarr
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: radarr
+  template:
+    metadata:
+      labels:
+        app: radarr
+        app.kubernetes.io/name: radarr
+    spec:
+      containers:
+      - name: radarr
+        image: linuxserver/radarr
+        env:
+        - name: TZ
+          value: America/Chicago
+        volumeMounts:
+          - name: radarr-config
+            mountPath: /config
+          - name: media
+            subPath: Video/Movies
+            mountPath: /movies
+          - name: media
+            subPath: downloads
+            mountPath: /downloads
+        livenessProbe:
+          tcpSocket:
+            port: http
+          initialDelaySeconds: 60
+          failureThreshold: 5
+          timeoutSeconds: 10
+        readinessProbe:
+          tcpSocket:
+            port: http
+          initialDelaySeconds: 60
+          failureThreshold: 5
+          timeoutSeconds: 10
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+        ports:
+        - name: http
+          containerPort: 7878
+      volumes:
+      - name: radarr-config
+        persistentVolumeClaim:
+            claimName: radarr
+      - name: media
+        persistentVolumeClaim:
+            claimName: media
+

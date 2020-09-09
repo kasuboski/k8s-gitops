@@ -2,3 +2,5 @@ resources:
   - nfs-media-volume.yaml
   - vpn-config-sealed-secret.json
   - transmission
+  - jackett
+  - radarr
