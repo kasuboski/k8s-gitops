@@ -78,8 +78,10 @@ spec:
         - secretRef:
             name: vpn-config
         env:
-        - name: DNS
-          value: 8.8.4.4
+        - name: FIREWALL
+          value: "on"
+        - name: ROUTE
+          value: 10.0.0.0/8
         volumeMounts:
           - name: vpn-config
             mountPath: /vpn
@@ -88,8 +90,9 @@ spec:
             add:
             - NET_ADMIN
         resources:
-          limits:
+          requests:
             cpu: 100m
+          limits:
             memory: 64Mi
       volumes:
         - name: transmission-config
