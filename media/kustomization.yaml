@@ -4,3 +4,4 @@ resources:
   - transmission
   - jackett
   - radarr
+  - sonarr
