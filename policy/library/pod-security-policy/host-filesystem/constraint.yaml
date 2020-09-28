@@ -8,6 +8,7 @@ spec:
       - apiGroups: [""]
         kinds: ["Pod"]
     excludedNamespaces:
+    - velero
     - openebs
     - system-upgrade
   parameters:
