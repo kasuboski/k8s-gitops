@@ -12,4 +12,5 @@ jobs:
         curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s
     - name: Scan Images
       run: |
+        sudo apt-get install ack-grep
         ack --type yaml 'image: (.*)' --output '$1' -h --nobreak | tr -d \"\' | sort -u | xargs -L1 ./bin/trivy image --severity HIGH,CRITICAL --ignore-unfixed
