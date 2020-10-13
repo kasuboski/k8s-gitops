@@ -10,8 +10,8 @@ jobs:
     - name: Install Trivy
       run: |
         curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s
+    - run: sudo apt-get install ack-grep
     - name: Scan Images
       run: |
-        sudo apt-get install ack-grep
         ls -la
         ack --type yaml 'image: (.*)' --output '$1' -h --nobreak | tr -d \"\' | sort -u | xargs -L1
