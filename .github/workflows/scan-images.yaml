@@ -14,4 +14,4 @@ jobs:
       run: |
         sudo apt-get install ack-grep
         ls -la
-        ack --type yaml 'image: (.*)' --output '$1' -h --nobreak | tr -d \"\' | sort -u | xargs -L1 ./bin/trivy image --severity HIGH,CRITICAL --ignore-unfixed
+        ack --type yaml 'image: (.*)' --output '$1' -h --nobreak | tr -d \"\' | sort -u | xargs -L1
