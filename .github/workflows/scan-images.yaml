@@ -1,0 +1,13 @@
+on:
+  workflow_dispatch: {}
+
+jobs:
+  scan-images:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Scan Images
+      uses: docker://docker.io/aquasec/trivy:latest
+      run: |
+        ack --type yaml 'image: (.*)' --output '$1' -h --nobreak | tr -d \"\' | sort -u | xargs -L1 trivy image --severity HIGH,CRITICAL --ignore-unfixed
