@@ -7,11 +7,6 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Install Trivy
-      run: |
-        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s
-    - run: sudo apt-get install ack-grep
     - name: Scan Images
-      run: |
-        ls -la
-        ack --type yaml 'image: (.*)' --output '$1' -h --nobreak | tr -d \"\' | sort -u | xargs -L1
+      uses: docker://kasuboski/trivy-scan-dir:latest
+      
