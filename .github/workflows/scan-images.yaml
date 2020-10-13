@@ -9,4 +9,5 @@ jobs:
       uses: actions/checkout@v2
     - name: Scan Images
       uses: docker://kasuboski/trivy-scan-dir:latest
-      
+      env:
+        EXCLUDED: 'voucher/vouch-proxy'
