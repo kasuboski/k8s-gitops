@@ -1,4 +1,5 @@
 resources:
   - backblaze-sealedsecret.json
+  - velero-crds.yaml
   - velero-deploy.yaml
   - velero-config.yaml

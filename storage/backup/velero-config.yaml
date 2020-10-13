@@ -7,24 +7,25 @@ metadata:
   namespace: velero
 spec:
   config:
-    region: us-west-002
     s3ForcePathStyle: "true"
+    region: us-west-002
     s3Url: https://s3.us-west-002.backblazeb2.com
   objectStorage:
-    bucket: velero
+    bucket: velero-backup
   provider: aws
----
-apiVersion: velero.io/v1
-kind: VolumeSnapshotLocation
-metadata:
-  labels:
-    component: velero
-  name: default
-  namespace: velero
-spec:
-  config:
-    region: us-west-002
-    s3ForcePathStyle: "true"
-    s3Url: https://s3.us-west-002.backblazeb2.com
-    provider: aws
-  provider: openebs.io/cstor-blockstore
+# ---
+# apiVersion: velero.io/v1
+# kind: VolumeSnapshotLocation
+# metadata:
+#   labels:
+#     component: velero
+#   name: default
+#   namespace: velero
+# spec:
+#   config:
+#     bucket: velero-backup
+#     s3ForcePathStyle: "true"
+#     region: us-west-002
+#     s3Url: https://s3.us-west-002.backblazeb2.com
+#     provider: aws
+#   provider: openebs.io/cstor-blockstore
