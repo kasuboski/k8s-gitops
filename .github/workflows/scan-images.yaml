@@ -1,5 +1,10 @@
 on:
   workflow_dispatch: {}
+  schedule:
+    - cron: '3 4 * * *'
+  push:
+    paths:
+    - '**/*.yaml'
 
 jobs:
   scan-images:
