@@ -9,7 +9,7 @@ jobs:
       uses: actions/checkout@v2
     - name: Install Trivy
       run: |
-        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s -- -b bin/trivy
+        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s
     - name: Scan Images
       run: |
-        ack --type yaml 'image: (.*)' --output '$1' -h --nobreak | tr -d \"\' | sort -u | xargs -L1 bin/trivy image --severity HIGH,CRITICAL --ignore-unfixed
+        ack --type yaml 'image: (.*)' --output '$1' -h --nobreak | tr -d \"\' | sort -u | xargs -L1 ./bin/trivy image --severity HIGH,CRITICAL --ignore-unfixed
