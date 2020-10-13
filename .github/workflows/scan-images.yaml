@@ -13,4 +13,5 @@ jobs:
     - name: Scan Images
       run: |
         sudo apt-get install ack-grep
-        ack --type yaml 'image: (.*)' --output '$1' -h --nobreak | tr -d \"\' | sort -u
+        ls -la
+        ack --type yaml 'image: (.*)' --output '$1' -h --nobreak | tr -d \"\' | sort -u | xargs -L1 ./bin/trivy image --severity HIGH,CRITICAL --ignore-unfixed
