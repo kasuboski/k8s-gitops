@@ -1,5 +1,10 @@
 on:
   workflow_dispatch: {}
+  schedule:
+    - cron: '3 4 * * *'
+  push:
+    paths:
+    - '**/*.yaml'
 
 jobs:
   scan-images:
@@ -7,9 +12,7 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Install Trivy
-      run: |
-        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s
     - name: Scan Images
-      run: |
-        ack --type yaml 'image: (.*)' --output '$1' -h --nobreak | tr -d \"\' | sort -u | xargs -L1 ./bin/trivy image --severity HIGH,CRITICAL --ignore-unfixed
+      uses: docker://kasuboski/trivy-scan-dir:latest
+      env:
+        EXCLUDED: 'voucher/vouch-proxy'
