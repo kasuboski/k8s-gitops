@@ -74,6 +74,14 @@ spec:
             containerPort: 9091
       - name: vpn
         image: dperson/openvpn-client
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - '[ "$(curl -s https://ifconfig.co/city)" != "Austin" ]'
+          initialDelaySeconds: 30
+          periodSeconds: 60
         envFrom:
         - secretRef:
             name: vpn-config

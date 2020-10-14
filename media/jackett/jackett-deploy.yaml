@@ -92,6 +92,8 @@ spec:
             - sh
             - -c
             - '[ "$(curl -s https://ifconfig.co/city)" != "Austin" ]'
+          initialDelaySeconds: 30
+          periodSeconds: 60
         envFrom:
         - secretRef:
             name: vpn-config
