@@ -1,9 +1,9 @@
 # helm repo add openebs https://openebs.github.io/charts
-# helm install openebs openebs/openebs --namespace openebs --version 1.11.1 -f openebs-values.yaml
+# helm install openebs openebs/openebs --namespace openebs --version 2.2.0 -f openebs-values.yaml
 ndm:
-  image: 'openebs/node-disk-manager-arm64'
+  image: 'openebs/node-disk-manager'
 ndmOperator:
-  image: 'openebs/node-disk-operator-arm64'
+  image: 'openebs/node-disk-operator'
 webhook:
   image: 'openebs/admission-server-arm64'
 apiserver:
