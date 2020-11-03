@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: miniflux
+  labels:
+    app.kubernetes.io/name: miniflux
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - miniflux.joshcorp.co
+    secretName: miniflux-joshcorp-tls
+  rules:
+  - host: miniflux.joshcorp.co
+    http:
+      paths:
+      - backend:
+          serviceName: miniflux
+          servicePort: http
+        path: /

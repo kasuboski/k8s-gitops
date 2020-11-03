@@ -1,0 +1,48 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: miniflux
+  labels:
+    app: miniflux
+    app.kubernetes.io/name: miniflux
+spec:
+  selector:
+    app.kubernetes.io/name: miniflux
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: miniflux
+spec:
+  selector:
+      matchLabels:
+        app.kubernetes.io/name: miniflux
+  template:
+    metadata:
+      labels:
+        app: miniflux
+        app.kubernetes.io/name: miniflux
+    spec:
+      containers:
+      - name: miniflux
+        image: miniflux/miniflux
+        ports:
+          - name: http
+            containerPort: 8080
+        env:
+        - name: RUN_MIGRATIONS
+          value: "1"
+        - name: CREATE_ADMIN
+          value: "1"
+        envFrom:
+        - secretRef:
+            name: miniflux-secret
+        resources:
+          limits:
+            cpu: 100m
+            memory: 64Mi
