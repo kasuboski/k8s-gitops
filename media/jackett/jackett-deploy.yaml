@@ -71,8 +71,7 @@ spec:
             failureThreshold: 5
             periodSeconds: 10
         readinessProbe:
-          httpGet:
-            path: "/UI/Dashboard"
+          tcpSocket:
             port: http
           failureThreshold: 5
           periodSeconds: 10
