@@ -39,6 +39,10 @@ spec:
           value: "1"
         - name: CREATE_ADMIN
           value: "1"
+        - name: POLLING_FREQUENCY
+          value: "30"
+        - name: BATCH_SIZE
+          value: "20"
         envFrom:
         - secretRef:
             name: miniflux-secret

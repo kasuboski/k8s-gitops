@@ -8,5 +8,4 @@ resources:
   - media-app.yaml
   - policy-app.yaml
   - secrets-app.yaml
-  - storage-app.yaml
   - upgrades-app.yaml

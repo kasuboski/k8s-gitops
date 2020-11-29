@@ -6,7 +6,7 @@ metadata:
 spec:
   name: cstor-disk
   type: disk
-  maxPools: 3
+  maxPools: 2
   poolSpec:
     poolType: striped
 ---
