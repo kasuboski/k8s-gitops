@@ -7,7 +7,7 @@ metadata:
     app: radarr
     app.kubernetes.io/name: radarr
 spec:
-  storageClassName: openebs-cstor-1-replica-disk
+  storageClassName: local-path
   accessModes:
     - ReadWriteOnce
   resources:
@@ -48,6 +48,8 @@ spec:
         app: radarr
         app.kubernetes.io/name: radarr
     spec:
+      nodeSelector:
+        storagespeed: fast
       containers:
       - name: radarr
         image: linuxserver/radarr

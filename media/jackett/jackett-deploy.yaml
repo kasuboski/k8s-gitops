@@ -7,7 +7,7 @@ metadata:
     app: jackett
     app.kubernetes.io/name: jackett
 spec:
-  storageClassName: openebs-cstor-1-replica-disk
+  storageClassName: local-path
   accessModes:
     - ReadWriteOnce
   resources:
@@ -48,6 +48,8 @@ spec:
         app: jackett
         app.kubernetes.io/name: jackett
     spec:
+      nodeSelector:
+        storagespeed: slow
       containers:
       - name: jackett
         image: linuxserver/jackett

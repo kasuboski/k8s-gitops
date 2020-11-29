@@ -7,7 +7,7 @@ metadata:
     app: transmission
     app.kubernetes.io/name: transmission
 spec:
-  storageClassName: openebs-cstor-1-replica-disk
+  storageClassName: local-path
   accessModes:
     - ReadWriteOnce
   resources:
@@ -45,6 +45,8 @@ spec:
         app: transmission
         app.kubernetes.io/name: transmission
     spec:
+      nodeSelector:
+        storagespeed: slow
       containers:
       - name: transmission
         image: linuxserver/transmission
