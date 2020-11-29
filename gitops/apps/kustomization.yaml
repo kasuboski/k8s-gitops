@@ -2,7 +2,7 @@ resources:
   - argocd-app.yaml
   - default-project.yaml
   - default-app.yaml
-  - fathom-app.yaml
+  # - fathom-app.yaml
   - indieweb-app.yaml
   - ingress-app.yaml
   # - media-app.yaml get rid of for now
