@@ -5,7 +5,7 @@ resources:
   # - fathom-app.yaml
   - indieweb-app.yaml
   - ingress-app.yaml
-  # - media-app.yaml get rid of for now
+  - media-app.yaml
   - policy-app.yaml
   - secrets-app.yaml
   - upgrades-app.yaml
