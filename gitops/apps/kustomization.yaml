@@ -3,9 +3,8 @@ resources:
   - default-project.yaml
   - default-app.yaml
   # - fathom-app.yaml
-  - indieweb-app.yaml
   - ingress-app.yaml
-  - media-app.yaml
-  - policy-app.yaml
+  # - media-app.yaml
+  # - policy-app.yaml
   - secrets-app.yaml
-  - upgrades-app.yaml
+  # - upgrades-app.yaml

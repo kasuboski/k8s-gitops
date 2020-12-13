@@ -1,5 +1,5 @@
 # helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-# helm install ingress-nginx ingress-nginx/ingress-nginx --version 2.1.0 -f nginx-ingress-values.yaml --namespace ingress-nginx
+# helm template ingress-nginx ingress-nginx/ingress-nginx --version 3.15.2 -f ingress/nginx-ingress-values.yaml --namespace ingress-nginx > ingress/ingress-nginx.yaml
 controller:
   service:
     type: NodePort
@@ -9,4 +9,4 @@ controller:
   metrics:
     enabled: true
     serviceMonitor:
-      enabled: true
+      enabled: false

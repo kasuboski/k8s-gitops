@@ -1,9 +1,0 @@
-resources:
-  - namespace.yaml
-  - ekster-deploy.yaml
-  - ekster-ingress.yaml
-
-configMapGenerator:
-  - name: ekster-backend
-    files:
-    - backend.json
