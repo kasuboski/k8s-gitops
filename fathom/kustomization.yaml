@@ -1,4 +1,4 @@
 resources:
-  - fathom-secret-sealed.json
+  - fathom-sealed-secret.json
   - fathom-deploy.yaml
   - fathom-ingress.yaml
