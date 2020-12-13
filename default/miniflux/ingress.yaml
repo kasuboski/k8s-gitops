@@ -5,6 +5,7 @@ metadata:
   labels:
     app.kubernetes.io/name: miniflux
   annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   tls:
