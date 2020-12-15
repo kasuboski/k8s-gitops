@@ -4,7 +4,7 @@ resources:
   - default-app.yaml
   # - fathom-app.yaml
   - ingress-app.yaml
-  # - media-app.yaml
+  - media-app.yaml
   # - policy-app.yaml
   - secrets-app.yaml
   # - upgrades-app.yaml
