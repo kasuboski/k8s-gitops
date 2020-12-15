@@ -85,6 +85,8 @@ spec:
           initialDelaySeconds: 30
           periodSeconds: 60
         env:
+        - name: FIREWALL
+          value: "on"
         - name: ROUTE
           value: 10.0.0.0/8
         envFrom:
