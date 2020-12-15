@@ -10,3 +10,4 @@ spec:
     excludedNamespaces:
     - openebs
     - system-upgrade
+    - kube-system
