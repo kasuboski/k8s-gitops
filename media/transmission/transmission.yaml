@@ -89,7 +89,7 @@ spec:
             name: vpn-config
         env:
         - name: FIREWALL
-          value: "on"
+          value: "off"
         - name: ROUTE
           value: 10.0.0.0/8
         volumeMounts:
