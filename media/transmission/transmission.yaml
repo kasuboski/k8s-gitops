@@ -87,11 +87,6 @@ spec:
         envFrom:
         - secretRef:
             name: vpn-config
-        env:
-        - name: FIREWALL
-          value: "off"
-        - name: ROUTE
-          value: 10.0.0.0/8
         volumeMounts:
           - name: vpn-config
             mountPath: /vpn
