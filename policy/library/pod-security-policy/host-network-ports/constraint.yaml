@@ -17,5 +17,6 @@ spec:
         values: ["ndm"]
     excludedNamespaces:
       - system-upgrade
+      - kube-system
   parameters:
     hostNetwork: false
