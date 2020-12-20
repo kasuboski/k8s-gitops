@@ -5,6 +5,6 @@ resources:
   # - fathom-app.yaml
   - ingress-app.yaml
   - media-app.yaml
-  # - policy-app.yaml
+  - policy-app.yaml
   - secrets-app.yaml
   # - upgrades-app.yaml

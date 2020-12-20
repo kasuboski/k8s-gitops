@@ -11,5 +11,6 @@ spec:
     - velero
     - openebs
     - system-upgrade
+    - kube-system
   parameters:
     allowedHostPaths: []
