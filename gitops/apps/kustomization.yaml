@@ -7,4 +7,4 @@ resources:
   - media-app.yaml
   - policy-app.yaml
   - secrets-app.yaml
-  # - upgrades-app.yaml
+  - upgrades-app.yaml
