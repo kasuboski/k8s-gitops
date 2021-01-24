@@ -52,7 +52,7 @@ spec:
         storagespeed: slow
       containers:
       - name: jackett
-        image: linuxserver/jackett
+        image: ghcr.io/linuxserver/jackett
         env:
         - name: TZ
           value: America/Chicago
