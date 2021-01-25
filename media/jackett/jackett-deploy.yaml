@@ -67,11 +67,11 @@ spec:
             cpu: "100m"
           limits:
             memory: "256Mi"
-        livenessProbe:
-            tcpSocket:
-              port: http
-            failureThreshold: 5
-            periodSeconds: 10
+#         livenessProbe:
+#             tcpSocket:
+#               port: http
+#             failureThreshold: 5
+#             periodSeconds: 10
         readinessProbe:
           tcpSocket:
             port: http
