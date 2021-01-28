@@ -93,7 +93,7 @@ spec:
             command:
             - sh
             - -c
-            - '[ "$(curl -s https://ifconfig.co/country)" != "United States" ]'
+            - '[ "$(curl -s https://ifconfig.co/city)" != "Austin" ]'
           initialDelaySeconds: 30
           periodSeconds: 60
         envFrom:
