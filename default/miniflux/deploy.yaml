@@ -48,5 +48,5 @@ spec:
             name: miniflux-secret
         resources:
           limits:
-            cpu: 100m
-            memory: 64Mi
+            cpu: 500m
+            memory: 256Mi
