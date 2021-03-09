@@ -52,7 +52,7 @@ spec:
         storagespeed: slow
       containers:
       - name: jackett
-        image: linuxserver/jackett
+        image: ghcr.io/linuxserver/jackett
         env:
         - name: TZ
           value: America/Chicago
@@ -67,11 +67,11 @@ spec:
             cpu: "100m"
           limits:
             memory: "256Mi"
-        livenessProbe:
-            tcpSocket:
-              port: http
-            failureThreshold: 5
-            periodSeconds: 10
+#         livenessProbe:
+#             tcpSocket:
+#               port: http
+#             failureThreshold: 5
+#             periodSeconds: 10
         readinessProbe:
           tcpSocket:
             port: http
@@ -86,41 +86,41 @@ spec:
         ports:
         - name: http
           containerPort: 9117
-      - name: vpn
-        image: dperson/openvpn-client
-        livenessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - '[ "$(curl -s https://ifconfig.co/city)" != "Austin" ]'
-          initialDelaySeconds: 30
-          periodSeconds: 60
-        envFrom:
-        - secretRef:
-            name: vpn-config
-        env:
-        - name: FIREWALL
-          value: "on"
-        - name: ROUTE
-          value: 10.0.0.0/8
-        volumeMounts:
-          - name: vpn-config
-            mountPath: /vpn
-        securityContext:
-          capabilities:
-            add:
-            - NET_ADMIN
-        resources:
-          limits:
-            cpu: 100m
-            memory: 64Mi
+#       - name: vpn
+#         image: dperson/openvpn-client
+#         livenessProbe:
+#           exec:
+#             command:
+#             - sh
+#             - -c
+#             - '[ "$(curl -s https://ifconfig.co/city)" != "Austin" ]'
+#           initialDelaySeconds: 30
+#           periodSeconds: 60
+#         envFrom:
+#         - secretRef:
+#             name: vpn-config
+#         env:
+#         - name: FIREWALL
+#           value: "on"
+#         - name: ROUTE
+#           value: 10.0.0.0/8
+#         volumeMounts:
+#           - name: vpn-config
+#             mountPath: /vpn
+#         securityContext:
+#           capabilities:
+#             add:
+#             - NET_ADMIN
+#         resources:
+#           limits:
+#             cpu: 100m
+#             memory: 64Mi
       volumes:
       - name: jackett-config
         persistentVolumeClaim:
             claimName: jackett
       - name: media
         emptyDir: {}
-      - name: vpn-config
-        secret:
-          secretName: vpn-config
+#       - name: vpn-config
+#         secret:
+#           secretName: vpn-config
