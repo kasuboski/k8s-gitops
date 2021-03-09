@@ -15,4 +15,4 @@ jobs:
     - name: Scan Images
       uses: docker://kasuboski/trivy-scan-dir:latest
       env:
-        EXCLUDED: 'voucher/vouch-proxy'
+        EXCLUDED: 'voucher/vouch-proxy rancher/k3s-upgrade'

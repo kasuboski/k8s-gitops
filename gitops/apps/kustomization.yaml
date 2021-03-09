@@ -2,9 +2,8 @@ resources:
   - argocd-app.yaml
   - default-project.yaml
   - default-app.yaml
-  # - fathom-app.yaml
   - ingress-app.yaml
   - media-app.yaml
   - policy-app.yaml
   - secrets-app.yaml
-  # - upgrades-app.yaml
+  - upgrades-app.yaml
