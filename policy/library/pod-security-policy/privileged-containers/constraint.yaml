@@ -8,6 +8,7 @@ spec:
       - apiGroups: [""]
         kinds: ["Pod"]
     excludedNamespaces:
+    - grafana-agent
     - openebs
     - system-upgrade
     - kube-system

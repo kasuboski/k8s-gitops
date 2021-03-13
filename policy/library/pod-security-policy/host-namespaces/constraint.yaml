@@ -7,5 +7,10 @@ spec:
     kinds:
       - apiGroups: [""]
         kinds: ["Pod"]
+    labelSelector:
+      matchExpressions:
+      - key: name
+        operator: NotIn
+        values: ["node-exporter"]
     excludedNamespaces:
       - system-upgrade

@@ -15,6 +15,9 @@ spec:
       - key: component
         operator: NotIn
         values: ["ndm"]
+      - key: name
+        operator: NotIn
+        values: ["node-exporter"]
     excludedNamespaces:
       - system-upgrade
       - kube-system

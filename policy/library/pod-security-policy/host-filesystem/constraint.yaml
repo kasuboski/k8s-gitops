@@ -10,6 +10,7 @@ spec:
     excludedNamespaces:
     - velero
     - openebs
+    - grafana-agent
     - system-upgrade
     - kube-system
   parameters:
