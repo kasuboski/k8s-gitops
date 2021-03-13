@@ -26,6 +26,13 @@ spec:
         image: grafana/agent:v0.9.1
         imagePullPolicy: IfNotPresent
         name: agent
+        resources:
+          requests:
+            cpu: 100m
+            memory: 64Mi
+          limits:
+            cpu: 300m
+            memory: 128Mi
         ports:
         - containerPort: 80
           name: http-metrics
