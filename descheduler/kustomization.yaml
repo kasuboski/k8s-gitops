@@ -1,0 +1,2 @@
+resources:
+- github.com/kubernetes-sigs/descheduler/kubernetes/cronjob?ref=v0.20.0
