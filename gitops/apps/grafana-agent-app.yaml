@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana-agent
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/kasuboski/k8s-gitops.git
+    targetRevision: master
+    path: observability/grafana-agent
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: grafana-agent
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

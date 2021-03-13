@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: grafana-agent
+spec:
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      name: grafana-agent
+  template:
+    metadata:
+      labels:
+        name: grafana-agent
+    spec:
+      containers:
+      - args:
+        - -config.file=/etc/agent/agent.yaml
+        - -prometheus.wal-directory=/tmp/agent/data
+        command:
+        - /bin/agent
+        env:
+        - name: HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        image: grafana/agent:v0.9.1
+        imagePullPolicy: IfNotPresent
+        name: agent
+        ports:
+        - containerPort: 80
+          name: http-metrics
+        securityContext:
+          privileged: true
+          runAsUser: 0
+        volumeMounts:
+        - mountPath: /etc/agent
+          name: grafana-agent
+        - mountPath: /secrets
+          name: api-key
+      serviceAccount: grafana-agent
+      tolerations:
+      - effect: NoSchedule
+        operator: Exists
+      volumes:
+      - configMap:
+          name: grafana-agent
+        name: grafana-agent
+      - secret:
+          secretName: api-key
+        name: api-key
+  updateStrategy:
+    type: RollingUpdate

@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-agent-deployment
+spec:
+  minReadySeconds: 10
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      name: grafana-agent-deployment
+  template:
+    metadata:
+      labels:
+        name: grafana-agent-deployment
+    spec:
+      containers:
+      - args:
+        - -config.file=/etc/agent/agent.yaml
+        - -prometheus.wal-directory=/tmp/agent/data
+        command:
+        - /bin/agent
+        env:
+        - name: HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        image: grafana/agent:v0.9.1
+        imagePullPolicy: IfNotPresent
+        name: agent
+        ports:
+        - containerPort: 80
+          name: http-metrics
+        securityContext:
+          privileged: true
+          runAsUser: 0
+        volumeMounts:
+        - mountPath: /etc/agent
+          name: grafana-agent-deployment
+        - mountPath: /secrets
+          name: api-key
+      serviceAccount: grafana-agent
+      volumes:
+      - configMap:
+          name: grafana-agent-deployment
+        name: grafana-agent-deployment
+      - secret:
+          secretName: api-key
+        name: api-key

@@ -3,6 +3,7 @@ resources:
   - default-project.yaml
   - default-app.yaml
   - descheduler-app.yaml
+  - grafana-agent-app.yaml
   - ingress-app.yaml
   - media-app.yaml
   - policy-app.yaml

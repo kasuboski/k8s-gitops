@@ -1,0 +1,14 @@
+resources:
+  - api-key-sealed-secret.json
+  - agent-rbac.yaml
+  - agent-ds.yaml
+  - agent-deploy.yaml
+  - node-exporter-ds.yaml
+
+configMapGenerator:
+  - name: grafana-agent
+    files:
+    - agent.yaml=agent-node.yaml
+  - name: grafana-agent-deployment
+    files:
+    - agent.yaml=agent-server.yaml
