@@ -1,6 +1,6 @@
 resources:
 - namespace.yaml
-- github.com/argoproj/argo-cd/manifests/cluster-install?ref=v1.7.6
+- github.com/argoproj/argo-cd/manifests/cluster-install?ref=v2.0.3
 - ingress.yaml
 
 patchesStrategicMerge:
