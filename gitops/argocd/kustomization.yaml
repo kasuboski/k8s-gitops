@@ -9,7 +9,7 @@ patchesStrategicMerge:
 - argocd-rbac-cm.yaml
 
 images:
-  - name: argoproj/argocd
+  - name: quay.io/argoproj/argocd
     newName: alinbalutoiu/argocd # this supports arm64
 
 namespace: argocd
