@@ -1,3 +1,5 @@
 resources:
 - namespace.yaml
 - ingress-nginx.yaml
+
+namespace: ingress-nginx
