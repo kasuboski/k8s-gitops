@@ -6,6 +6,6 @@ resources:
   - secrets-app.yaml
   - ingress-app.yaml
   - default-app.yaml
+  - media-app.yaml
   # - policy-app.yaml
   # - upgrades-app.yaml
-  # - media-app.yaml

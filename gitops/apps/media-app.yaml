@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/kasuboski/k8s-gitops.git
-    targetRevision: master
+    targetRevision: main
     path: media
   destination:
     server: https://kubernetes.default.svc

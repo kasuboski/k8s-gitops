@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plex-wi
+  labels:
+    app: plex-wi
+    app.kubernetes.io/name: plex-wi
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: plex-wi
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: plex-wi
+    spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: wisconsin
+      containers:
+      - name: plex
+        image: plexinc/pms-docker
+        ports:
+        - name: tcp-plex
+          containerPort: 32400
+        env:
+        - name: TZ
+          value: America/Chicago
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: data
+          mountPath: /data
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: plex-wi
+      - name: data
+        persistentVolumeClaim:
+          claimName: media-sichy
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: plex-wi
+  labels:
+    app: plex-wi
+    app.kubernetes.io/name: plex-wi
+spec:
+  ports:
+  - name: tcp-plex
+    port: 32400
+    targetPort: tcp-plex
+  selector:
+    app.kubernetes.io/name: plex-wi
+
+

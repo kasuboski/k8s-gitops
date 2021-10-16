@@ -1,0 +1,3 @@
+resources:
+- thinkbox-plex-volume.yaml
+- plex-wi-deploy.yaml
