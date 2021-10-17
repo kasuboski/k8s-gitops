@@ -1,5 +1,4 @@
 resources:
-  - api-key-sealed-secret.json
   - agent-rbac.yaml
   - agent-ds.yaml
   - agent-deploy.yaml
