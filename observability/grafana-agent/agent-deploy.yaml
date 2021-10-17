@@ -52,5 +52,8 @@ spec:
           name: grafana-agent-deployment
         name: grafana-agent-deployment
       - secret:
-          secretName: api-key
+          secretName: api-credentials
+          items:
+          - key: API_KEY
+            path: api-key
         name: api-key
