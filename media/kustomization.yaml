@@ -1,4 +1,5 @@
 resources:
 - local-storage-class.yaml
 - sichy-nfs-volume.yaml
+- speicher-nfs-volume.yaml
 - plex

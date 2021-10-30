@@ -1,3 +1,5 @@
 resources:
 - thinkbox-plex-volume.yaml
+- adel-plex-volume.yaml
 - plex-wi-deploy.yaml
+- plex-austin-deploy.yaml

@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plex-austin
+  labels:
+    app: plex-austin
+    app.kubernetes.io/name: plex-austin
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: plex-austin
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: plex-austin
+    spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: austin
+      containers:
+      - name: plex
+        image: plexinc/pms-docker
+        ports:
+        - name: tcp-plex
+          containerPort: 32400
+        env:
+        - name: TZ
+          value: America/Chicago
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: data
+          mountPath: /data
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: plex-austin
+      - name: data
+        persistentVolumeClaim:
+          claimName: media-speicher
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: plex-austin
+  labels:
+    app: plex-austin
+    app.kubernetes.io/name: plex-austin
+spec:
+  ports:
+  - name: tcp-plex
+    port: 32400
+    targetPort: tcp-plex
+  selector:
+    app.kubernetes.io/name: plex-austin
+
+

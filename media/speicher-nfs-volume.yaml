@@ -5,21 +5,22 @@ metadata:
 spec:
   storageClassName: manual
   capacity:
-    storage: 250Gi
+    storage: 1Mi
   accessModes:
     - ReadWriteMany
-  persistentVolumeReclaimPolicy: Retain
-  hostPath:
-    path: "/mnt/speicher"
+  nfs:
+    server: 100.71.44.76
+    path: "/speicher"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: media
+  name: media-speicher
 spec:
   accessModes:
     - ReadWriteMany
   storageClassName: "manual"
+  volumeName: speicher
   resources:
     requests:
-      storage: 250Gi
+      storage: 1Mi
