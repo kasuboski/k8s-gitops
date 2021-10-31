@@ -3,3 +3,4 @@ resources:
 - sichy-nfs-volume.yaml
 - speicher-nfs-volume.yaml
 - plex
+- transmission
