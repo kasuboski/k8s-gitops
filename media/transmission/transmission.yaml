@@ -98,9 +98,6 @@ spec:
           value: 10.0.0.0/8
         - name: ROUTE_2
           value: 100.64.0.0/10
-        envFrom:
-        - secretRef:
-            name: vpn-config
         volumeMounts:
           - name: vpn-config
             mountPath: /vpn
@@ -121,5 +118,18 @@ spec:
           persistentVolumeClaim:
               claimName: media-speicher
         - name: vpn-config
-          secret:
-            secretName: vpn-config
+          projected:
+            sources:
+            - secret:
+                name: media-secret
+                items:
+                - key: VPN_AUTH
+                  path: vpn.auth
+                - key: VPN_CA
+                  path: ca.crt
+                - key: VPN_CLIENT_CERT
+                  path: client.crt
+                - key: VPN_CLIENT_KEY
+                  path: client.key
+            - configMap:
+                name: vpn-config

@@ -4,3 +4,8 @@ resources:
 - speicher-nfs-volume.yaml
 - plex
 - transmission
+
+configMapGenerator:
+- name: vpn-config
+  files:
+    - vpn.conf
