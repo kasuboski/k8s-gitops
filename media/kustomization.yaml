@@ -5,6 +5,8 @@ resources:
 - plex
 - transmission
 - jackett
+- radarr
+- sonarr
 
 configMapGenerator:
 - name: vpn-config
