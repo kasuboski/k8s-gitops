@@ -4,6 +4,7 @@ resources:
 - speicher-nfs-volume.yaml
 - plex
 - transmission
+- jackett
 
 configMapGenerator:
 - name: vpn-config
