@@ -1,4 +1,3 @@
 resources:
-- miniflux-sealed-secret.json
 - deploy.yaml
 - ingress.yaml
