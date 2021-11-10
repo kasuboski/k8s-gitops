@@ -46,10 +46,12 @@ metadata:
     app: plex-austin
     app.kubernetes.io/name: plex-austin
 spec:
+  type: NodePort
   ports:
   - name: tcp-plex
     port: 32400
     targetPort: tcp-plex
+    nodePort: 32400
   selector:
     app.kubernetes.io/name: plex-austin
 
