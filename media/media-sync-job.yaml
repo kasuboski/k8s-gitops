@@ -1,0 +1,38 @@
+# This still doesn't shut down reliably and seems to just hang eventually
+apiVersion: v1
+kind: Pod
+metadata:
+  name: media-sync
+  labels:
+    app: media-sync
+    app.kubernetes.io/name: media-sync
+spec:
+  nodeSelector:
+    topology.kubernetes.io/zone: austin
+  securityContext:
+    fsGroup: 1000
+    runAsUser: 1000
+    runAsGroup: 1000
+  containers:
+  - name: sync
+    image: rclone/rclone
+    args:
+    - sync
+    - --human-readable
+    - --stats-log-level=NOTICE
+    - --max-duration=4h
+    - --exclude=downloads
+    - /speicher
+    - /sichy
+    volumeMounts:
+    - name: speicher
+      mountPath: /speicher
+    - name: sichy
+      mountPath: /sichy
+  volumes:
+  - name: speicher
+    persistentVolumeClaim:
+      claimName: media-speicher
+  - name: sichy
+    persistentVolumeClaim:
+      claimName: media-sichy
