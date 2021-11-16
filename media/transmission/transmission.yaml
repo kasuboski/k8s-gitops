@@ -47,6 +47,8 @@ spec:
     spec:
       nodeSelector:
         topology.kubernetes.io/zone: austin
+      securityContext:
+        fsGroup: 1000
       containers:
       - name: transmission
         image: linuxserver/transmission
