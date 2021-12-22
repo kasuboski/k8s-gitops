@@ -54,3 +54,13 @@ spec:
           limits:
             cpu: 500m
             memory: 256Mi
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                - key: topology.kubernetes.io/region
+                  operator: In
+                  values:
+                  - cloud
