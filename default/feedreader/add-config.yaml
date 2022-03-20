@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: feedreader
+spec:
+  template:
+    spec:
+      containers:
+      - name: app
+        env:
+        - name: FEED_OPML_FILE
+          value: "/feedreader/config/feeds.opml"
+        volumeMounts:
+        - name: feeds
+          mountPath: "/feedreader/config"
+      volumes:
+      - name: feeds
+        configMap:
+          name: feeds
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                - key: topology.kubernetes.io/region
+                  operator: In
+                  values:
+                  - cloud

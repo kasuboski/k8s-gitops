@@ -1,0 +1,10 @@
+resources:
+- github.com/kasuboski/feedreader/deploy/manifests?ref=main
+
+patchesStrategicMerge:
+  - add-config.yaml
+
+configMapGenerator:
+  - name: feeds
+    files:
+    - "feeds.opml"
