@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: feedreader
+spec:
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      initContainers:
+      - name: init-litestream
+        image: litestream/litestream
+        args: ['restore', '-if-db-not-exists', '-if-replica-exists', '-v', '/feedreader/db/feeds.db']
+        volumeMounts:
+        - name: db
+          mountPath: /feedreader/db
+        - name: litestream-config
+          mountPath: /etc/litestream.yml
+          subPath: litestream.yml
+      containers:
+      - name: litestream
+        image: litestream/litestream
+        args: ['replicate']
+        resources:
+          limits:
+            cpu: 100m
+            memory: 64Mi
+        volumeMounts:
+        - name: db
+          mountPath: /feedreader/db
+        - name: configmap
+          mountPath: /etc/litestream.yml
+          subPath: litestream.yml
+      volumes:
+      - name: litestream-config
+        secret:
+          secretName: miniflux-secret
+          items:
+          - key: LITESTREAM_CONFIG
+            path: litestream.yml

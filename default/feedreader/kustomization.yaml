@@ -3,8 +3,13 @@ resources:
 
 patchesStrategicMerge:
   - add-config.yaml
+  - add-litestream.yaml
 
 configMapGenerator:
   - name: feeds
     files:
     - "feeds.opml"
+
+images:
+  - name: litestream/litestream
+    newTag: 0.3.8
