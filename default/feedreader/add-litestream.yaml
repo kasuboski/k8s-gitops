@@ -28,7 +28,7 @@ spec:
         volumeMounts:
         - name: db
           mountPath: /feedreader/db
-        - name: configmap
+        - name: litestream-config
           mountPath: /etc/litestream.yml
           subPath: litestream.yml
       volumes:
