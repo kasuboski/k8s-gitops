@@ -8,6 +8,7 @@ spec:
   template:
     spec:
       securityContext:
+        runAsUser: 1000
         fsGroup: 1000
       nodeSelector:
         kubernetes.io/arch: amd64
