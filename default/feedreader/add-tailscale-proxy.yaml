@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: feedreader
+spec:
+  template:
+    spec:
+      serviceAccountName: tailscale
+      containers:
+      - name: tailscale-proxy
+        image: ghcr.io/kasuboski/tailscale-proxy:main
+        resources:
+          limits:
+            cpu: 100m
+            memory: 64Mi
+        env:
+          # Store the state in a k8s secret
+        - name: KUBE_SECRET
+          value: tailscale-state
+        - name: HOSTNAME
+          value: feedreader
+        - name: DEST_PORT
+          value: "3030"
+        - name: USERSPACE
+          value: "false"
+        - name: AUTH_KEY
+          valueFrom:
+            secretKeyRef:
+              name: miniflux-secret
+              key: TAILSCALE_AUTH
+              optional: false
+        securityContext:
+          runAsNonRoot: false
+          runAsUser: 0
+          capabilities:
+            add:
+            - NET_ADMIN

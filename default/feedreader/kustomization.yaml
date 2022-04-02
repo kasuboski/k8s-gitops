@@ -1,9 +1,12 @@
 resources:
 - github.com/kasuboski/feedreader/deploy/manifests?ref=main
+- github.com/kasuboski/tailscale-proxy/k8s?ref=main
+- sa.yaml
 
 patchesStrategicMerge:
   - add-config.yaml
   - add-litestream.yaml
+  - add-tailscale-proxy.yaml
 
 configMapGenerator:
   - name: feeds
@@ -15,3 +18,5 @@ images:
     newTag: 0.3.8
   - name: ghcr.io/kasuboski/feedreader
     newTag: sha-3fa8e34
+  - name: ghcr.io/kasuboski/tailscale-proxy
+    newTag: sha-fdcf45d
