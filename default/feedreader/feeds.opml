@@ -92,6 +92,7 @@
             <outline title="victorzhou.com" text="victorzhou.com" xmlUrl="https://victorzhou.com/rss.xml" htmlUrl="https://victorzhou.com"></outline>
             <outline title="zwischenzugs" text="zwischenzugs" xmlUrl="https://zwischenzugs.com/feed/" htmlUrl="https://zwischenzugs.com"></outline>
             <outline title="Austin Z. Henley" text="Austin Z. Henley" xmlUrl="https://austinhenley.com/blog/feed.rss" htmlUrl="https://austinhenley.com/blog.html"></outline>
+            <outline title="Matthias Endler" text="Matthias Endler" xmlUrl="https://endler.dev/rss.xml" htmlUrl="https://endler.dev"></outline>
         </outline>
     </body>
 </opml>
