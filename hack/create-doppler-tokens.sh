@@ -2,7 +2,7 @@
 
 set -ex
 
-APPS="grafana-agent media default"
+APPS="grafana-agent media default builder"
 
 for a in $APPS
 do
