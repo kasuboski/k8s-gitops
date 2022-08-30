@@ -93,6 +93,7 @@
             <outline title="zwischenzugs" text="zwischenzugs" xmlUrl="https://zwischenzugs.com/feed/" htmlUrl="https://zwischenzugs.com"></outline>
             <outline title="Austin Z. Henley" text="Austin Z. Henley" xmlUrl="https://austinhenley.com/blog/feed.rss" htmlUrl="https://austinhenley.com/blog.html"></outline>
             <outline title="Matthias Endler" text="Matthias Endler" xmlUrl="https://endler.dev/rss.xml" htmlUrl="https://endler.dev"></outline>
+            <outline title="Ricard Bejarano" text="Ricard Bejarano" xmlUrl="https://www.bejarano.io/feed.xml" htmlUrl="https://www.bejarano.io/"></outline>
         </outline>
     </body>
 </opml>
