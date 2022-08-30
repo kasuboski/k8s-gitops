@@ -17,6 +17,6 @@ images:
   - name: litestream/litestream
     newTag: 0.3.8
   - name: ghcr.io/kasuboski/feedreader
-    newTag: sha-7110cac
+    newTag: sha-909dd6e
   - name: ghcr.io/kasuboski/tailscale-proxy
     newTag: sha-fdcf45d
