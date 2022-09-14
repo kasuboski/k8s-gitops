@@ -1,0 +1,5 @@
+resources:
+  - https://github.com/intel/intel-device-plugins-for-kubernetes/deployments/gpu_plugin?ref=v0.24.0
+
+patchesStrategicMerge:
+  - node-selector.yaml
