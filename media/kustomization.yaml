@@ -1,6 +1,6 @@
 resources:
 - local-storage-class.yaml
-- indel-device-plugin.yaml
+- indel-device-plugin
 - sichy-nfs-volume.yaml
 - speicher-nfs-volume.yaml
 - plex
