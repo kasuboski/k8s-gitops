@@ -6,6 +6,8 @@ metadata:
     app: plex-austin
     app.kubernetes.io/name: plex-austin
 spec:
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app.kubernetes.io/name: plex-austin
