@@ -118,7 +118,7 @@ spec:
               claimName: transmission
         - name: data
           persistentVolumeClaim:
-              claimName: media-speicher
+              claimName: adel-speicher
         - name: vpn-config
           projected:
             sources:

@@ -3,6 +3,7 @@ resources:
 - intel-device-plugin
 - sichy-nfs-volume.yaml
 - speicher-nfs-volume.yaml
+- speicher-local-volume.yaml
 - plex
 - transmission
 - jackett

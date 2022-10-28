@@ -98,5 +98,5 @@ spec:
             claimName: sonarr
       - name: media
         persistentVolumeClaim:
-            claimName: media-speicher
+            claimName: adel-speicher
 

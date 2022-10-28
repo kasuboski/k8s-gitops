@@ -92,5 +92,5 @@ spec:
             claimName: radarr
       - name: media
         persistentVolumeClaim:
-            claimName: media-speicher
+            claimName: adel-speicher
 
