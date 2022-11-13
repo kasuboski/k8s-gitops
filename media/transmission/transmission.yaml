@@ -53,6 +53,10 @@ spec:
       - name: transmission
         image: linuxserver/transmission
         env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
         - name: TZ
           value: America/Chicago
         - name: TRANSMISSION_WEB_HOME
