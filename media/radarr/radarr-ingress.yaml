@@ -1,21 +1,24 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: radarr
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
   labels:
     app.kubernetes.io/name: radarr
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  name: radarr
 spec:
-  tls:
-  - hosts:
-    - radarr.joshcorp.co
-    secretName: radarr-joshcorp-tls
   rules:
   - host: radarr.joshcorp.co
     http:
       paths:
       - backend:
-          serviceName: radarr
-          servicePort: http
+          service:
+            name: radarr
+            port:
+              name: http
         path: /
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - radarr.joshcorp.co
+    secretName: radarr-joshcorp-tls

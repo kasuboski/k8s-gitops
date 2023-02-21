@@ -1,22 +1,25 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: vouch
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  name: vouch
 spec:
-  tls:
-  - hosts:
-    - vouch.joshcorp.co
-    secretName: vouch-joshcorp-tls
   rules:
   - host: vouch.joshcorp.co
     http:
       paths:
       - backend:
-          serviceName: vouch
-          servicePort: http
+          service:
+            name: vouch
+            port:
+              name: http
         path: /
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - vouch.joshcorp.co
+    secretName: vouch-joshcorp-tls
 ---
 apiVersion: v1
 kind: Service

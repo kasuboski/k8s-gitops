@@ -1,21 +1,24 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: sonarr
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
   labels:
     app.kubernetes.io/name: sonarr
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  name: sonarr
 spec:
-  tls:
-  - hosts:
-    - sonarr.joshcorp.co
-    secretName: sonarr-joshcorp-tls
   rules:
   - host: sonarr.joshcorp.co
     http:
       paths:
       - backend:
-          serviceName: sonarr
-          servicePort: http
+          service:
+            name: sonarr
+            port:
+              name: http
         path: /
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - sonarr.joshcorp.co
+    secretName: sonarr-joshcorp-tls

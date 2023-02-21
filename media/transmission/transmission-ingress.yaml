@@ -1,21 +1,24 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: transmission
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
   labels:
     app.kubernetes.io/name: transmission
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  name: transmission
 spec:
-  tls:
-  - hosts:
-    - transmission.joshcorp.co
-    secretName: transmission-joshcorp-tls
   rules:
   - host: transmission.joshcorp.co
     http:
       paths:
       - backend:
-          serviceName: transmission
-          servicePort: http
+          service:
+            name: transmission
+            port:
+              name: http
         path: /
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - transmission.joshcorp.co
+    secretName: transmission-joshcorp-tls
