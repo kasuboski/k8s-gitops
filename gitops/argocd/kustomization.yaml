@@ -1,15 +1,11 @@
 resources:
 - namespace.yaml
-- github.com/argoproj/argo-cd/manifests/cluster-install?ref=v1.7.6
+- github.com/argoproj/argo-cd/manifests/cluster-install?ref=v2.6.2
 - ingress.yaml
 
 patchesStrategicMerge:
-- insecure-server-patch.yaml
 - argocd-cm.yaml
 - argocd-rbac-cm.yaml
-
-images:
-  - name: argoproj/argocd
-    newName: alinbalutoiu/argocd # this supports arm64
+- argocd-cmd-params-cm.yaml
 
 namespace: argocd
