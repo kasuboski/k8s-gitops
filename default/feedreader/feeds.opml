@@ -78,7 +78,6 @@
             <outline title="Newsletter feed for Surya's Technical Blog" text="Newsletter feed for Surya's Technical Blog" xmlUrl="https://buttondown.email/surya/rss" htmlUrl="https://buttondown.email/surya"></outline>
             <outline title="NullDeref" text="NullDeref" xmlUrl="https://nullderef.com/index.xml" htmlUrl="https://nullderef.com/"></outline>
             <outline title="octetz" text="octetz" xmlUrl="https://octetz.com/rss" htmlUrl="http://octetz.com/"></outline>
-            <outline title="Product Hunt — The best new products, every day" text="Product Hunt — The best new products, every day" xmlUrl="https://www.producthunt.com/feed" htmlUrl="https://www.producthunt.com"></outline>
             <outline title="Robert Heaton | Blog" text="Robert Heaton | Blog" xmlUrl="https://robertheaton.com/feed.xml" htmlUrl="https://robertheaton.com"></outline>
             <outline title="rootco.de" text="rootco.de" xmlUrl="https://rootco.de/feed.xml" htmlUrl="https://rootco.de"></outline>
             <outline title="Stay SaaSy" text="Stay SaaSy" xmlUrl="https://staysaasy.com/feed.xml" htmlUrl="https://staysaasy.com/"></outline>
