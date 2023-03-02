@@ -15,6 +15,9 @@ spec:
       operator: In
       values:
       - "true"
+  tolerations:
+  - key: CriticalAddonsOnly
+    operator: Exists
   serviceAccountName: system-upgrade
   upgrade:
     image: rancher/k3s-upgrade
