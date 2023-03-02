@@ -9,4 +9,4 @@ resources:
   - media-app.yaml
   - builder-app.yaml
   # - policy-app.yaml
-  # - upgrades-app.yaml
+  - upgrades-app.yaml
