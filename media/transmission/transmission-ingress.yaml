@@ -7,6 +7,7 @@ metadata:
     app.kubernetes.io/name: transmission
   name: transmission
 spec:
+  ingressClassName: nginx
   rules:
   - host: transmission.joshcorp.co
     http:

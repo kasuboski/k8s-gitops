@@ -7,6 +7,7 @@ metadata:
     app.kubernetes.io/name: radarr
   name: radarr
 spec:
+  ingressClassName: nginx
   rules:
   - host: radarr.joshcorp.co
     http:

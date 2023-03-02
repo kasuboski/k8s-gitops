@@ -5,6 +5,7 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-prod
   name: vouch
 spec:
+  ingressClassName: nginx
   rules:
   - host: vouch.joshcorp.co
     http:
