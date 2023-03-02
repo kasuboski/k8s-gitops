@@ -4,6 +4,8 @@ kind: Plan
 metadata:
   name: server-plan
   namespace: system-upgrade
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   concurrency: 1
   cordon: true
@@ -24,6 +26,8 @@ kind: Plan
 metadata:
   name: agent-plan
   namespace: system-upgrade
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   concurrency: 1
   cordon: true
