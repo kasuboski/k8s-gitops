@@ -3,6 +3,12 @@
 controller:
   service:
     type: ClusterIP
+  ingressClassResource:
+    name: external-nginx
+    enabled: true
+    default: false
+    controllerValue: "k8s.io/external-ingress-nginx"
+  ingressClass: external-nginx
   metrics:
     enabled: true
     serviceMonitor:

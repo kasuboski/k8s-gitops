@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/name: argo
   name: argocd
 spec:
-  ingressClassName: nginx
+  ingressClassName: external-nginx
   rules:
   - host: argocd.joshcorp.co
     http:

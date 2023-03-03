@@ -385,8 +385,8 @@ spec:
             - /nginx-ingress-controller
             - --publish-service=$(POD_NAMESPACE)/ingress-nginx-controller
             - --election-id=ingress-nginx-leader
-            - --controller-class=k8s.io/ingress-nginx
-            - --ingress-class=nginx
+            - --controller-class=k8s.io/external-ingress-nginx
+            - --ingress-class=external-nginx
             - --configmap=$(POD_NAMESPACE)/ingress-nginx-controller
             - --validating-webhook=:8443
             - --validating-webhook-certificate=/usr/local/certificates/cert
@@ -474,9 +474,9 @@ metadata:
     app.kubernetes.io/part-of: ingress-nginx
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
-  name: nginx
+  name: external-nginx
 spec:
-  controller: k8s.io/ingress-nginx
+  controller: k8s.io/external-ingress-nginx
 ---
 # Source: ingress-nginx/templates/admission-webhooks/validating-webhook.yaml
 # before changing this value, check the required kubernetes version

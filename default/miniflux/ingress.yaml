@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/name: miniflux
   name: miniflux
 spec:
-  ingressClassName: nginx
+  ingressClassName: external-nginx
   rules:
   - host: miniflux.joshcorp.co
     http:
