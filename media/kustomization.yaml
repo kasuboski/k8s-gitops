@@ -9,6 +9,7 @@ resources:
 - jackett
 - radarr
 - sonarr
+- qbittorrent
 
 configMapGenerator:
 - name: vpn-config
