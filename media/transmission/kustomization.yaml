@@ -1,3 +1,0 @@
-resources:
-  - transmission-ingress.yaml
-  - transmission.yaml
