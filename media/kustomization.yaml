@@ -5,7 +5,7 @@ resources:
 - speicher-nfs-volume.yaml
 - speicher-local-volume.yaml
 - plex
-- jackett
+- prowlarr
 - radarr
 - sonarr
 - qbittorrent
