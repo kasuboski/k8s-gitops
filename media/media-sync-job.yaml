@@ -26,7 +26,7 @@ spec:
         - --human-readable
         - --stats-log-level=NOTICE
         - --order-by=size,asc # send smaller files first
-        - --max-duration=4h
+        # - --max-duration=4h
         - --exclude=downloads/**
         - --exclude=downloads-complete/**
         - --exclude=Music/**
@@ -42,7 +42,7 @@ spec:
       volumes:
       - name: speicher
         persistentVolumeClaim:
-          claimName: media-speicher
+          claimName: adel-speicher
       - name: sichy
         persistentVolumeClaim:
           claimName: media-sichy
