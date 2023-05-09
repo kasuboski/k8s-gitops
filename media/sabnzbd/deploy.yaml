@@ -69,8 +69,8 @@ spec:
           requests:
             cpu: 100m
           limits:
-            cpu: 1000m
-            memory: 256Mi
+            cpu: 2000m
+            memory: 2Gi
         ports:
           - name: web
             containerPort: 8080 
