@@ -4,6 +4,7 @@ resources:
   - descheduler-app.yaml
   - grafana-agent-app.yaml
   - secrets-app.yaml
+  - metallb-app.yaml
   - ingress-app.yaml
   - default-app.yaml
   - media-app.yaml
