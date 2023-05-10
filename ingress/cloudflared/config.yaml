@@ -21,7 +21,17 @@ originRequest:
 ingress:
 - hostname: 'joshcorp.co'
   service: http://joshcorp-landing.default.svc
-- hostname: '*.joshcorp.co'
-  service: https://ingress-nginx-controller
+- hostname: 'argocd.joshcorp.co'
+  service: http://argocd-server.argocd.svc
+- hostname: 'radarr.joshcorp.co'
+  service: http://radarr.media.svc
+- hostname: 'sonarr.joshcorp.co'
+  service: http://sonarr.media.svc
+- hostname: 'qbittorrent.joshcorp.co'
+  service: http://qbittorrent.media.svc
+- hostname: 'sabnzbd.joshcorp.co'
+  service: http://sabnzbd.media.svc
+# - hostname: '*.joshcorp.co'
+#   service: https://ingress-nginx-controller
 # This rule matches any traffic which didn't match a previous rule, and responds with HTTP 404.
 - service: http_status:404
