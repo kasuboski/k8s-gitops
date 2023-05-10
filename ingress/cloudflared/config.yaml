@@ -1,5 +1,5 @@
 # Name of the tunnel you want to run
-tunnel: example-tunnel
+tunnel: home-external-ingress
 credentials-file: /etc/cloudflared/creds/credentials.json
 # Serves the metrics server under /metrics and the readiness server under /ready
 metrics: 0.0.0.0:2000
@@ -19,7 +19,8 @@ originRequest:
 # from the internet to cloudflared, run `cloudflared tunnel route dns <tunnel> <hostname>`.
 # E.g. `cloudflared tunnel route dns example-tunnel tunnel.example.com`.
 ingress:
-# The first rule proxies traffic to the httpbin sample Service defined in app.yaml
+- hostname: 'joshcorp.co'
+  service: http://joshcorp-landing.default.svc
 - hostname: '*.joshcorp.co'
   service: https://ingress-nginx-controller
 # This rule matches any traffic which didn't match a previous rule, and responds with HTTP 404.
