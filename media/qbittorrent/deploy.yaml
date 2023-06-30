@@ -113,7 +113,7 @@ spec:
               claimName: qbittorrent
         - name: data
           persistentVolumeClaim:
-              claimName: adel-speicher
+              claimName: media-storage
         - name: vpn-config
           projected:
             sources:

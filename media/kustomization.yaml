@@ -4,6 +4,7 @@ resources:
 - sichy-nfs-volume.yaml
 - speicher-nfs-volume.yaml
 - speicher-local-volume.yaml
+- storage-nfs-volume.yaml
 - plex
 - prowlarr
 - radarr

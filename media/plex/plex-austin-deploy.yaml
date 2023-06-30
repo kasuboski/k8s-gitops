@@ -41,7 +41,7 @@ spec:
           claimName: plex-austin
       - name: data
         persistentVolumeClaim:
-          claimName: adel-speicher
+          claimName: media-storage
 ---
 apiVersion: v1
 kind: Service
