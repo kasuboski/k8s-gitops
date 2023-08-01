@@ -11,6 +11,7 @@ resources:
 - sonarr
 - qbittorrent
 - sabnzbd
+- overseerr
 
 configMapGenerator:
 - name: vpn-config

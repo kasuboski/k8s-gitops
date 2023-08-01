@@ -1,0 +1,80 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: overseerr
+  labels:
+    app: overseerr
+    app.kubernetes.io/name: overseerr
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: overseerr
+  labels:
+    app: overseerr
+    app.kubernetes.io/name: overseerr
+spec:
+  selector:
+    app.kubernetes.io/name: overseerr
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: overseerr
+  labels:
+    app: overseerr
+    app.kubernetes.io/name: overseerr
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: overseerr
+  template:
+    metadata:
+      labels:
+        app: overseerr
+        app.kubernetes.io/name: overseerr
+    spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: austin
+      containers:
+      - name: overseerr
+        image: sctx/overseerr
+        env:
+        - name: TZ
+          value: America/Chicago
+        volumeMounts:
+          - name: overseerr-config
+            mountPath: /app/config
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        readinessProbe:
+          tcpSocket:
+            port: http
+          failureThreshold: 5
+          periodSeconds: 10
+        ports:
+        - name: http
+          containerPort: 5055 
+      volumes:
+      - name: overseerr-config
+        persistentVolumeClaim:
+            claimName: overseerr

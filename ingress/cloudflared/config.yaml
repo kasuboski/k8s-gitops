@@ -31,6 +31,8 @@ ingress:
   service: http://qbittorrent.media.svc
 - hostname: 'sabnzbd.joshcorp.co'
   service: http://sabnzbd.media.svc
+- hostname: 'overseerr.joshcorp.co'
+  service: http://overseerr.media.svc
 # - hostname: '*.joshcorp.co'
 #   service: https://ingress-nginx-controller
 # This rule matches any traffic which didn't match a previous rule, and responds with HTTP 404.
