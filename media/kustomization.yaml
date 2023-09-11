@@ -9,6 +9,7 @@ resources:
 - prowlarr
 - radarr
 - sonarr
+- lidarr
 - qbittorrent
 - sabnzbd
 - overseerr

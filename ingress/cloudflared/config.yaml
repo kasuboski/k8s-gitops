@@ -27,6 +27,8 @@ ingress:
   service: http://radarr.media.svc
 - hostname: 'sonarr.joshcorp.co'
   service: http://sonarr.media.svc
+- hostname: 'lidarr.joshcorp.co'
+  service: http://lidarrr.media.svc
 - hostname: 'qbittorrent.joshcorp.co'
   service: http://qbittorrent.media.svc
 - hostname: 'sabnzbd.joshcorp.co'
