@@ -34,7 +34,8 @@ spec:
           mountPath: /data
         resources:
           limits:
-            gpu.intel.com/i915: "1"
+            cpu: "8"
+            memory: 8Gi
       volumes:
       - name: config
         persistentVolumeClaim:
