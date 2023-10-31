@@ -18,6 +18,7 @@ spec:
     spec:
       nodeSelector:
         topology.kubernetes.io/zone: austin
+        kubernetes.io/hostname: fettig
       containers:
       - name: plex
         image: plexinc/pms-docker
