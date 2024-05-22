@@ -2,4 +2,4 @@ resources:
 - thinkbox-plex-volume.yaml
 - fettig-plex-volume.yaml
 - plex-wi-deploy.yaml
-- plex-austin-deploy.yaml
+# - plex-austin-deploy.yaml
