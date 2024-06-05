@@ -27,7 +27,7 @@ spec:
                       - cloudflared
       containers:
       - name: cloudflared
-        image: cloudflare/cloudflared:2024.5.0
+        image: cloudflare/cloudflared:2024.6.0
         args:
         - tunnel
         # Points cloudflared to the config file, which configures what
@@ -45,6 +45,13 @@ spec:
           failureThreshold: 1
           initialDelaySeconds: 10
           periodSeconds: 10
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
         volumeMounts:
         - name: config
           mountPath: /etc/cloudflared/config
