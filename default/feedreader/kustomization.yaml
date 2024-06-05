@@ -5,7 +5,6 @@ resources:
 
 patchesStrategicMerge:
   - add-config.yaml
-  - add-litestream.yaml
   - add-tailscale-proxy.yaml
 
 configMapGenerator:
@@ -14,8 +13,6 @@ configMapGenerator:
     - "feeds.opml"
 
 images:
-  - name: litestream/litestream
-    newTag: 0.3.9
   - name: ghcr.io/kasuboski/feedreader
     newTag: sha-cd3ae95
   - name: ghcr.io/kasuboski/tailscale-proxy

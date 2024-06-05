@@ -18,6 +18,7 @@
           doppler
           kubecolor
           kubectl
+          kustomize_4
         ];
       };
     });
