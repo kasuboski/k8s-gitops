@@ -21,6 +21,13 @@ originRequest:
 ingress:
 - hostname: 'joshcorp.co'
   service: http://joshcorp-landing.default.svc
+- hostname: 'feeds.joshcorp.co'
+  service: http://feedreader.default.svc
+  access:
+    required: true
+    teamName: joshcorp
+    audTag:
+    - aud1 aa4a1619b747249661761374cb187912b55fcce4e06ef3909f33e0c4d6e6086e
 - hostname: 'argocd.joshcorp.co'
   service: http://argocd-server.argocd.svc
 - hostname: 'radarr.joshcorp.co'
