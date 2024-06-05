@@ -5,7 +5,6 @@ resources:
 
 patchesStrategicMerge:
   - add-config.yaml
-  - add-tailscale-proxy.yaml
 
 configMapGenerator:
   - name: feeds
@@ -15,5 +14,3 @@ configMapGenerator:
 images:
   - name: ghcr.io/kasuboski/feedreader
     newTag: sha-cd3ae95
-  - name: ghcr.io/kasuboski/tailscale-proxy
-    newTag: sha-fdcf45d
