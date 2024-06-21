@@ -13,4 +13,4 @@ configMapGenerator:
 
 images:
   - name: ghcr.io/kasuboski/feedreader
-    newTag: sha-cd3ae95
+    newTag: 7b7c28c
