@@ -52,6 +52,9 @@ spec:
           limits:
             cpu: 500m
             memory: 512Mi
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN"]
         volumeMounts:
         - name: config
           mountPath: /etc/cloudflared/config
