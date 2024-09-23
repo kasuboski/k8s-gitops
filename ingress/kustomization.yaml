@@ -1,5 +1,6 @@
 resources:
 - namespace.yaml
 - ingress-nginx.yaml
+- ./cert-manager
 
 namespace: ingress-nginx
