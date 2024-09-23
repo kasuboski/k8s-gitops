@@ -1,6 +1,5 @@
 resources:
 - namespace.yaml
 - ingress-nginx.yaml
-- cloudflared
 
 namespace: ingress-nginx

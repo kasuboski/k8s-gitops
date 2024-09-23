@@ -1,6 +1,0 @@
-resources:
-  - deploy.yaml
-configMapGenerator:
-  - name: cloudflared
-    files:
-      - config.yaml
