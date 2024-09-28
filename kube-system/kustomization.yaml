@@ -1,0 +1,7 @@
+resources:
+  - github.com/kubernetes-sigs/metrics-server/manifests/overlays/release?ref=v0.7.2
+
+patchesStrategicMerge:
+  - metrics-tolerate-controlplane.yaml
+
+namespace: kube-system
