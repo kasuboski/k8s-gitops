@@ -1,7 +1,15 @@
 resources:
+  - github.com/alex1989hu/kubelet-serving-cert-approver/deploy/base?ref=v0.8.6
   - github.com/kubernetes-sigs/metrics-server/manifests/overlays/release?ref=v0.7.2
 
 patchesStrategicMerge:
   - metrics-tolerate-controlplane.yaml
+patchesJson6902:
+- target:
+    group: rbac.authorization.k8s.io
+    version: v1
+    kind: RoleBinding
+    name: events:kubelet-serving-cert-approver
+  path: cert-approver-patch.yaml
 
 namespace: kube-system

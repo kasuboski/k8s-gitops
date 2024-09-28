@@ -13,7 +13,7 @@ bootstrap:
 	endif
 	talosctl apply-config --insecure -n $(NODE) --file result/cherry.yaml
 	talosctl --talosconfig=result/talosconfig bootstrap -n $(NODE) -e $(NODE)
-	kubectl apply -f https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml
+	kustomize build ../kube-system | kubectl apply -f -
 	talosctl --talosconfig=result/talosconfig config endpoint $(CLUSTER_ENDPOINT)
 
 .PHONY: cluster
