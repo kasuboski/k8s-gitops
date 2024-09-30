@@ -5,15 +5,18 @@ nodes:
     - austin-labels-patch.yaml
     - ephemeral-usb-patch.yaml
     - sdcard-install-patch.yaml
+    - etcd-advertise-patch.yaml
   cherry:
     role: controlplane
     patches:
     - austin-labels-patch.yaml
     - ephemeral-usb-patch.yaml
     - sdcard-install-patch.yaml
+    - etcd-advertise-patch.yaml
   pumpkin:
     role: controlplane
     patches:
     - austin-labels-patch.yaml
     - ephemeral-usb-patch.yaml
     - sdcard-install-patch.yaml
+    - etcd-advertise-patch.yaml

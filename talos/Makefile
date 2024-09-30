@@ -13,10 +13,9 @@ bootstrap:
 	ifndef NODE
 		$(error NODE is not set)
 	endif
-	talosctl apply-config --insecure -n $(NODE) --file result/cherry.yaml
+	talosctl apply-config --insecure -n $(NODE) --file result/$(NODE).yaml
 	talosctl --talosconfig=result/talosconfig bootstrap -n $(NODE) -e $(NODE)
 	kustomize build ../kube-system | kubectl apply -f -
-	talosctl --talosconfig=result/talosconfig config endpoint $(CLUSTER_ENDPOINT)
 
 .PHONY: cluster
 cluster: $(CLUSTER_FILES_RESULT)

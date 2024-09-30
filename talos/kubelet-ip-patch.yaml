@@ -1,0 +1,6 @@
+machine:
+  kubelet:
+    nodeIP:
+      validSubnets:
+      - "0.0.0.0/0"
+      - "!100.64.0.0/10" # ignore tailscale

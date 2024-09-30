@@ -11,7 +11,7 @@ RESULT_FOLDER=result
 NODE_ROLE=$(yq -r ".nodes."$NODE_NAME".role" < cluster.yaml)
 BASE_CONFIG=""
 
-NODE_PATCHES=(kubelet-cert-patch.yaml vip-patch.yaml "$RESULT_FOLDER/tailscale-extensionconfig.yaml")
+NODE_PATCHES=(kubelet-cert-patch.yaml kubelet-ip-patch.yaml vip-patch.yaml "$RESULT_FOLDER/tailscale-extensionconfig.yaml")
 
 if [ "$NODE_ROLE" == "controlplane" ]; then
   BASE_CONFIG="$RESULT_FOLDER/controlplane.yaml"
