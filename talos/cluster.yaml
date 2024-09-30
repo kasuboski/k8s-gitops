@@ -11,3 +11,9 @@ nodes:
     - austin-labels-patch.yaml
     - ephemeral-usb-patch.yaml
     - sdcard-install-patch.yaml
+  pumpkin:
+    role: controlplane
+    patches:
+    - austin-labels-patch.yaml
+    - ephemeral-usb-patch.yaml
+    - sdcard-install-patch.yaml

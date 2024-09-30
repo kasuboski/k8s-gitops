@@ -27,6 +27,9 @@ $(RESULT_FOLDER)/cherry.yaml: $(RESULT_FOLDER)/controlplane.yaml $(RESULT_FOLDER
 $(RESULT_FOLDER)/blueberry.yaml: $(RESULT_FOLDER)/controlplane.yaml $(RESULT_FOLDER)/tailscale-extensionconfig.yaml
 	@bash generate-node-config.sh	blueberry
 
+$(RESULT_FOLDER)/pumpkin.yaml: $(RESULT_FOLDER)/controlplane.yaml $(RESULT_FOLDER)/tailscale-extensionconfig.yaml
+	@bash generate-node-config.sh	pumpkin
+
 $(CLUSTER_FILES_RESULT) &: $(RESULT_FOLDER)/secrets.yaml
 	talosctl gen config --with-secrets $(RESULT_FOLDER)/secrets.yaml $(CLUSTER_NAME) https://$(CLUSTER_ENDPOINT):6443 -o $(RESULT_FOLDER) --force
 
