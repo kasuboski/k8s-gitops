@@ -1,10 +1,12 @@
 CLUSTER_NAME = pi
-CLUSTER_ENDPOINT = '192.168.86.19'
+CLUSTER_ENDPOINT = 192.168.86.19
 
 RESULT_FOLDER = result
 
 CLUSTER_FILES = controlplane.yaml worker.yaml talosconfig.yaml
 CLUSTER_FILES_RESULT = $(addprefix $(RESULT_FOLDER)/,$(CLUSTER_FILES))
+
+COMMON_PATCHES = kubelet-cert-patch.yaml vip-patch.yaml $(RESULT_FOLDER)/tailscale-extensionconfig.yaml
 
 .PHONY: bootstrap
 bootstrap:
@@ -20,15 +22,10 @@ bootstrap:
 cluster: $(CLUSTER_FILES_RESULT)
 
 $(RESULT_FOLDER)/cherry.yaml: $(RESULT_FOLDER)/controlplane.yaml $(RESULT_FOLDER)/tailscale-extensionconfig.yaml
-	talosctl machineconfig patch $(RESULT_FOLDER)/controlplane.yaml \
-		--patch @cherry-patch.yaml \
-		--patch @kubelet-cert-patch.yaml \
-		--patch @vip-patch.yaml \
-		--patch @ephemeral-usb-patch.yaml \
-		--patch @sdcard-install-patch.yaml \
-		--patch @$(RESULT_FOLDER)/tailscale-extensionconfig.yaml \
-		--patch @austin-labels-patch.yaml \
-		--output $(RESULT_FOLDER)/cherry.yaml
+	@bash generate-node-config.sh	cherry
+
+$(RESULT_FOLDER)/blueberry.yaml: $(RESULT_FOLDER)/controlplane.yaml $(RESULT_FOLDER)/tailscale-extensionconfig.yaml
+	@bash generate-node-config.sh	blueberry
 
 $(CLUSTER_FILES_RESULT) &: $(RESULT_FOLDER)/secrets.yaml
 	talosctl gen config --with-secrets $(RESULT_FOLDER)/secrets.yaml $(CLUSTER_NAME) https://$(CLUSTER_ENDPOINT):6443 -o $(RESULT_FOLDER) --force
