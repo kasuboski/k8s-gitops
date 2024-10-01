@@ -9,6 +9,8 @@ if [ -z "$EXISTING" ]; then
   talosctl gen secrets -o "$SECRET_FILE"
   cat "$SECRET_FILE" | doppler secrets set SECRET_YAML -p talos -c boot
 else
-  echo "$EXISTING" > "$SECRET_FILE"
+  if [ ! $(echo "$EXISTING" | cmp -s "$SECRET_FILE") ]; then
+    echo "$EXISTING" > "$SECRET_FILE"
+  fi
 fi
 

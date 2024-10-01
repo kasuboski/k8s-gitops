@@ -18,20 +18,15 @@ bootstrap:
 .PHONY: cluster
 cluster: $(CLUSTER_FILES_RESULT)
 
-$(RESULT_FOLDER)/cherry.yaml: $(RESULT_FOLDER)/controlplane.yaml $(RESULT_FOLDER)/tailscale-extensionconfig.yaml
-	@./k8s-gitops gen nc cherry
-
-$(RESULT_FOLDER)/blueberry.yaml: $(RESULT_FOLDER)/controlplane.yaml $(RESULT_FOLDER)/tailscale-extensionconfig.yaml
-	@./k8s-gitops	gen nc blueberry
-
-$(RESULT_FOLDER)/pumpkin.yaml: $(RESULT_FOLDER)/controlplane.yaml $(RESULT_FOLDER)/tailscale-extensionconfig.yaml
-	@./k8s-gitops	gen nc pumpkin
-
-$(RESULT_FOLDER)/apple.yaml: $(RESULT_FOLDER)/worker.yaml $(RESULT_FOLDER)/tailscale-extensionconfig.yaml
-	@./k8s-gitops	gen nc apple
+.PHONY: nodes
+nodes: $(RESULT_FOLDER)/controlplane.yaml $(RESULT_FOLDER)/worker.yaml $(RESULT_FOLDER)/tailscale-extensionconfig.yaml
+	@../k8s gen nc cherry
+	@../k8s gen nc blueberry
+	@../k8s gen nc pumpkin
+	@../k8s gen nc apple
 
 $(CLUSTER_FILES_RESULT) &: $(RESULT_FOLDER)/secrets.yaml
-	talosctl gen config --with-secrets $(RESULT_FOLDER)/secrets.yaml $(CLUSTER_NAME) https://$(CLUSTER_ENDPOINT):6443 -o $(RESULT_FOLDER) --force
+	@talosctl gen config --with-secrets $(RESULT_FOLDER)/secrets.yaml $(CLUSTER_NAME) https://$(CLUSTER_ENDPOINT):6443 -o $(RESULT_FOLDER) --force
 
 $(RESULT_FOLDER)/secrets.yaml:
 	@bash get-or-create-secrets.sh $(RESULT_FOLDER)/secrets.yaml
