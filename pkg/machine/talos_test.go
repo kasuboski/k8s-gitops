@@ -54,8 +54,8 @@ func TestMachineConfigPatchCmd(t *testing.T) {
 	assert.Contains(t, args, "talosctl")
 	assert.Contains(t, args, "base-config")
 	assert.Contains(t, args, "--output output-file")
-	assert.Contains(t, args, "--patch patch1")
-	assert.Contains(t, args, "--patch patch2")
+	assert.Contains(t, args, "--patch @patch1")
+	assert.Contains(t, args, "--patch @patch2")
 }
 
 func repoClusterConfig(t *testing.T) *ClusterConfig {
