@@ -34,7 +34,7 @@ type TalosMachineConfigInfo struct {
 func ValidateMachineConfig(ctx context.Context, path string, mode string) error {
 	args := []string{"validate", "--strict", "-c", path, "-m", mode}
 	c := exec.CommandContext(ctx, "talosctl", args...)
-	o, err := c.Output()
+	o, err := c.CombinedOutput()
 	if err != nil {
 		return fmt.Errorf("%s: %w", o, err)
 	}
@@ -107,5 +107,5 @@ func ReadClusterConfig(filepath string) (*ClusterConfig, error) {
 }
 
 func DefaultNodePatches() []string {
-	return []string{"kubelet-cert-patch.yaml", "kubelet-ip-patch.yaml", "vip-patch.yaml", "result/tailscale-extensionconfig.yaml"}
+	return []string{"kubelet-cert-patch.yaml", "kubelet-ip-patch.yaml", "result/tailscale-extensionconfig.yaml"}
 }
