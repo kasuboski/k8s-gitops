@@ -4,17 +4,28 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
   outputs = {
+    self,
     nixpkgs,
     flake-utils,
     ...
-  } @ inputs:
+  } @ inputs: let
+    goVersion = 23;
+    goOverlay = final: prev: {
+      go = final."go_1_${toString goVersion}";
+    };
+  in
     flake-utils.lib.eachDefaultSystem (system: let
-      pkgs = import nixpkgs {inherit system;};
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [goOverlay];
+      };
     in {
       formatter = pkgs.alejandra;
       devShells.default = pkgs.mkShell {
         packages = with pkgs; [
+          cobra-cli
           doppler
+          go
           kubecolor
           kubectl
           kustomize_4
