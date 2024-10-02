@@ -1,5 +1,6 @@
 resources:
-- namespace.yaml
-- ingress-nginx.yaml
+- envoy-gateway.yaml
+- gateway-class.yaml
+- http-gateway.yaml
 
-namespace: ingress-nginx
+namespace: envoy-gateway-system
