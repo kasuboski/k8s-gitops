@@ -1,3 +1,0 @@
-resources:
-- github.com/rancher/system-upgrade-controller?ref=v0.10.0
-- system-upgrade-plans.yaml

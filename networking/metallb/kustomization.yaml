@@ -1,7 +1,7 @@
 namespace: metallb-system
 
 resources:
-  - github.com/metallb/metallb/config/native?ref=v0.13.9
+  - github.com/metallb/metallb/config/native?ref=v0.14.8
   - austin-ips.yaml
   - austin-advertisement.yaml
 
