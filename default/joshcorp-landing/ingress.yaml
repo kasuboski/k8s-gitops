@@ -1,20 +1,22 @@
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
 metadata:
-  labels:
-    app.kubernetes.io/name: joshcorp-landing
-  name: joshcorp-landing
+  name: backend
 spec:
-  ingressClassName: external-nginx
+  parentRefs:
+    - name: http
+      namespace: envoy-gateway-system
+  hostnames:
+    - "joshcorp.co"
   rules:
-  - host: joshcorp.co
-    http:
-      paths:
-      - backend:
-          service:
-            name: joshcorp-landing
-            port:
-              name: http
-        path: /
-        pathType: ImplementationSpecific
+    - backendRefs:
+        - group: ""
+          kind: Service
+          name: joshcorp-landing
+          port: 80
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
         
