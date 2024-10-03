@@ -1,5 +1,7 @@
 package apps
 
+import "github.com/kasuboski/k8s-gitops/ingress"
+
 apps: ingress: {
   namespace: "envoy-gateway-system"
   resources: [{
@@ -19,5 +21,9 @@ apps: ingress: {
       port: 80
       allowedRoutes: namespaces: from: "ALL"
     }]
-  }]
-} 
+  },
+  for k,v in _generated.deployment {v}
+  ]
+}
+
+_generated: deployment: ingress.deployment

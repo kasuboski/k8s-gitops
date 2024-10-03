@@ -1,3 +1,5 @@
+package ingress
+
 import yaml656e63 "encoding/yaml"
 
 customresourcedefinition: "backendlbpolicies.gateway.networking.k8s.io": {

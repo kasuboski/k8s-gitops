@@ -7,7 +7,7 @@ k8s:
 	@go build -o k8s
 
 ingress/envoy-gateway.download.cue: ingress/envoy-gateway.download.yaml 
-	cue import yaml -f -l 'strings.ToLower(kind)' -l 'metadata.name' -R -i ingress/envoy-gateway.download.yaml
+	cue import yaml -p ingress -f -l 'strings.ToLower(kind)' -l 'metadata.name' -R -i ingress/envoy-gateway.download.yaml
 
 ingress/envoy-gateway.download.yaml:
 	./k8s download https://github.com/envoyproxy/gateway/releases/download/v1.1.2/install.yaml ingress/envoy-gateway.download.yaml
