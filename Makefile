@@ -2,5 +2,17 @@
 cluster-nodes: k8s
 	@$(MAKE) -C talos nodes
 
+.PHONY: k8s
 k8s:
 	@go build -o k8s
+
+ingress/envoy-gateway.download.cue: ingress/envoy-gateway.download.yaml 
+	cue import yaml -f -l 'strings.ToLower(kind)' -l 'metadata.name' -R -i ingress/envoy-gateway.download.yaml
+
+ingress/envoy-gateway.download.yaml:
+	./k8s download https://github.com/envoyproxy/gateway/releases/download/v1.1.2/install.yaml ingress/envoy-gateway.download.yaml
+
+.PHONY: cue-k8s
+cue-k8s:
+	go get k8s.io/api/core/v1 && cue get go k8s.io/api/core/v1
+	go get k8s.io/api/apps/v1 && cue get go k8s.io/api/apps/v1

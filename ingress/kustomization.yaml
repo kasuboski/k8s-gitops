@@ -1,5 +1,5 @@
 resources:
-- envoy-gateway.yaml
+- envoy-gateway.download.yaml # until using cue
 - gateway-class.yaml
 - http-gateway.yaml
 
