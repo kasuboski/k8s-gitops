@@ -1,0 +1,8 @@
+package ingress
+
+gatewayclass: eg: {
+	apiVersion: "gateway.networking.k8s.io/v1"
+	kind:       "GatewayClass"
+	metadata: name:       "eg"
+	spec: controllerName: "gateway.envoyproxy.io/gatewayclass-controller"
+}

@@ -4,6 +4,11 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+#Resource: {
+  metav1.#PartialObjectMetadata
+  ...
+}
+
 #ArgoApp: metav1.#Object & {
 	apiVersion: "argoproj.io/v1alpha1"
 	kind:       "Application"
@@ -39,12 +44,19 @@ import (
 #App: {
 	name:      string
 	namespace: string
-	resources: [...metav1.#Object]
+	resources: [string]: [string]: #Resource
 }
 
-apps: [Name=string]: #App & {
+apps: [string]: #App
+apps: [Name=string]: {
 	name: Name
+  resources: [string]: [string]: metadata: {
+    labels: "app.kubernetes.io/part-of": Name
+  }
 }
+
+appsResources: [string]: [...#Resource]
+appsResources: {for appName, a in apps {{(appName): [for _, n in a.resources for name, r in n {r}]}}}
 
 appOut: [...#ArgoApp]
 appOut: [for n, a in apps {
@@ -53,7 +65,7 @@ appOut: [for n, a in apps {
 	}
 	spec: {
 		source: {
-			path: n
+			path: "manifests/\(n)"
 		}
 		destination: {
 			namespace: a.namespace
