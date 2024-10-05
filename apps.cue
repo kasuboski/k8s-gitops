@@ -51,7 +51,7 @@ apps: [string]: #App
 apps: [Name=string]: {
 	name: Name
   resources: [string]: [string]: metadata: {
-    labels: "app.kubernetes.io/part-of": Name
+    labels: "k8s.joshcorp.co/app": Name
   }
 }
 
