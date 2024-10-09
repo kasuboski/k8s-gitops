@@ -17,12 +17,42 @@ var manifestsCmd = &cobra.Command{
 	Use:   "manifests",
 	Short: "Generate manifests from the repo",
 	Run: func(cmd *cobra.Command, args []string) {
-		b, err := manifests.AppsResources(".")
+		argoApps, err := manifests.ArgoApps(".")
+		if err != nil {
+			log.Fatal(err)
+		}
+		appRoot := path.Join("manifests", "apps")
+		err = os.RemoveAll(appRoot)
+		if err != nil {
+			log.Printf("failed to remove app directory: %s", err)
+		}
+		err = os.MkdirAll(appRoot, 0750)
+		if err != nil {
+			log.Printf("failed to create app directory: %s", err)
+		}
+		for _, app := range argoApps {
+			metadata := app["metadata"].(map[string]interface{})
+			name := metadata["name"]
+			p := path.Join(appRoot, fmt.Sprintf("%s.json", name))
+			f, err := os.Create(p)
+			if err != nil {
+				log.Printf("failed to create file: %s", err)
+			}
+			defer f.Close()
+			encoder := json.NewEncoder(f)
+			encoder.SetIndent("", "  ")
+			err = encoder.Encode(app)
+			if err != nil {
+				log.Printf("failed to write file for %s", name)
+			}
+		}
+
+		res, err := manifests.AppsResources(".")
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		for app, resources := range b {
+		for app, resources := range res {
 			appPath := path.Join("manifests", app)
 			err := os.RemoveAll(appPath)
 			if err != nil {

@@ -14,4 +14,15 @@ func TestAppsResources(t *testing.T) {
 	require.NotNil(t, b)
 	assert.Contains(t, b, "ingress")
 	assert.NotEmpty(t, b["ingress"])
+
+	assert.Contains(t, b, "secrets")
+	assert.NotEmpty(t, b["secrets"])
+}
+
+func TestArgoApps(t *testing.T) {
+	b, err := ArgoApps("../../")
+	require.NoError(t, err)
+
+	require.NotNil(t, b)
+	assert.NotEmpty(t, b)
 }

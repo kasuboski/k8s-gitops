@@ -65,6 +65,7 @@ appOut: [for n, a in apps {
 	}
 	spec: {
 		source: {
+			targetRevision: "feature/talos"
 			path: "manifests/\(n)"
 		}
 		destination: {
@@ -72,3 +73,18 @@ appOut: [for n, a in apps {
 		}
 	}
 }]
+
+appsApp: #ArgoApp
+appsApp: {
+	metadata: {
+		name: "apps"
+	}
+	spec: {
+		source: {
+			path: "manifests/apps"
+		}
+		destination: {
+			namespace: "argocd"
+		}
+	}
+}
