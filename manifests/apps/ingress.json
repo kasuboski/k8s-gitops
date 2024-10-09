@@ -1,0 +1,33 @@
+{
+  "apiVersion": "argoproj.io/v1alpha1",
+  "kind": "Application",
+  "metadata": {
+    "finalizers": [
+      "resources-finalizer.argocd.argoproj.io"
+    ],
+    "name": "ingress",
+    "namespace": "argocd"
+  },
+  "spec": {
+    "destination": {
+      "namespace": "envoy-gateway-system",
+      "server": "https://kubernetes.default.svc"
+    },
+    "project": "default",
+    "source": {
+      "path": "manifests/ingress",
+      "repoURL": "https://github.com/kasuboski/k8s-gitops.git",
+      "targetRevision": "feature/talos"
+    },
+    "syncPolicy": {
+      "automated": {
+        "prune": true,
+        "selfHeal": true
+      },
+      "syncOptions": [
+        "CreateNamespace=true",
+        "PrunePropagationPolicy=foreground"
+      ]
+    }
+  }
+}
