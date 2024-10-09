@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -17,6 +16,20 @@ var manifestsCmd = &cobra.Command{
 	Use:   "manifests",
 	Short: "Generate manifests from the repo",
 	Run: func(cmd *cobra.Command, args []string) {
+		err := os.MkdirAll("manifests", 0750)
+		if err != nil {
+			log.Fatalf("failed to create manifests directory: %s", err)
+		}
+		appsApp, err := manifests.ArgoAppsApp(".")
+		if err != nil {
+			log.Fatal(err)
+		}
+		appsAppPath := path.Join("manifests", "apps.json")
+		err = manifests.WriteResource(appsAppPath, appsApp)
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		argoApps, err := manifests.ArgoApps(".")
 		if err != nil {
 			log.Fatal(err)
@@ -34,16 +47,9 @@ var manifestsCmd = &cobra.Command{
 			metadata := app["metadata"].(map[string]interface{})
 			name := metadata["name"]
 			p := path.Join(appRoot, fmt.Sprintf("%s.json", name))
-			f, err := os.Create(p)
+			err := manifests.WriteResource(p, app)
 			if err != nil {
-				log.Printf("failed to create file: %s", err)
-			}
-			defer f.Close()
-			encoder := json.NewEncoder(f)
-			encoder.SetIndent("", "  ")
-			err = encoder.Encode(app)
-			if err != nil {
-				log.Printf("failed to write file for %s", name)
+				log.Println(err)
 			}
 		}
 
@@ -66,16 +72,10 @@ var manifestsCmd = &cobra.Command{
 				metadata := r["metadata"].(map[string]interface{})
 				name := metadata["name"]
 				kind := strings.ToLower(r["kind"].(string))
-				f, err := os.Create(path.Join(appPath, fmt.Sprintf("%s-%s.json", kind, name)))
+				p := path.Join(appPath, fmt.Sprintf("%s-%s.json", kind, name))
+				err := manifests.WriteResource(p, r)
 				if err != nil {
-					log.Printf("failed to create file: %s", err)
-				}
-				defer f.Close()
-				encoder := json.NewEncoder(f)
-				encoder.SetIndent("", "  ")
-				err = encoder.Encode(r)
-				if err != nil {
-					log.Printf("failed to write file for %s", name)
+					log.Println(err)
 				}
 			}
 		}

@@ -26,3 +26,10 @@ func TestArgoApps(t *testing.T) {
 	require.NotNil(t, b)
 	assert.NotEmpty(t, b)
 }
+
+func TestArgoAppsApp(t *testing.T) {
+	b, err := ArgoAppsApp("../../")
+	require.NoError(t, err)
+
+	require.NotNil(t, b)
+}
