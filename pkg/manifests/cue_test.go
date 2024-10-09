@@ -25,6 +25,11 @@ func TestArgoApps(t *testing.T) {
 
 	require.NotNil(t, b)
 	assert.NotEmpty(t, b)
+
+	for _, a := range b {
+		assert.NotEmpty(t, a.Name())
+		assert.NotEmpty(t, a.Kind())
+	}
 }
 
 func TestArgoAppsApp(t *testing.T) {
@@ -32,4 +37,6 @@ func TestArgoAppsApp(t *testing.T) {
 	require.NoError(t, err)
 
 	require.NotNil(t, b)
+	assert.NotEmpty(t, b.Name())
+	assert.NotEmpty(t, b.Kind())
 }

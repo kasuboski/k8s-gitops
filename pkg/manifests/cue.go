@@ -10,7 +10,26 @@ import (
 	"cuelang.org/go/cue/load"
 )
 
-type Resource = map[string]interface{}
+type Resource struct {
+	Object map[string]interface{} `json:",inline"`
+}
+
+func (r *Resource) UnmarshalJSON(b []byte) error {
+	return json.Unmarshal(b, &r.Object)
+}
+
+func (r Resource) MarshalJSON() ([]byte, error) {
+	return json.Marshal(&r.Object)
+}
+
+func (r Resource) Kind() string {
+	return r.Object["kind"].(string)
+}
+
+func (r Resource) Name() string {
+	metadata := r.Object["metadata"].(map[string]interface{})
+	return metadata["name"].(string)
+}
 
 func AppsResources(path string) (map[string][]Resource, error) {
 	ctx := cuecontext.New()
@@ -21,7 +40,7 @@ func AppsResources(path string) (map[string][]Resource, error) {
 	if err != nil {
 		return nil, fmt.Errorf("couldn't marshal to json: %w", err)
 	}
-	ret := make(map[string][]map[string]interface{}, 0)
+	ret := make(map[string][]Resource, 0)
 	err = json.Unmarshal(bs, &ret)
 	return ret, err
 }
@@ -33,12 +52,12 @@ func ArgoApps(path string) ([]Resource, error) {
 	if err != nil {
 		return nil, fmt.Errorf("couldn't marshal to json: %w", err)
 	}
-	ret := make([]Resource, 0)
+	var ret []Resource
 	err = json.Unmarshal(bs, &ret)
 	return ret, err
 }
 
-func ArgoAppsApp(path string) (Resource, error) {
+func ArgoAppsApp(path string) (*Resource, error) {
 	v := loadCue(path)
 	v = v.LookupPath(cue.ParsePath("appsApp"))
 	bs, err := json.Marshal(v)
@@ -47,7 +66,7 @@ func ArgoAppsApp(path string) (Resource, error) {
 	}
 	var ret Resource
 	err = json.Unmarshal(bs, &ret)
-	return ret, err
+	return &ret, err
 }
 
 func WriteResource(p string, res Resource) error {

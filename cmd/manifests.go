@@ -25,7 +25,7 @@ var manifestsCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 		appsAppPath := path.Join("manifests", "apps.json")
-		err = manifests.WriteResource(appsAppPath, appsApp)
+		err = manifests.WriteResource(appsAppPath, *appsApp)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -44,8 +44,7 @@ var manifestsCmd = &cobra.Command{
 			log.Printf("failed to create app directory: %s", err)
 		}
 		for _, app := range argoApps {
-			metadata := app["metadata"].(map[string]interface{})
-			name := metadata["name"]
+			name := app.Name()
 			p := path.Join(appRoot, fmt.Sprintf("%s.json", name))
 			err := manifests.WriteResource(p, app)
 			if err != nil {
@@ -69,9 +68,8 @@ var manifestsCmd = &cobra.Command{
 				log.Printf("failed to create app directory: %s", err)
 			}
 			for _, r := range resources {
-				metadata := r["metadata"].(map[string]interface{})
-				name := metadata["name"]
-				kind := strings.ToLower(r["kind"].(string))
+				name := r.Name()
+				kind := strings.ToLower(r.Kind())
 				p := path.Join(appPath, fmt.Sprintf("%s-%s.json", kind, name))
 				err := manifests.WriteResource(p, r)
 				if err != nil {
