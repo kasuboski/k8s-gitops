@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-rbac-cm
+data:
+  policy.default: role:syncer
+  policy.csv: |
+    p, role:syncer, applications, get, */*, allow
+    p, role:syncer, applications, sync, */*, allow
+    p, role:syncer, projects, get, *, allow
+    p, role:syncer, repositories, get, *, allow

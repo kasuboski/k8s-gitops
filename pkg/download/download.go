@@ -46,8 +46,9 @@ func canonicalizeYaml(dst string) error {
 	decoder := yaml.NewDecoder(r)
 	encoder := yaml.NewEncoder(w)
 	defer encoder.Close()
+
 	for {
-		var d map[string]interface{}
+		d := make(map[string]interface{})
 		if err := decoder.Decode(&d); err != nil {
 			if err == io.EOF {
 				break
@@ -58,15 +59,23 @@ func canonicalizeYaml(dst string) error {
 		if len(d) == 0 {
 			continue
 		}
-		err := encoder.Encode(&d)
-		if err != nil {
+
+		if err := encoder.Encode(d); err != nil {
 			return fmt.Errorf("couldn't encode document: %w", err)
 		}
 	}
+	encoder.Close()
+	w.Flush()
+	temp.Close()
 
 	err = os.Rename(temp.Name(), dst)
 	if err != nil {
 		return fmt.Errorf("couldn't move tmp file: %w", err)
+	}
+
+	err = os.Chmod(dst, 0755)
+	if err != nil {
+		return fmt.Errorf("couldn't chmod end file: %w", err)
 	}
 	return nil
 }

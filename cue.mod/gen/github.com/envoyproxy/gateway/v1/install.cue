@@ -1,4 +1,4 @@
-package ingress
+package v1
 
 import yaml656e63 "encoding/yaml"
 
@@ -40075,8 +40075,140 @@ deployment: "envoy-gateway": {
 				}]
 				imagePullSecrets: []
 				securityContext: runAsNonRoot: true
-				serviceAccountName: "envoy-g"
+				serviceAccountName:            "envoy-gateway"
+				terminationGracePeriodSeconds: 10
+				volumes: [{
+					configMap: {
+						defaultMode: 420
+						name:        "envoy-gateway-config"
+					}
+					name: "envoy-gateway-config"
+				}, {
+					name: "certs"
+					secret: secretName: "envoy-gateway"
+				}]
 			}
 		}
+	}
+}
+serviceaccount: "eg-gateway-helm-certgen": {
+	apiVersion: "v1"
+	kind:       "ServiceAccount"
+	metadata: {
+		annotations: "helm.sh/hook": "pre-install"
+		labels: {
+			"app.kubernetes.io/instance":   "eg"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "gateway-helm"
+			"app.kubernetes.io/version":    "latest"
+			"helm.sh/chart":                "gateway-helm-v0.0.0-latest"
+		}
+		name:      "eg-gateway-helm-certgen"
+		namespace: "envoy-gateway-system"
+	}
+}
+role: "eg-gateway-helm-certgen": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "Role"
+	metadata: {
+		annotations: "helm.sh/hook": "pre-install"
+		labels: {
+			"app.kubernetes.io/instance":   "eg"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "gateway-helm"
+			"app.kubernetes.io/version":    "latest"
+			"helm.sh/chart":                "gateway-helm-v0.0.0-latest"
+		}
+		name:      "eg-gateway-helm-certgen"
+		namespace: "envoy-gateway-system"
+	}
+	rules: [{
+		apiGroups: [""]
+		resources: ["secrets"]
+		verbs: [
+			"get",
+			"create",
+			"update",
+		]
+	}]
+}
+rolebinding: "eg-gateway-helm-certgen": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "RoleBinding"
+	metadata: {
+		annotations: "helm.sh/hook": "pre-install"
+		labels: {
+			"app.kubernetes.io/instance":   "eg"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "gateway-helm"
+			"app.kubernetes.io/version":    "latest"
+			"helm.sh/chart":                "gateway-helm-v0.0.0-latest"
+		}
+		name:      "eg-gateway-helm-certgen"
+		namespace: "envoy-gateway-system"
+	}
+	roleRef: {
+		apiGroup: "rbac.authorization.k8s.io"
+		kind:     "Role"
+		name:     "eg-gateway-helm-certgen"
+	}
+	subjects: [{
+		kind:      "ServiceAccount"
+		name:      "eg-gateway-helm-certgen"
+		namespace: "envoy-gateway-system"
+	}]
+}
+job: "eg-gateway-helm-certgen": {
+	apiVersion: "batch/v1"
+	kind:       "Job"
+	metadata: {
+		annotations: "helm.sh/hook": "pre-install, pre-upgrade"
+		labels: {
+			"app.kubernetes.io/instance":   "eg"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "gateway-helm"
+			"app.kubernetes.io/version":    "latest"
+			"helm.sh/chart":                "gateway-helm-v0.0.0-latest"
+		}
+		name:      "eg-gateway-helm-certgen"
+		namespace: "envoy-gateway-system"
+	}
+	spec: {
+		backoffLimit: 1
+		completions:  1
+		parallelism:  1
+		template: {
+			metadata: labels: app: "certgen"
+			spec: {
+				containers: [{
+					command: [
+						"envoy-gateway",
+						"certgen",
+					]
+					env: [{
+						name: "ENVOY_GATEWAY_NAMESPACE"
+						valueFrom: fieldRef: {
+							apiVersion: "v1"
+							fieldPath:  "metadata.namespace"
+						}
+					}, {
+						name:  "KUBERNETES_CLUSTER_DOMAIN"
+						value: "cluster.local"
+					}]
+					image:           "envoyproxy/gateway:v1.1.2"
+					imagePullPolicy: "IfNotPresent"
+					name:            "envoy-gateway-certgen"
+				}]
+				imagePullSecrets: []
+				restartPolicy: "Never"
+				securityContext: {
+					runAsGroup:   65534
+					runAsNonRoot: true
+					runAsUser:    65534
+				}
+				serviceAccountName: "eg-gateway-helm-certgen"
+			}
+		}
+		ttlSecondsAfterFinished: 30
 	}
 }
