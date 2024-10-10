@@ -1,4 +1,4 @@
-package secrets
+package v1
 
 import yaml656e63 "encoding/yaml"
 
@@ -15,7 +15,8 @@ customresourcedefinition: "dopplersecrets.secrets.doppler.com": {
 	kind:       "CustomResourceDefinition"
 	metadata: {
 		annotations: "controller-gen.kubebuilder.io/version": "v0.4.1"
-		name: "dopplersecrets.secrets.doppler.com"
+		creationTimestamp: null
+		name:              "dopplersecrets.secrets.doppler.com"
 	}
 	spec: {
 		group: "secrets.doppler.com"
@@ -295,7 +296,10 @@ role: "doppler-operator-leader-election-role": {
 clusterrole: "doppler-operator-manager-role": {
 	apiVersion: "rbac.authorization.k8s.io/v1"
 	kind:       "ClusterRole"
-	metadata: name: "doppler-operator-manager-role"
+	metadata: {
+		creationTimestamp: null
+		name:              "doppler-operator-manager-role"
+	}
 	rules: [{
 		apiGroups: [""]
 		resources: ["secrets"]

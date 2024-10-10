@@ -128,7 +128,23 @@
             "type": "RuntimeDefault"
           }
         },
-        "serviceAccountName": "envoy-g"
+        "serviceAccountName": "envoy-gateway",
+        "terminationGracePeriodSeconds": 10,
+        "volumes": [
+          {
+            "configMap": {
+              "defaultMode": 420,
+              "name": "envoy-gateway-config"
+            },
+            "name": "envoy-gateway-config"
+          },
+          {
+            "name": "certs",
+            "secret": {
+              "secretName": "envoy-gateway"
+            }
+          }
+        ]
       }
     }
   }
