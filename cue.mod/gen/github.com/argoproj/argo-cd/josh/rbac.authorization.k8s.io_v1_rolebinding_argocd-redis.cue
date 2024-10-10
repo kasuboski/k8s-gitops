@@ -1,0 +1,25 @@
+package josh
+
+rolebinding: "argocd-redis": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "RoleBinding"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/component": "redis"
+			"app.kubernetes.io/name":      "argocd-redis"
+			"app.kubernetes.io/part-of":   "argocd"
+		}
+		name:      "argocd-redis"
+		namespace: "argocd"
+	}
+	roleRef: {
+		apiGroup: "rbac.authorization.k8s.io"
+		kind:     "Role"
+		name:     "argocd-redis"
+	}
+	subjects: [{
+		kind:      "ServiceAccount"
+		name:      "argocd-redis"
+		namespace: "argocd"
+	}]
+}

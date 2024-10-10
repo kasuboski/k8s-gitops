@@ -1,0 +1,27 @@
+package josh
+
+role: "argocd-dex-server": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "Role"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/component": "dex-server"
+			"app.kubernetes.io/name":      "argocd-dex-server"
+			"app.kubernetes.io/part-of":   "argocd"
+		}
+		name:      "argocd-dex-server"
+		namespace: "argocd"
+	}
+	rules: [{
+		apiGroups: [""]
+		resources: [
+			"secrets",
+			"configmaps",
+		]
+		verbs: [
+			"get",
+			"list",
+			"watch",
+		]
+	}]
+}
