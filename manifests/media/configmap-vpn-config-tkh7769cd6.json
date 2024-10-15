@@ -1,0 +1,13 @@
+{
+  "apiVersion": "v1",
+  "data": {
+    "vpn.conf": "client\nremote 87-1-us.cg-dialup.net 443\ndev tun \nproto udp\nauth-user-pass\n\n\nresolv-retry infinite \nredirect-gateway def1\npersist-key\npersist-tun\nnobind\ncipher AES-256-CBC\nncp-disable\nauth SHA256\nping 5\nping-exit 60\nping-timer-rem\nexplicit-exit-notify 2\nscript-security 2\nremote-cert-tls server\nroute-delay 5\nverb 4\n\n\nca ca.crt\n\ncert client.crt\n\nkey client.key\n\n"
+  },
+  "kind": "ConfigMap",
+  "metadata": {
+    "labels": {
+      "k8s.joshcorp.co/app": "media"
+    },
+    "name": "vpn-config-tkh7769cd6"
+  }
+}

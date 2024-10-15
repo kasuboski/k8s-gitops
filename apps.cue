@@ -46,6 +46,7 @@ import (
 	namespace: string
 	resources: [string]: [string]: #Resource
 }
+#App: resources: #Schema
 
 apps: [string]: #App
 apps: [Name=string]: {
