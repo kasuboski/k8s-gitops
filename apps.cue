@@ -5,8 +5,8 @@ import (
 )
 
 #Resource: {
-  metav1.#PartialObjectMetadata
-  ...
+	metav1.#PartialObjectMetadata
+	...
 }
 
 #ArgoApp: metav1.#Object & {
@@ -50,9 +50,9 @@ import (
 apps: [string]: #App
 apps: [Name=string]: {
 	name: Name
-  resources: [string]: [string]: metadata: {
-    labels: "k8s.joshcorp.co/app": Name
-  }
+	resources: [string]: [string]: metadata: {
+		labels: "k8s.joshcorp.co/app": Name
+	}
 }
 
 appsResources: [string]: [...#Resource]
@@ -66,7 +66,7 @@ appOut: [for n, a in apps {
 	spec: {
 		source: {
 			targetRevision: "feature/talos"
-			path: "manifests/\(n)"
+			path:           "manifests/\(n)"
 		}
 		destination: {
 			namespace: a.namespace
@@ -81,7 +81,7 @@ appsApp: {
 	}
 	spec: {
 		source: {
-			path: "manifests/apps"
+			path:           "manifests/apps"
 			targetRevision: "feature/talos"
 		}
 		destination: {

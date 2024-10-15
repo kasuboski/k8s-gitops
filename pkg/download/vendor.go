@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
+	"strings"
 
 	"cuelang.org/go/cue"
 	"cuelang.org/go/cue/cuecontext"
@@ -102,9 +103,13 @@ func RunKustomize(ctx context.Context, pkg string, k Kustomize) error {
 }
 
 func ConvertYaml(ctx context.Context, p string, pkg string) error {
+	err := sanitizeDirectoryFiles(p)
+	if err != nil {
+		return err
+	}
 	// cue import yaml -p secrets -f -l 'strings.ToLower(kind)' -l 'metadata.name' -R -i secrets/doppler-operator.yaml
 	pkgName := path.Base(pkg)
-	args := []string{"import", "yaml", "-p", pkgName, "-f", "-l", "strings.ToLower(kind)", "-l", "metadata.name", "-R", "-i", "."}
+	args := []string{"import", "yaml", "-p", pkgName, "-f", "-l", "strings.ToLower(kind)", "-l", "metadata.name", "-R", "-i", "-s", "."}
 	c := exec.CommandContext(ctx, "cue", args...)
 	f, err := relPath(p)
 	if err != nil {
@@ -163,4 +168,33 @@ func loadCue(path string) cue.Value {
 	insts := load.Instances([]string{path}, nil)
 	v := ctx.BuildInstance(insts[0])
 	return v
+}
+
+// sanitizeDirectoryFiles makes sure every file in the directory has a cue compatible name
+func sanitizeDirectoryFiles(p string) error {
+	entries, err := os.ReadDir(p)
+	if err != nil {
+		return err
+	}
+	var errs error
+	for _, e := range entries {
+		if e.IsDir() {
+			continue
+		}
+		if changed, newName := sanitizedName(e.Name()); changed {
+			err := os.Rename(path.Join(p, e.Name()), path.Join(p, newName))
+			if err != nil {
+				errs = errors.Join(errs, fmt.Errorf("couldn't sanitize filename: %w", err))
+			}
+		}
+	}
+	return errs
+}
+
+// sanitizedName returns whether the filename needs to change and what it should change to
+func sanitizedName(name string) (bool, string) {
+	if strings.Contains(name, ":") {
+		return true, strings.ReplaceAll(name, ":", "_")
+	}
+	return false, name
 }
