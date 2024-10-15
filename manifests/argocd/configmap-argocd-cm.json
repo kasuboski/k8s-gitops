@@ -1,0 +1,19 @@
+{
+  "apiVersion": "v1",
+  "data": {
+    "admin.enabled": "false",
+    "resource.customizations": "apiextensions.k8s.io/CustomResourceDefinition:\n  ignoreDifferences: |\n    jsonPointers:\n      - /status\nadmissionregistration.k8s.io/ValidatingWebhookConfiguration:\n  ignoreDifferences: |\n    jsonPointers:\n      - /webhooks/0/clientConfig/caBundle\n      - /webhooks/1/clientConfig/caBundle\n",
+    "statusbadge.enabled": "true",
+    "users.anonymous.enabled": "true"
+  },
+  "kind": "ConfigMap",
+  "metadata": {
+    "labels": {
+      "app.kubernetes.io/name": "argocd-cm",
+      "app.kubernetes.io/part-of": "argocd",
+      "k8s.joshcorp.co/app": "argocd"
+    },
+    "name": "argocd-cm",
+    "namespace": "argocd"
+  }
+}
