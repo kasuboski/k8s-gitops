@@ -1,0 +1,22 @@
+{
+  "apiVersion": "metallb.io/v1beta1",
+  "kind": "L2Advertisement",
+  "metadata": {
+    "labels": {
+      "k8s.joshcorp.co/app": "metallb"
+    },
+    "name": "austin-advertisement"
+  },
+  "spec": {
+    "ipAddressPools": [
+      "austin-ips"
+    ],
+    "nodeSelectors": [
+      {
+        "matchLabels": {
+          "topology.kubernetes.io/zone": "austin"
+        }
+      }
+    ]
+  }
+}

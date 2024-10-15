@@ -1,7 +1,0 @@
-apiVersion: metallb.io/v1beta1
-kind: IPAddressPool
-metadata:
-  name: austin-ips
-spec:
-  addresses:
-  - 192.168.86.243-192.168.86.250

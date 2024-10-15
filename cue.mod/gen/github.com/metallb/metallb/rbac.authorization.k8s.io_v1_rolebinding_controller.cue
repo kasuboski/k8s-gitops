@@ -1,0 +1,21 @@
+package metallb
+
+rolebinding: controller: {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "RoleBinding"
+	metadata: {
+		labels: app: "metallb"
+		name:      "controller"
+		namespace: "metallb-system"
+	}
+	roleRef: {
+		apiGroup: "rbac.authorization.k8s.io"
+		kind:     "Role"
+		name:     "controller"
+	}
+	subjects: [{
+		kind:      "ServiceAccount"
+		name:      "controller"
+		namespace: "metallb-system"
+	}]
+}

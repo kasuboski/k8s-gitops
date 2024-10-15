@@ -1,6 +1,0 @@
-resources:
-- envoy-gateway.download.yaml # until using cue
-- gateway-class.yaml
-- http-gateway.yaml
-
-namespace: envoy-gateway-system

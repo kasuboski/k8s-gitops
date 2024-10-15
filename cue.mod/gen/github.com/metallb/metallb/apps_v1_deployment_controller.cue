@@ -1,0 +1,106 @@
+package metallb
+
+deployment: controller: {
+	apiVersion: "apps/v1"
+	kind:       "Deployment"
+	metadata: {
+		labels: {
+			app:       "metallb"
+			component: "controller"
+		}
+		name:      "controller"
+		namespace: "metallb-system"
+	}
+	spec: {
+		revisionHistoryLimit: 3
+		selector: matchLabels: {
+			app:       "metallb"
+			component: "controller"
+		}
+		template: {
+			metadata: {
+				annotations: {
+					"prometheus.io/port":   "7472"
+					"prometheus.io/scrape": "true"
+				}
+				labels: {
+					app:       "metallb"
+					component: "controller"
+				}
+			}
+			spec: {
+				containers: [{
+					args: [
+						"--port=7472",
+						"--log-level=info",
+						"--tls-min-version=VersionTLS12",
+					]
+					env: [{
+						name:  "METALLB_ML_SECRET_NAME"
+						value: "memberlist"
+					}, {
+						name:  "METALLB_DEPLOYMENT"
+						value: "controller"
+					}]
+					image: "quay.io/metallb/controller:v0.14.8"
+					livenessProbe: {
+						failureThreshold: 3
+						httpGet: {
+							path: "/metrics"
+							port: "monitoring"
+						}
+						initialDelaySeconds: 10
+						periodSeconds:       10
+						successThreshold:    1
+						timeoutSeconds:      1
+					}
+					name: "controller"
+					ports: [{
+						containerPort: 7472
+						name:          "monitoring"
+					}, {
+						containerPort: 9443
+						name:          "webhook-server"
+						protocol:      "TCP"
+					}]
+					readinessProbe: {
+						failureThreshold: 3
+						httpGet: {
+							path: "/metrics"
+							port: "monitoring"
+						}
+						initialDelaySeconds: 10
+						periodSeconds:       10
+						successThreshold:    1
+						timeoutSeconds:      1
+					}
+					securityContext: {
+						allowPrivilegeEscalation: false
+						capabilities: drop: ["all"]
+						readOnlyRootFilesystem: true
+					}
+					volumeMounts: [{
+						mountPath: "/tmp/k8s-webhook-server/serving-certs"
+						name:      "cert"
+						readOnly:  true
+					}]
+				}]
+				nodeSelector: "kubernetes.io/os": "linux"
+				securityContext: {
+					fsGroup:      65534
+					runAsNonRoot: true
+					runAsUser:    65534
+				}
+				serviceAccountName:            "controller"
+				terminationGracePeriodSeconds: 0
+				volumes: [{
+					name: "cert"
+					secret: {
+						defaultMode: 420
+						secretName:  "metallb-webhook-cert"
+					}
+				}]
+			}
+		}
+	}
+}
