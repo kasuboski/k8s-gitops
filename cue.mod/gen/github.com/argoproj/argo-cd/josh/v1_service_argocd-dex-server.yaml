@@ -9,7 +9,8 @@ metadata:
   namespace: argocd
 spec:
   ports:
-  - name: http
+  - appProtocol: TCP
+    name: http
     port: 5556
     protocol: TCP
     targetPort: 5556

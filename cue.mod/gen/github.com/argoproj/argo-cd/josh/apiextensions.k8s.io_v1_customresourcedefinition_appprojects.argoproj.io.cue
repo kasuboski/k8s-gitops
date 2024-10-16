@@ -26,15 +26,33 @@ customresourcedefinition: "appprojects.argoproj.io": {
 		versions: [{
 			name: "v1alpha1"
 			schema: openAPIV3Schema: {
-				description: "AppProject provides a logical grouping of applications, providing controls for: * where the apps may deploy to (cluster whitelist) * what may be deployed (repository whitelist, resource whitelist/blacklist) * who can access these applications (roles, OIDC group claims bindings) * and what they can do (RBAC policies) * automation access to these roles (JWT tokens)"
+				description: """
+					AppProject provides a logical grouping of applications, providing controls for:
+					* where the apps may deploy to (cluster whitelist)
+					* what may be deployed (repository whitelist, resource whitelist/blacklist)
+					* who can access these applications (roles, OIDC group claims bindings)
+					* and what they can do (RBAC policies)
+					* automation access to these roles (JWT tokens)
+					"""
 				properties: {
 					apiVersion: {
-						description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources"
-						type:        "string"
+						description: """
+	APIVersion defines the versioned schema of this representation of an object.
+	Servers should convert recognized schemas to the latest internal value, and
+	may reject unrecognized values.
+	More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+	"""
+						type: "string"
 					}
 					kind: {
-						description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
-						type:        "string"
+						description: """
+	Kind is a string value representing the REST resource this object represents.
+	Servers may infer this from the endpoint the client submits requests to.
+	Cannot be updated.
+	In CamelCase.
+	More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+	"""
+						type: "string"
 					}
 					metadata: type: "object"
 					spec: {
@@ -43,7 +61,10 @@ customresourcedefinition: "appprojects.argoproj.io": {
 							clusterResourceBlacklist: {
 								description: "ClusterResourceBlacklist contains list of blacklisted cluster level resources"
 								items: {
-									description: "GroupKind specifies a Group and a Kind, but does not force a version.  This is useful for identifying concepts during lookup stages without having partially valid types"
+									description: """
+	GroupKind specifies a Group and a Kind, but does not force a version.  This is useful for identifying
+	concepts during lookup stages without having partially valid types
+	"""
 									properties: {
 										group: type: "string"
 										kind: type: "string"
@@ -59,7 +80,10 @@ customresourcedefinition: "appprojects.argoproj.io": {
 							clusterResourceWhitelist: {
 								description: "ClusterResourceWhitelist contains list of whitelisted cluster level resources"
 								items: {
-									description: "GroupKind specifies a Group and a Kind, but does not force a version.  This is useful for identifying concepts during lookup stages without having partially valid types"
+									description: """
+	GroupKind specifies a Group and a Kind, but does not force a version.  This is useful for identifying
+	concepts during lookup stages without having partially valid types
+	"""
 									properties: {
 										group: type: "string"
 										kind: type: "string"
@@ -82,15 +106,18 @@ customresourcedefinition: "appprojects.argoproj.io": {
 									description: "ApplicationDestination holds information about the application's destination"
 									properties: {
 										name: {
-											description: "Name is an alternate way of specifying the target cluster by its symbolic name"
+											description: "Name is an alternate way of specifying the target cluster by its symbolic name. This must be set if Server is not set."
 											type:        "string"
 										}
 										namespace: {
-											description: "Namespace specifies the target namespace for the application's resources. The namespace will only be set for namespace-scoped resources that have not set a value for .metadata.namespace"
-											type:        "string"
+											description: """
+	Namespace specifies the target namespace for the application's resources.
+	The namespace will only be set for namespace-scoped resources that have not set a value for .metadata.namespace
+	"""
+											type: "string"
 										}
 										server: {
-											description: "Server specifies the URL of the target cluster and must be set to the Kubernetes control plane API"
+											description: "Server specifies the URL of the target cluster's Kubernetes control plane API. This must be set if Name is not set."
 											type:        "string"
 										}
 									}
@@ -101,7 +128,10 @@ customresourcedefinition: "appprojects.argoproj.io": {
 							namespaceResourceBlacklist: {
 								description: "NamespaceResourceBlacklist contains list of blacklisted namespace level resources"
 								items: {
-									description: "GroupKind specifies a Group and a Kind, but does not force a version.  This is useful for identifying concepts during lookup stages without having partially valid types"
+									description: """
+	GroupKind specifies a Group and a Kind, but does not force a version.  This is useful for identifying
+	concepts during lookup stages without having partially valid types
+	"""
 									properties: {
 										group: type: "string"
 										kind: type: "string"
@@ -117,7 +147,10 @@ customresourcedefinition: "appprojects.argoproj.io": {
 							namespaceResourceWhitelist: {
 								description: "NamespaceResourceWhitelist contains list of whitelisted namespace level resources"
 								items: {
-									description: "GroupKind specifies a Group and a Kind, but does not force a version.  This is useful for identifying concepts during lookup stages without having partially valid types"
+									description: """
+	GroupKind specifies a Group and a Kind, but does not force a version.  This is useful for identifying
+	concepts during lookup stages without having partially valid types
+	"""
 									properties: {
 										group: type: "string"
 										kind: type: "string"

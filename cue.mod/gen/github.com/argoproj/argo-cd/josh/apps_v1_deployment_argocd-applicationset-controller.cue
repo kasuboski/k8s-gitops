@@ -5,9 +5,9 @@ deployment: "argocd-applicationset-controller": {
 	kind:       "Deployment"
 	metadata: {
 		labels: {
-			"app.kubernetes.io/component": "controller"
+			"app.kubernetes.io/component": "applicationset-controller"
 			"app.kubernetes.io/name":      "argocd-applicationset-controller"
-			"app.kubernetes.io/part-of":   "argocd-applicationset"
+			"app.kubernetes.io/part-of":   "argocd"
 		}
 		name:      "argocd-applicationset-controller"
 		namespace: "argocd"
@@ -18,24 +18,28 @@ deployment: "argocd-applicationset-controller": {
 			metadata: labels: "app.kubernetes.io/name": "argocd-applicationset-controller"
 			spec: {
 				containers: [{
-					command: [
-						"entrypoint.sh",
-						"argocd-applicationset-controller",
-					]
+					args: ["/usr/local/bin/argocd-applicationset-controller"]
 					env: [{
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_GLOBAL_PRESERVED_ANNOTATIONS"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.global.preserved.annotations"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_GLOBAL_PRESERVED_LABELS"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.global.preserved.labels"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
 						name: "NAMESPACE"
 						valueFrom: fieldRef: fieldPath: "metadata.namespace"
 					}, {
 						name: "ARGOCD_APPLICATIONSET_CONTROLLER_ENABLE_LEADER_ELECTION"
 						valueFrom: configMapKeyRef: {
 							key:      "applicationsetcontroller.enable.leader.election"
-							name:     "argocd-cmd-params-cm"
-							optional: true
-						}
-					}, {
-						name: "ARGOCD_APPLICATIONSET_CONTROLLER_NAMESPACE"
-						valueFrom: configMapKeyRef: {
-							key:      "applicationsetcontroller.namespace"
 							name:     "argocd-cmd-params-cm"
 							optional: true
 						}
@@ -50,6 +54,13 @@ deployment: "argocd-applicationset-controller": {
 						name: "ARGOCD_APPLICATIONSET_CONTROLLER_POLICY"
 						valueFrom: configMapKeyRef: {
 							key:      "applicationsetcontroller.policy"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_ENABLE_POLICY_OVERRIDE"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.enable.policy.override"
 							name:     "argocd-cmd-params-cm"
 							optional: true
 						}
@@ -95,8 +106,71 @@ deployment: "argocd-applicationset-controller": {
 							name:     "argocd-cmd-params-cm"
 							optional: true
 						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_ENABLE_NEW_GIT_FILE_GLOBBING"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.enable.new.git.file.globbing"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_REPO_SERVER_PLAINTEXT"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.repo.server.plaintext"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_REPO_SERVER_STRICT_TLS"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.repo.server.strict.tls"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_REPO_SERVER_TIMEOUT_SECONDS"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.repo.server.timeout.seconds"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_CONCURRENT_RECONCILIATIONS"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.concurrent.reconciliations.max"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_NAMESPACES"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.namespaces"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_SCM_ROOT_CA_PATH"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.scm.root.ca.path"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_ALLOWED_SCM_PROVIDERS"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.allowed.scm.providers"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_ENABLE_SCM_PROVIDERS"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.enable.scm.providers"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
 					}]
-					image:           "quay.io/argoproj/argocd:v2.6.2"
+					image:           "quay.io/argoproj/argocd:v2.12.4"
 					imagePullPolicy: "Always"
 					name:            "argocd-applicationset-controller"
 					ports: [{
@@ -128,6 +202,9 @@ deployment: "argocd-applicationset-controller": {
 					}, {
 						mountPath: "/tmp"
 						name:      "tmp"
+					}, {
+						mountPath: "/app/config/reposerver/tls"
+						name:      "argocd-repo-server-tls"
 					}]
 				}]
 				serviceAccountName: "argocd-applicationset-controller"
@@ -146,6 +223,22 @@ deployment: "argocd-applicationset-controller": {
 				}, {
 					emptyDir: {}
 					name: "tmp"
+				}, {
+					name: "argocd-repo-server-tls"
+					secret: {
+						items: [{
+							key:  "tls.crt"
+							path: "tls.crt"
+						}, {
+							key:  "tls.key"
+							path: "tls.key"
+						}, {
+							key:  "ca.crt"
+							path: "ca.crt"
+						}]
+						optional:   true
+						secretName: "argocd-repo-server-tls"
+					}
 				}]
 			}
 		}

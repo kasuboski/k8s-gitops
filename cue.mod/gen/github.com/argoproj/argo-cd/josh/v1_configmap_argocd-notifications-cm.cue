@@ -4,6 +4,11 @@ configmap: "argocd-notifications-cm": {
 	apiVersion: "v1"
 	kind:       "ConfigMap"
 	metadata: {
+		labels: {
+			"app.kubernetes.io/component": "notifications-controller"
+			"app.kubernetes.io/name":      "argocd-notifications-controller"
+			"app.kubernetes.io/part-of":   "argocd"
+		}
 		name:      "argocd-notifications-cm"
 		namespace: "argocd"
 	}

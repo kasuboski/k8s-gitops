@@ -14,10 +14,11 @@ service: "argocd-dex-server": {
 	}
 	spec: {
 		ports: [{
-			name:       "http"
-			port:       5556
-			protocol:   "TCP"
-			targetPort: 5556
+			appProtocol: "TCP"
+			name:        "http"
+			port:        5556
+			protocol:    "TCP"
+			targetPort:  5556
 		}, {
 			name:       "grpc"
 			port:       5557

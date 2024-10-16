@@ -5,9 +5,9 @@ serviceaccount: "argocd-applicationset-controller": {
 	kind:       "ServiceAccount"
 	metadata: {
 		labels: {
-			"app.kubernetes.io/component": "controller"
+			"app.kubernetes.io/component": "applicationset-controller"
 			"app.kubernetes.io/name":      "argocd-applicationset-controller"
-			"app.kubernetes.io/part-of":   "argocd-applicationset"
+			"app.kubernetes.io/part-of":   "argocd"
 		}
 		name:      "argocd-applicationset-controller"
 		namespace: "argocd"

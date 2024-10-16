@@ -45,5 +45,13 @@ role: "argocd-application-controller": {
 			"create",
 			"list",
 		]
+	}, {
+		apiGroups: ["apps"]
+		resources: ["deployments"]
+		verbs: [
+			"get",
+			"list",
+			"watch",
+		]
 	}]
 }

@@ -37,7 +37,7 @@ deployment: "argocd-dex-server": {
 							optional: true
 						}
 					}]
-					image:           "ghcr.io/dexidp/dex:v2.35.3"
+					image:           "ghcr.io/dexidp/dex:v2.38.0"
 					imagePullPolicy: "Always"
 					name:            "dex"
 					ports: [{
@@ -67,12 +67,12 @@ deployment: "argocd-dex-server": {
 				}]
 				initContainers: [{
 					command: [
-						"cp",
+						"/bin/cp",
 						"-n",
 						"/usr/local/bin/argocd",
 						"/shared/argocd-dex",
 					]
-					image:           "quay.io/argoproj/argocd:v2.6.2"
+					image:           "quay.io/argoproj/argocd:v2.12.4"
 					imagePullPolicy: "Always"
 					name:            "copyutil"
 					securityContext: {

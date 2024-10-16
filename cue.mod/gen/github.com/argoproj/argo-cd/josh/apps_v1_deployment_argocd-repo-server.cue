@@ -32,12 +32,14 @@ deployment: "argocd-repo-server": {
 				}]
 				automountServiceAccountToken: false
 				containers: [{
-					command: [
-						"sh",
-						"-c",
-						"entrypoint.sh argocd-repo-server --redis argocd-redis:6379",
-					]
+					args: ["/usr/local/bin/argocd-repo-server"]
 					env: [{
+						name: "REDIS_PASSWORD"
+						valueFrom: secretKeyRef: {
+							key:  "auth"
+							name: "argocd-redis"
+						}
+					}, {
 						name: "ARGOCD_RECONCILIATION_TIMEOUT"
 						valueFrom: configMapKeyRef: {
 							key:      "timeout.reconciliation"
@@ -62,6 +64,20 @@ deployment: "argocd-repo-server": {
 						name: "ARGOCD_REPO_SERVER_PARALLELISM_LIMIT"
 						valueFrom: configMapKeyRef: {
 							key:      "reposerver.parallelism.limit"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_REPO_SERVER_LISTEN_ADDRESS"
+						valueFrom: configMapKeyRef: {
+							key:      "reposerver.listen.address"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_REPO_SERVER_LISTEN_METRICS_ADDRESS"
+						valueFrom: configMapKeyRef: {
+							key:      "reposerver.metrics.listen.address"
 							name:     "argocd-cmd-params-cm"
 							optional: true
 						}
@@ -136,6 +152,20 @@ deployment: "argocd-repo-server": {
 							optional: true
 						}
 					}, {
+						name: "ARGOCD_REPO_SERVER_OTLP_INSECURE"
+						valueFrom: configMapKeyRef: {
+							key:      "otlp.insecure"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_REPO_SERVER_OTLP_HEADERS"
+						valueFrom: configMapKeyRef: {
+							key:      "otlp.headers"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
 						name: "ARGOCD_REPO_SERVER_MAX_COMBINED_DIRECTORY_MANIFESTS_SIZE"
 						valueFrom: configMapKeyRef: {
 							key:      "reposerver.max.combined.directory.manifests.size"
@@ -171,9 +201,58 @@ deployment: "argocd-repo-server": {
 							optional: true
 						}
 					}, {
+						name: "ARGOCD_REPO_SERVER_HELM_MANIFEST_MAX_EXTRACTED_SIZE"
+						valueFrom: configMapKeyRef: {
+							key:      "reposerver.helm.manifest.max.extracted.size"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_REPO_SERVER_DISABLE_HELM_MANIFEST_MAX_EXTRACTED_SIZE"
+						valueFrom: configMapKeyRef: {
+							key:      "reposerver.disable.helm.manifest.max.extracted.size"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_REVISION_CACHE_LOCK_TIMEOUT"
+						valueFrom: configMapKeyRef: {
+							key:      "reposerver.revision.cache.lock.timeout"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
 						name: "ARGOCD_GIT_MODULES_ENABLED"
 						valueFrom: configMapKeyRef: {
 							key:      "reposerver.enable.git.submodule"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_GIT_LS_REMOTE_PARALLELISM_LIMIT"
+						valueFrom: configMapKeyRef: {
+							key:      "reposerver.git.lsremote.parallelism.limit"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_GIT_REQUEST_TIMEOUT"
+						valueFrom: configMapKeyRef: {
+							key:      "reposerver.git.request.timeout"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_GRPC_MAX_SIZE_MB"
+						valueFrom: configMapKeyRef: {
+							key:      "reposerver.grpc.max.size"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_REPO_SERVER_INCLUDE_HIDDEN_DIRECTORIES"
+						valueFrom: configMapKeyRef: {
+							key:      "reposerver.include.hidden.directories"
 							name:     "argocd-cmd-params-cm"
 							optional: true
 						}
@@ -187,7 +266,7 @@ deployment: "argocd-repo-server": {
 						name:  "HELM_DATA_HOME"
 						value: "/helm-working-dir"
 					}]
-					image:           "quay.io/argoproj/argocd:v2.6.2"
+					image:           "quay.io/argoproj/argocd:v2.12.4"
 					imagePullPolicy: "Always"
 					livenessProbe: {
 						failureThreshold: 3
@@ -248,12 +327,12 @@ deployment: "argocd-repo-server": {
 				}]
 				initContainers: [{
 					command: [
-						"cp",
+						"/bin/cp",
 						"-n",
 						"/usr/local/bin/argocd",
 						"/var/run/argocd/argocd-cmp-server",
 					]
-					image: "quay.io/argoproj/argocd:v2.6.2"
+					image: "quay.io/argoproj/argocd:v2.12.4"
 					name:  "copyutil"
 					securityContext: {
 						allowPrivilegeEscalation: false

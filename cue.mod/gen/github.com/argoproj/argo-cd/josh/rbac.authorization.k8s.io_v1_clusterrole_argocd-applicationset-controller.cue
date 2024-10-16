@@ -1,16 +1,15 @@
 package josh
 
-role: "argocd-applicationset-controller": {
+clusterrole: "argocd-applicationset-controller": {
 	apiVersion: "rbac.authorization.k8s.io/v1"
-	kind:       "Role"
+	kind:       "ClusterRole"
 	metadata: {
 		labels: {
 			"app.kubernetes.io/component": "applicationset-controller"
 			"app.kubernetes.io/name":      "argocd-applicationset-controller"
 			"app.kubernetes.io/part-of":   "argocd"
 		}
-		name:      "argocd-applicationset-controller"
-		namespace: "argocd"
+		name: "argocd-applicationset-controller"
 	}
 	rules: [{
 		apiGroups: ["argoproj.io"]
@@ -30,19 +29,19 @@ role: "argocd-applicationset-controller": {
 		]
 	}, {
 		apiGroups: ["argoproj.io"]
-		resources: ["appprojects"]
-		verbs: [
-			"get",
-			"list",
-			"watch",
-		]
-	}, {
-		apiGroups: ["argoproj.io"]
 		resources: ["applicationsets/status"]
 		verbs: [
 			"get",
 			"patch",
 			"update",
+		]
+	}, {
+		apiGroups: ["argoproj.io"]
+		resources: ["appprojects"]
+		verbs: [
+			"get",
+			"list",
+			"watch",
 		]
 	}, {
 		apiGroups: [""]
@@ -56,10 +55,19 @@ role: "argocd-applicationset-controller": {
 		]
 	}, {
 		apiGroups: [""]
-		resources: [
-			"secrets",
-			"configmaps",
+		resources: ["configmaps"]
+		verbs: [
+			"create",
+			"update",
+			"delete",
+			"get",
+			"list",
+			"patch",
+			"watch",
 		]
+	}, {
+		apiGroups: [""]
+		resources: ["secrets"]
 		verbs: [
 			"get",
 			"list",
@@ -74,6 +82,18 @@ role: "argocd-applicationset-controller": {
 		verbs: [
 			"get",
 			"list",
+			"watch",
+		]
+	}, {
+		apiGroups: ["coordination.k8s.io"]
+		resources: ["leases"]
+		verbs: [
+			"create",
+			"delete",
+			"get",
+			"list",
+			"patch",
+			"update",
 			"watch",
 		]
 	}]

@@ -4,6 +4,11 @@ deployment: "argocd-notifications-controller": {
 	apiVersion: "apps/v1"
 	kind:       "Deployment"
 	metadata: {
+		labels: {
+			"app.kubernetes.io/component": "notifications-controller"
+			"app.kubernetes.io/name":      "argocd-notifications-controller"
+			"app.kubernetes.io/part-of":   "argocd"
+		}
 		name:      "argocd-notifications-controller"
 		namespace: "argocd"
 	}
@@ -14,8 +19,37 @@ deployment: "argocd-notifications-controller": {
 			metadata: labels: "app.kubernetes.io/name": "argocd-notifications-controller"
 			spec: {
 				containers: [{
-					command: ["argocd-notifications"]
-					image:           "quay.io/argoproj/argocd:v2.6.2"
+					args: ["/usr/local/bin/argocd-notifications"]
+					env: [{
+						name: "ARGOCD_NOTIFICATIONS_CONTROLLER_LOGFORMAT"
+						valueFrom: configMapKeyRef: {
+							key:      "notificationscontroller.log.format"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_NOTIFICATIONS_CONTROLLER_LOGLEVEL"
+						valueFrom: configMapKeyRef: {
+							key:      "notificationscontroller.log.level"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATION_NAMESPACES"
+						valueFrom: configMapKeyRef: {
+							key:      "application.namespaces"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_NOTIFICATION_CONTROLLER_SELF_SERVICE_NOTIFICATION_ENABLED"
+						valueFrom: configMapKeyRef: {
+							key:      "notificationscontroller.selfservice.enabled"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}]
+					image:           "quay.io/argoproj/argocd:v2.12.4"
 					imagePullPolicy: "Always"
 					livenessProbe: tcpSocket: port: 9001
 					name: "argocd-notifications-controller"

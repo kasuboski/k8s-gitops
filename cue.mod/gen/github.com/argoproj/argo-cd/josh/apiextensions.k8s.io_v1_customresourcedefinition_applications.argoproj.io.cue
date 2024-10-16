@@ -37,18 +37,34 @@ customresourcedefinition: "applications.argoproj.io": {
 				name:     "Revision"
 				priority: 10
 				type:     "string"
+			}, {
+				jsonPath: ".spec.project"
+				name:     "Project"
+				priority: 10
+				type:     "string"
 			}]
 			name: "v1alpha1"
 			schema: openAPIV3Schema: {
 				description: "Application is a definition of Application resource."
 				properties: {
 					apiVersion: {
-						description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources"
-						type:        "string"
+						description: """
+	APIVersion defines the versioned schema of this representation of an object.
+	Servers should convert recognized schemas to the latest internal value, and
+	may reject unrecognized values.
+	More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+	"""
+						type: "string"
 					}
 					kind: {
-						description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds"
-						type:        "string"
+						description: """
+	Kind is a string value representing the REST resource this object represents.
+	Servers may infer this from the endpoint the client submits requests to.
+	Cannot be updated.
+	In CamelCase.
+	More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+	"""
+						type: "string"
 					}
 					metadata: type: "object"
 					operation: {
@@ -148,16 +164,25 @@ customresourcedefinition: "applications.argoproj.io": {
 										type: "array"
 									}
 									revision: {
-										description: "Revision is the revision (Git) or chart version (Helm) which to sync the application to If omitted, will use the revision specified in app spec."
-										type:        "string"
+										description: """
+	Revision is the revision (Git) or chart version (Helm) which to sync the application to
+	If omitted, will use the revision specified in app spec.
+	"""
+										type: "string"
 									}
 									revisions: {
-										description: "Revisions is the list of revision (Git) or chart version (Helm) which to sync each source in sources field for the application to If omitted, will use the revision specified in app spec."
+										description: """
+	Revisions is the list of revision (Git) or chart version (Helm) which to sync each source in sources field for the application to
+	If omitted, will use the revision specified in app spec.
+	"""
 										items: type: "string"
 										type: "array"
 									}
 									source: {
-										description: "Source overrides the source definition set in the application. This is typically set in a Rollback operation and is nil during a Sync operation"
+										description: """
+	Source overrides the source definition set in the application.
+	This is typically set in a Rollback operation and is nil during a Sync operation
+	"""
 										properties: {
 											chart: {
 												description: "Chart is a Helm chart name, and must be specified for applications sourced from a Helm repo."
@@ -291,8 +316,13 @@ customresourcedefinition: "applications.argoproj.io": {
 														type: "array"
 													}
 													values: {
-														description: "Values specifies Helm values to be passed to helm template, typically defined as a block"
+														description: "Values specifies Helm values to be passed to helm template, typically defined as a block. ValuesObject takes precedence over Values, so use one or the other."
 														type:        "string"
+													}
+													valuesObject: {
+														description:                            "ValuesObject specifies Helm values to be passed to helm template, defined as a map. This takes precedence over Values."
+														type:                                   "object"
+														"x-kubernetes-preserve-unknown-fields": true
 													}
 													version: {
 														description: "Version is the Helm version to use for templating (\"3\")"
@@ -309,10 +339,19 @@ customresourcedefinition: "applications.argoproj.io": {
 														description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
 														type:        "object"
 													}
+													commonAnnotationsEnvsubst: {
+														description: "CommonAnnotationsEnvsubst specifies whether to apply env variables substitution for annotation values"
+														type:        "boolean"
+													}
 													commonLabels: {
 														additionalProperties: type: "string"
 														description: "CommonLabels is a list of additional labels to add to rendered manifests"
 														type:        "object"
+													}
+													components: {
+														description: "Components specifies a list of kustomize components to add to the kustomization before building"
+														items: type: "string"
+														type: "array"
 													}
 													forceCommonAnnotations: {
 														description: "ForceCommonAnnotations specifies whether to force applying common annotations to resources for Kustomize apps"
@@ -330,6 +369,10 @@ customresourcedefinition: "applications.argoproj.io": {
 														}
 														type: "array"
 													}
+													labelWithoutSelector: {
+														description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
+														type:        "boolean"
+													}
 													namePrefix: {
 														description: "NamePrefix is a prefix appended to resources for Kustomize apps"
 														type:        "string"
@@ -337,6 +380,63 @@ customresourcedefinition: "applications.argoproj.io": {
 													nameSuffix: {
 														description: "NameSuffix is a suffix appended to resources for Kustomize apps"
 														type:        "string"
+													}
+													namespace: {
+														description: "Namespace sets the namespace that Kustomize adds to all resources"
+														type:        "string"
+													}
+													patches: {
+														description: "Patches is a list of Kustomize patches"
+														items: {
+															properties: {
+																options: {
+																	additionalProperties: type: "boolean"
+																	type: "object"
+																}
+																patch: type: "string"
+																path: type: "string"
+																target: {
+																	properties: {
+																		annotationSelector: type: "string"
+																		group: type: "string"
+																		kind: type: "string"
+																		labelSelector: type: "string"
+																		name: type: "string"
+																		namespace: type: "string"
+																		version: type: "string"
+																	}
+																	type: "object"
+																}
+															}
+															type: "object"
+														}
+														type: "array"
+													}
+													replicas: {
+														description: "Replicas is a list of Kustomize Replicas override specifications"
+														items: {
+															properties: {
+																count: {
+																	anyOf: [{
+																		type: "integer"
+																	}, {
+																		type: "string"
+																	}]
+																	description:                  "Number of replicas"
+																	"x-kubernetes-int-or-string": true
+																}
+																name: {
+																	description: "Name of Deployment or StatefulSet"
+																	type:        "string"
+																}
+															}
+															required: [
+																"count",
+																"name",
+															]
+															type: "object"
+														}
+														type: "array"
 													}
 													version: {
 														description: "Version controls which version of Kustomize to use for rendering manifests"
@@ -413,15 +513,22 @@ customresourcedefinition: "applications.argoproj.io": {
 												type:        "string"
 											}
 											targetRevision: {
-												description: "TargetRevision defines the revision of the source to sync the application to. In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD. In case of Helm, this is a semver tag for the Chart's version."
-												type:        "string"
+												description: """
+	TargetRevision defines the revision of the source to sync the application to.
+	In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD.
+	In case of Helm, this is a semver tag for the Chart's version.
+	"""
+												type: "string"
 											}
 										}
 										required: ["repoURL"]
 										type: "object"
 									}
 									sources: {
-										description: "Sources overrides the source definition set in the application. This is typically set in a Rollback operation and is nil during a Sync operation"
+										description: """
+	Sources overrides the source definition set in the application.
+	This is typically set in a Rollback operation and is nil during a Sync operation
+	"""
 										items: {
 											description: "ApplicationSource contains all required information about the source of an application"
 											properties: {
@@ -557,8 +664,13 @@ customresourcedefinition: "applications.argoproj.io": {
 															type: "array"
 														}
 														values: {
-															description: "Values specifies Helm values to be passed to helm template, typically defined as a block"
+															description: "Values specifies Helm values to be passed to helm template, typically defined as a block. ValuesObject takes precedence over Values, so use one or the other."
 															type:        "string"
+														}
+														valuesObject: {
+															description:                            "ValuesObject specifies Helm values to be passed to helm template, defined as a map. This takes precedence over Values."
+															type:                                   "object"
+															"x-kubernetes-preserve-unknown-fields": true
 														}
 														version: {
 															description: "Version is the Helm version to use for templating (\"3\")"
@@ -575,10 +687,19 @@ customresourcedefinition: "applications.argoproj.io": {
 															description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
 															type:        "object"
 														}
+														commonAnnotationsEnvsubst: {
+															description: "CommonAnnotationsEnvsubst specifies whether to apply env variables substitution for annotation values"
+															type:        "boolean"
+														}
 														commonLabels: {
 															additionalProperties: type: "string"
 															description: "CommonLabels is a list of additional labels to add to rendered manifests"
 															type:        "object"
+														}
+														components: {
+															description: "Components specifies a list of kustomize components to add to the kustomization before building"
+															items: type: "string"
+															type: "array"
 														}
 														forceCommonAnnotations: {
 															description: "ForceCommonAnnotations specifies whether to force applying common annotations to resources for Kustomize apps"
@@ -596,6 +717,10 @@ customresourcedefinition: "applications.argoproj.io": {
 															}
 															type: "array"
 														}
+														labelWithoutSelector: {
+															description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
+															type:        "boolean"
+														}
 														namePrefix: {
 															description: "NamePrefix is a prefix appended to resources for Kustomize apps"
 															type:        "string"
@@ -603,6 +728,63 @@ customresourcedefinition: "applications.argoproj.io": {
 														nameSuffix: {
 															description: "NameSuffix is a suffix appended to resources for Kustomize apps"
 															type:        "string"
+														}
+														namespace: {
+															description: "Namespace sets the namespace that Kustomize adds to all resources"
+															type:        "string"
+														}
+														patches: {
+															description: "Patches is a list of Kustomize patches"
+															items: {
+																properties: {
+																	options: {
+																		additionalProperties: type: "boolean"
+																		type: "object"
+																	}
+																	patch: type: "string"
+																	path: type: "string"
+																	target: {
+																		properties: {
+																			annotationSelector: type: "string"
+																			group: type: "string"
+																			kind: type: "string"
+																			labelSelector: type: "string"
+																			name: type: "string"
+																			namespace: type: "string"
+																			version: type: "string"
+																		}
+																		type: "object"
+																	}
+																}
+																type: "object"
+															}
+															type: "array"
+														}
+														replicas: {
+															description: "Replicas is a list of Kustomize Replicas override specifications"
+															items: {
+																properties: {
+																	count: {
+																		anyOf: [{
+																			type: "integer"
+																		}, {
+																			type: "string"
+																		}]
+																		description:                  "Number of replicas"
+																		"x-kubernetes-int-or-string": true
+																	}
+																	name: {
+																		description: "Name of Deployment or StatefulSet"
+																		type:        "string"
+																	}
+																}
+																required: [
+																	"count",
+																	"name",
+																]
+																type: "object"
+															}
+															type: "array"
 														}
 														version: {
 															description: "Version controls which version of Kustomize to use for rendering manifests"
@@ -679,8 +861,12 @@ customresourcedefinition: "applications.argoproj.io": {
 													type:        "string"
 												}
 												targetRevision: {
-													description: "TargetRevision defines the revision of the source to sync the application to. In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD. In case of Helm, this is a semver tag for the Chart's version."
-													type:        "string"
+													description: """
+	TargetRevision defines the revision of the source to sync the application to.
+	In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD.
+	In case of Helm, this is a semver tag for the Chart's version.
+	"""
+													type: "string"
 												}
 											}
 											required: ["repoURL"]
@@ -699,16 +885,24 @@ customresourcedefinition: "applications.argoproj.io": {
 											apply: {
 												description: "Apply will perform a `kubectl apply` to perform the sync."
 												properties: force: {
-													description: "Force indicates whether or not to supply the --force flag to `kubectl apply`. The --force flag deletes and re-create the resource, when PATCH encounters conflict and has retried for 5 times."
-													type:        "boolean"
+													description: """
+	Force indicates whether or not to supply the --force flag to `kubectl apply`.
+	The --force flag deletes and re-create the resource, when PATCH encounters conflict and has
+	retried for 5 times.
+	"""
+													type: "boolean"
 												}
 												type: "object"
 											}
 											hook: {
 												description: "Hook will submit any referenced resources to perform the sync. This is the default strategy"
 												properties: force: {
-													description: "Force indicates whether or not to supply the --force flag to `kubectl apply`. The --force flag deletes and re-create the resource, when PATCH encounters conflict and has retried for 5 times."
-													type:        "boolean"
+													description: """
+	Force indicates whether or not to supply the --force flag to `kubectl apply`.
+	The --force flag deletes and re-create the resource, when PATCH encounters conflict and has
+	retried for 5 times.
+	"""
+													type: "boolean"
 												}
 												type: "object"
 											}
@@ -728,15 +922,18 @@ customresourcedefinition: "applications.argoproj.io": {
 								description: "Destination is a reference to the target Kubernetes server and namespace"
 								properties: {
 									name: {
-										description: "Name is an alternate way of specifying the target cluster by its symbolic name"
+										description: "Name is an alternate way of specifying the target cluster by its symbolic name. This must be set if Server is not set."
 										type:        "string"
 									}
 									namespace: {
-										description: "Namespace specifies the target namespace for the application's resources. The namespace will only be set for namespace-scoped resources that have not set a value for .metadata.namespace"
-										type:        "string"
+										description: """
+	Namespace specifies the target namespace for the application's resources.
+	The namespace will only be set for namespace-scoped resources that have not set a value for .metadata.namespace
+	"""
+										type: "string"
 									}
 									server: {
-										description: "Server specifies the URL of the target cluster and must be set to the Kubernetes control plane API"
+										description: "Server specifies the URL of the target cluster's Kubernetes control plane API. This must be set if Name is not set."
 										type:        "string"
 									}
 								}
@@ -758,7 +955,10 @@ customresourcedefinition: "applications.argoproj.io": {
 										}
 										kind: type: "string"
 										managedFieldsManagers: {
-											description: "ManagedFieldsManagers is a list of trusted managers. Fields mutated by those managers will take precedence over the desired state defined in the SCM and won't be displayed in diffs"
+											description: """
+	ManagedFieldsManagers is a list of trusted managers. Fields mutated by those managers will take precedence over the
+	desired state defined in the SCM and won't be displayed in diffs
+	"""
 											items: type: "string"
 											type: "array"
 										}
@@ -786,13 +986,22 @@ customresourcedefinition: "applications.argoproj.io": {
 								type: "array"
 							}
 							project: {
-								description: "Project is a reference to the project this application belongs to. The empty string means that application belongs to the 'default' project."
-								type:        "string"
+								description: """
+	Project is a reference to the project this application belongs to.
+	The empty string means that application belongs to the 'default' project.
+	"""
+								type: "string"
 							}
 							revisionHistoryLimit: {
-								description: "RevisionHistoryLimit limits the number of items kept in the application's revision history, which is used for informational purposes as well as for rollbacks to previous versions. This should only be changed in exceptional circumstances. Setting to zero will store no history. This will reduce storage used. Increasing will increase the space used to store the history, so we do not recommend increasing it. Default is 10."
-								format:      "int64"
-								type:        "integer"
+								description: """
+	RevisionHistoryLimit limits the number of items kept in the application's revision history, which is used for informational purposes as well as for rollbacks to previous versions.
+	This should only be changed in exceptional circumstances.
+	Setting to zero will store no history. This will reduce storage used.
+	Increasing will increase the space used to store the history, so we do not recommend increasing it.
+	Default is 10.
+	"""
+								format: "int64"
+								type:   "integer"
 							}
 							source: {
 								description: "Source is a reference to the location of the application's manifests or chart"
@@ -929,8 +1138,13 @@ customresourcedefinition: "applications.argoproj.io": {
 												type: "array"
 											}
 											values: {
-												description: "Values specifies Helm values to be passed to helm template, typically defined as a block"
+												description: "Values specifies Helm values to be passed to helm template, typically defined as a block. ValuesObject takes precedence over Values, so use one or the other."
 												type:        "string"
+											}
+											valuesObject: {
+												description:                            "ValuesObject specifies Helm values to be passed to helm template, defined as a map. This takes precedence over Values."
+												type:                                   "object"
+												"x-kubernetes-preserve-unknown-fields": true
 											}
 											version: {
 												description: "Version is the Helm version to use for templating (\"3\")"
@@ -947,10 +1161,19 @@ customresourcedefinition: "applications.argoproj.io": {
 												description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
 												type:        "object"
 											}
+											commonAnnotationsEnvsubst: {
+												description: "CommonAnnotationsEnvsubst specifies whether to apply env variables substitution for annotation values"
+												type:        "boolean"
+											}
 											commonLabels: {
 												additionalProperties: type: "string"
 												description: "CommonLabels is a list of additional labels to add to rendered manifests"
 												type:        "object"
+											}
+											components: {
+												description: "Components specifies a list of kustomize components to add to the kustomization before building"
+												items: type: "string"
+												type: "array"
 											}
 											forceCommonAnnotations: {
 												description: "ForceCommonAnnotations specifies whether to force applying common annotations to resources for Kustomize apps"
@@ -968,6 +1191,10 @@ customresourcedefinition: "applications.argoproj.io": {
 												}
 												type: "array"
 											}
+											labelWithoutSelector: {
+												description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
+												type:        "boolean"
+											}
 											namePrefix: {
 												description: "NamePrefix is a prefix appended to resources for Kustomize apps"
 												type:        "string"
@@ -975,6 +1202,63 @@ customresourcedefinition: "applications.argoproj.io": {
 											nameSuffix: {
 												description: "NameSuffix is a suffix appended to resources for Kustomize apps"
 												type:        "string"
+											}
+											namespace: {
+												description: "Namespace sets the namespace that Kustomize adds to all resources"
+												type:        "string"
+											}
+											patches: {
+												description: "Patches is a list of Kustomize patches"
+												items: {
+													properties: {
+														options: {
+															additionalProperties: type: "boolean"
+															type: "object"
+														}
+														patch: type: "string"
+														path: type: "string"
+														target: {
+															properties: {
+																annotationSelector: type: "string"
+																group: type: "string"
+																kind: type: "string"
+																labelSelector: type: "string"
+																name: type: "string"
+																namespace: type: "string"
+																version: type: "string"
+															}
+															type: "object"
+														}
+													}
+													type: "object"
+												}
+												type: "array"
+											}
+											replicas: {
+												description: "Replicas is a list of Kustomize Replicas override specifications"
+												items: {
+													properties: {
+														count: {
+															anyOf: [{
+																type: "integer"
+															}, {
+																type: "string"
+															}]
+															description:                  "Number of replicas"
+															"x-kubernetes-int-or-string": true
+														}
+														name: {
+															description: "Name of Deployment or StatefulSet"
+															type:        "string"
+														}
+													}
+													required: [
+														"count",
+														"name",
+													]
+													type: "object"
+												}
+												type: "array"
 											}
 											version: {
 												description: "Version controls which version of Kustomize to use for rendering manifests"
@@ -1051,8 +1335,12 @@ customresourcedefinition: "applications.argoproj.io": {
 										type:        "string"
 									}
 									targetRevision: {
-										description: "TargetRevision defines the revision of the source to sync the application to. In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD. In case of Helm, this is a semver tag for the Chart's version."
-										type:        "string"
+										description: """
+	TargetRevision defines the revision of the source to sync the application to.
+	In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD.
+	In case of Helm, this is a semver tag for the Chart's version.
+	"""
+										type: "string"
 									}
 								}
 								required: ["repoURL"]
@@ -1195,8 +1483,13 @@ customresourcedefinition: "applications.argoproj.io": {
 													type: "array"
 												}
 												values: {
-													description: "Values specifies Helm values to be passed to helm template, typically defined as a block"
+													description: "Values specifies Helm values to be passed to helm template, typically defined as a block. ValuesObject takes precedence over Values, so use one or the other."
 													type:        "string"
+												}
+												valuesObject: {
+													description:                            "ValuesObject specifies Helm values to be passed to helm template, defined as a map. This takes precedence over Values."
+													type:                                   "object"
+													"x-kubernetes-preserve-unknown-fields": true
 												}
 												version: {
 													description: "Version is the Helm version to use for templating (\"3\")"
@@ -1213,10 +1506,19 @@ customresourcedefinition: "applications.argoproj.io": {
 													description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
 													type:        "object"
 												}
+												commonAnnotationsEnvsubst: {
+													description: "CommonAnnotationsEnvsubst specifies whether to apply env variables substitution for annotation values"
+													type:        "boolean"
+												}
 												commonLabels: {
 													additionalProperties: type: "string"
 													description: "CommonLabels is a list of additional labels to add to rendered manifests"
 													type:        "object"
+												}
+												components: {
+													description: "Components specifies a list of kustomize components to add to the kustomization before building"
+													items: type: "string"
+													type: "array"
 												}
 												forceCommonAnnotations: {
 													description: "ForceCommonAnnotations specifies whether to force applying common annotations to resources for Kustomize apps"
@@ -1234,6 +1536,10 @@ customresourcedefinition: "applications.argoproj.io": {
 													}
 													type: "array"
 												}
+												labelWithoutSelector: {
+													description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
+													type:        "boolean"
+												}
 												namePrefix: {
 													description: "NamePrefix is a prefix appended to resources for Kustomize apps"
 													type:        "string"
@@ -1241,6 +1547,63 @@ customresourcedefinition: "applications.argoproj.io": {
 												nameSuffix: {
 													description: "NameSuffix is a suffix appended to resources for Kustomize apps"
 													type:        "string"
+												}
+												namespace: {
+													description: "Namespace sets the namespace that Kustomize adds to all resources"
+													type:        "string"
+												}
+												patches: {
+													description: "Patches is a list of Kustomize patches"
+													items: {
+														properties: {
+															options: {
+																additionalProperties: type: "boolean"
+																type: "object"
+															}
+															patch: type: "string"
+															path: type: "string"
+															target: {
+																properties: {
+																	annotationSelector: type: "string"
+																	group: type: "string"
+																	kind: type: "string"
+																	labelSelector: type: "string"
+																	name: type: "string"
+																	namespace: type: "string"
+																	version: type: "string"
+																}
+																type: "object"
+															}
+														}
+														type: "object"
+													}
+													type: "array"
+												}
+												replicas: {
+													description: "Replicas is a list of Kustomize Replicas override specifications"
+													items: {
+														properties: {
+															count: {
+																anyOf: [{
+																	type: "integer"
+																}, {
+																	type: "string"
+																}]
+																description:                  "Number of replicas"
+																"x-kubernetes-int-or-string": true
+															}
+															name: {
+																description: "Name of Deployment or StatefulSet"
+																type:        "string"
+															}
+														}
+														required: [
+															"count",
+															"name",
+														]
+														type: "object"
+													}
+													type: "array"
 												}
 												version: {
 													description: "Version controls which version of Kustomize to use for rendering manifests"
@@ -1317,8 +1680,12 @@ customresourcedefinition: "applications.argoproj.io": {
 											type:        "string"
 										}
 										targetRevision: {
-											description: "TargetRevision defines the revision of the source to sync the application to. In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD. In case of Helm, this is a semver tag for the Chart's version."
-											type:        "string"
+											description: """
+	TargetRevision defines the revision of the source to sync the application to.
+	In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD.
+	In case of Helm, this is a semver tag for the Chart's version.
+	"""
+											type: "string"
 										}
 									}
 									required: ["repoURL"]
@@ -1341,7 +1708,7 @@ customresourcedefinition: "applications.argoproj.io": {
 												type:        "boolean"
 											}
 											selfHeal: {
-												description: "SelfHeal specifes whether to revert resources back to their desired state upon modification in the cluster (default: false)"
+												description: "SelfHeal specifies whether to revert resources back to their desired state upon modification in the cluster (default: false)"
 												type:        "boolean"
 											}
 										}
@@ -1412,7 +1779,7 @@ customresourcedefinition: "applications.argoproj.io": {
 							conditions: {
 								description: "Conditions is a list of currently observed application conditions"
 								items: {
-									description: "ApplicationCondition contains details about an application condition, which is usally an error or warning"
+									description: "ApplicationCondition contains details about an application condition, which is usually an error or warning"
 									properties: {
 										lastTransitionTime: {
 											description: "LastTransitionTime is the time the condition was last observed"
@@ -1435,6 +1802,10 @@ customresourcedefinition: "applications.argoproj.io": {
 									type: "object"
 								}
 								type: "array"
+							}
+							controllerNamespace: {
+								description: "ControllerNamespace indicates the namespace in which the application controller is located"
+								type:        "string"
 							}
 							health: {
 								description: "Health contains information about the application's current health status"
@@ -1469,6 +1840,20 @@ customresourcedefinition: "applications.argoproj.io": {
 											description: "ID is an auto incrementing identifier of the RevisionHistory"
 											format:      "int64"
 											type:        "integer"
+										}
+										initiatedBy: {
+											description: "InitiatedBy contains information about who initiated the operations"
+											properties: {
+												automated: {
+													description: "Automated is set to true if operation was initiated automatically by the application controller."
+													type:        "boolean"
+												}
+												username: {
+													description: "Username contains the name of a user who started operation"
+													type:        "string"
+												}
+											}
+											type: "object"
 										}
 										revision: {
 											description: "Revision holds the revision the sync was performed against"
@@ -1614,8 +1999,13 @@ customresourcedefinition: "applications.argoproj.io": {
 															type: "array"
 														}
 														values: {
-															description: "Values specifies Helm values to be passed to helm template, typically defined as a block"
+															description: "Values specifies Helm values to be passed to helm template, typically defined as a block. ValuesObject takes precedence over Values, so use one or the other."
 															type:        "string"
+														}
+														valuesObject: {
+															description:                            "ValuesObject specifies Helm values to be passed to helm template, defined as a map. This takes precedence over Values."
+															type:                                   "object"
+															"x-kubernetes-preserve-unknown-fields": true
 														}
 														version: {
 															description: "Version is the Helm version to use for templating (\"3\")"
@@ -1632,10 +2022,19 @@ customresourcedefinition: "applications.argoproj.io": {
 															description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
 															type:        "object"
 														}
+														commonAnnotationsEnvsubst: {
+															description: "CommonAnnotationsEnvsubst specifies whether to apply env variables substitution for annotation values"
+															type:        "boolean"
+														}
 														commonLabels: {
 															additionalProperties: type: "string"
 															description: "CommonLabels is a list of additional labels to add to rendered manifests"
 															type:        "object"
+														}
+														components: {
+															description: "Components specifies a list of kustomize components to add to the kustomization before building"
+															items: type: "string"
+															type: "array"
 														}
 														forceCommonAnnotations: {
 															description: "ForceCommonAnnotations specifies whether to force applying common annotations to resources for Kustomize apps"
@@ -1653,6 +2052,10 @@ customresourcedefinition: "applications.argoproj.io": {
 															}
 															type: "array"
 														}
+														labelWithoutSelector: {
+															description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
+															type:        "boolean"
+														}
 														namePrefix: {
 															description: "NamePrefix is a prefix appended to resources for Kustomize apps"
 															type:        "string"
@@ -1660,6 +2063,63 @@ customresourcedefinition: "applications.argoproj.io": {
 														nameSuffix: {
 															description: "NameSuffix is a suffix appended to resources for Kustomize apps"
 															type:        "string"
+														}
+														namespace: {
+															description: "Namespace sets the namespace that Kustomize adds to all resources"
+															type:        "string"
+														}
+														patches: {
+															description: "Patches is a list of Kustomize patches"
+															items: {
+																properties: {
+																	options: {
+																		additionalProperties: type: "boolean"
+																		type: "object"
+																	}
+																	patch: type: "string"
+																	path: type: "string"
+																	target: {
+																		properties: {
+																			annotationSelector: type: "string"
+																			group: type: "string"
+																			kind: type: "string"
+																			labelSelector: type: "string"
+																			name: type: "string"
+																			namespace: type: "string"
+																			version: type: "string"
+																		}
+																		type: "object"
+																	}
+																}
+																type: "object"
+															}
+															type: "array"
+														}
+														replicas: {
+															description: "Replicas is a list of Kustomize Replicas override specifications"
+															items: {
+																properties: {
+																	count: {
+																		anyOf: [{
+																			type: "integer"
+																		}, {
+																			type: "string"
+																		}]
+																		description:                  "Number of replicas"
+																		"x-kubernetes-int-or-string": true
+																	}
+																	name: {
+																		description: "Name of Deployment or StatefulSet"
+																		type:        "string"
+																	}
+																}
+																required: [
+																	"count",
+																	"name",
+																]
+																type: "object"
+															}
+															type: "array"
 														}
 														version: {
 															description: "Version controls which version of Kustomize to use for rendering manifests"
@@ -1736,8 +2196,12 @@ customresourcedefinition: "applications.argoproj.io": {
 													type:        "string"
 												}
 												targetRevision: {
-													description: "TargetRevision defines the revision of the source to sync the application to. In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD. In case of Helm, this is a semver tag for the Chart's version."
-													type:        "string"
+													description: """
+	TargetRevision defines the revision of the source to sync the application to.
+	In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD.
+	In case of Helm, this is a semver tag for the Chart's version.
+	"""
+													type: "string"
 												}
 											}
 											required: ["repoURL"]
@@ -1880,8 +2344,13 @@ customresourcedefinition: "applications.argoproj.io": {
 																type: "array"
 															}
 															values: {
-																description: "Values specifies Helm values to be passed to helm template, typically defined as a block"
+																description: "Values specifies Helm values to be passed to helm template, typically defined as a block. ValuesObject takes precedence over Values, so use one or the other."
 																type:        "string"
+															}
+															valuesObject: {
+																description:                            "ValuesObject specifies Helm values to be passed to helm template, defined as a map. This takes precedence over Values."
+																type:                                   "object"
+																"x-kubernetes-preserve-unknown-fields": true
 															}
 															version: {
 																description: "Version is the Helm version to use for templating (\"3\")"
@@ -1898,10 +2367,19 @@ customresourcedefinition: "applications.argoproj.io": {
 																description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
 																type:        "object"
 															}
+															commonAnnotationsEnvsubst: {
+																description: "CommonAnnotationsEnvsubst specifies whether to apply env variables substitution for annotation values"
+																type:        "boolean"
+															}
 															commonLabels: {
 																additionalProperties: type: "string"
 																description: "CommonLabels is a list of additional labels to add to rendered manifests"
 																type:        "object"
+															}
+															components: {
+																description: "Components specifies a list of kustomize components to add to the kustomization before building"
+																items: type: "string"
+																type: "array"
 															}
 															forceCommonAnnotations: {
 																description: "ForceCommonAnnotations specifies whether to force applying common annotations to resources for Kustomize apps"
@@ -1919,6 +2397,10 @@ customresourcedefinition: "applications.argoproj.io": {
 																}
 																type: "array"
 															}
+															labelWithoutSelector: {
+																description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
+																type:        "boolean"
+															}
 															namePrefix: {
 																description: "NamePrefix is a prefix appended to resources for Kustomize apps"
 																type:        "string"
@@ -1926,6 +2408,63 @@ customresourcedefinition: "applications.argoproj.io": {
 															nameSuffix: {
 																description: "NameSuffix is a suffix appended to resources for Kustomize apps"
 																type:        "string"
+															}
+															namespace: {
+																description: "Namespace sets the namespace that Kustomize adds to all resources"
+																type:        "string"
+															}
+															patches: {
+																description: "Patches is a list of Kustomize patches"
+																items: {
+																	properties: {
+																		options: {
+																			additionalProperties: type: "boolean"
+																			type: "object"
+																		}
+																		patch: type: "string"
+																		path: type: "string"
+																		target: {
+																			properties: {
+																				annotationSelector: type: "string"
+																				group: type: "string"
+																				kind: type: "string"
+																				labelSelector: type: "string"
+																				name: type: "string"
+																				namespace: type: "string"
+																				version: type: "string"
+																			}
+																			type: "object"
+																		}
+																	}
+																	type: "object"
+																}
+																type: "array"
+															}
+															replicas: {
+																description: "Replicas is a list of Kustomize Replicas override specifications"
+																items: {
+																	properties: {
+																		count: {
+																			anyOf: [{
+																				type: "integer"
+																			}, {
+																				type: "string"
+																			}]
+																			description:                  "Number of replicas"
+																			"x-kubernetes-int-or-string": true
+																		}
+																		name: {
+																			description: "Name of Deployment or StatefulSet"
+																			type:        "string"
+																		}
+																	}
+																	required: [
+																		"count",
+																		"name",
+																	]
+																	type: "object"
+																}
+																type: "array"
 															}
 															version: {
 																description: "Version controls which version of Kustomize to use for rendering manifests"
@@ -2002,8 +2541,12 @@ customresourcedefinition: "applications.argoproj.io": {
 														type:        "string"
 													}
 													targetRevision: {
-														description: "TargetRevision defines the revision of the source to sync the application to. In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD. In case of Helm, this is a semver tag for the Chart's version."
-														type:        "string"
+														description: """
+	TargetRevision defines the revision of the source to sync the application to.
+	In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD.
+	In case of Helm, this is a semver tag for the Chart's version.
+	"""
+														type: "string"
 													}
 												}
 												required: ["repoURL"]
@@ -2021,9 +2564,12 @@ customresourcedefinition: "applications.argoproj.io": {
 								type: "array"
 							}
 							observedAt: {
-								description: "ObservedAt indicates when the application state was updated without querying latest git state Deprecated: controller no longer updates ObservedAt field"
-								format:      "date-time"
-								type:        "string"
+								description: """
+	ObservedAt indicates when the application state was updated without querying latest git state
+	Deprecated: controller no longer updates ObservedAt field
+	"""
+								format: "date-time"
+								type:   "string"
 							}
 							operationState: {
 								description: "OperationState contains information about any ongoing operations, such as a sync"
@@ -2134,16 +2680,25 @@ customresourcedefinition: "applications.argoproj.io": {
 														type: "array"
 													}
 													revision: {
-														description: "Revision is the revision (Git) or chart version (Helm) which to sync the application to If omitted, will use the revision specified in app spec."
-														type:        "string"
+														description: """
+	Revision is the revision (Git) or chart version (Helm) which to sync the application to
+	If omitted, will use the revision specified in app spec.
+	"""
+														type: "string"
 													}
 													revisions: {
-														description: "Revisions is the list of revision (Git) or chart version (Helm) which to sync each source in sources field for the application to If omitted, will use the revision specified in app spec."
+														description: """
+	Revisions is the list of revision (Git) or chart version (Helm) which to sync each source in sources field for the application to
+	If omitted, will use the revision specified in app spec.
+	"""
 														items: type: "string"
 														type: "array"
 													}
 													source: {
-														description: "Source overrides the source definition set in the application. This is typically set in a Rollback operation and is nil during a Sync operation"
+														description: """
+	Source overrides the source definition set in the application.
+	This is typically set in a Rollback operation and is nil during a Sync operation
+	"""
 														properties: {
 															chart: {
 																description: "Chart is a Helm chart name, and must be specified for applications sourced from a Helm repo."
@@ -2277,8 +2832,13 @@ customresourcedefinition: "applications.argoproj.io": {
 																		type: "array"
 																	}
 																	values: {
-																		description: "Values specifies Helm values to be passed to helm template, typically defined as a block"
+																		description: "Values specifies Helm values to be passed to helm template, typically defined as a block. ValuesObject takes precedence over Values, so use one or the other."
 																		type:        "string"
+																	}
+																	valuesObject: {
+																		description:                            "ValuesObject specifies Helm values to be passed to helm template, defined as a map. This takes precedence over Values."
+																		type:                                   "object"
+																		"x-kubernetes-preserve-unknown-fields": true
 																	}
 																	version: {
 																		description: "Version is the Helm version to use for templating (\"3\")"
@@ -2295,10 +2855,19 @@ customresourcedefinition: "applications.argoproj.io": {
 																		description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
 																		type:        "object"
 																	}
+																	commonAnnotationsEnvsubst: {
+																		description: "CommonAnnotationsEnvsubst specifies whether to apply env variables substitution for annotation values"
+																		type:        "boolean"
+																	}
 																	commonLabels: {
 																		additionalProperties: type: "string"
 																		description: "CommonLabels is a list of additional labels to add to rendered manifests"
 																		type:        "object"
+																	}
+																	components: {
+																		description: "Components specifies a list of kustomize components to add to the kustomization before building"
+																		items: type: "string"
+																		type: "array"
 																	}
 																	forceCommonAnnotations: {
 																		description: "ForceCommonAnnotations specifies whether to force applying common annotations to resources for Kustomize apps"
@@ -2316,6 +2885,10 @@ customresourcedefinition: "applications.argoproj.io": {
 																		}
 																		type: "array"
 																	}
+																	labelWithoutSelector: {
+																		description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
+																		type:        "boolean"
+																	}
 																	namePrefix: {
 																		description: "NamePrefix is a prefix appended to resources for Kustomize apps"
 																		type:        "string"
@@ -2323,6 +2896,63 @@ customresourcedefinition: "applications.argoproj.io": {
 																	nameSuffix: {
 																		description: "NameSuffix is a suffix appended to resources for Kustomize apps"
 																		type:        "string"
+																	}
+																	namespace: {
+																		description: "Namespace sets the namespace that Kustomize adds to all resources"
+																		type:        "string"
+																	}
+																	patches: {
+																		description: "Patches is a list of Kustomize patches"
+																		items: {
+																			properties: {
+																				options: {
+																					additionalProperties: type: "boolean"
+																					type: "object"
+																				}
+																				patch: type: "string"
+																				path: type: "string"
+																				target: {
+																					properties: {
+																						annotationSelector: type: "string"
+																						group: type: "string"
+																						kind: type: "string"
+																						labelSelector: type: "string"
+																						name: type: "string"
+																						namespace: type: "string"
+																						version: type: "string"
+																					}
+																					type: "object"
+																				}
+																			}
+																			type: "object"
+																		}
+																		type: "array"
+																	}
+																	replicas: {
+																		description: "Replicas is a list of Kustomize Replicas override specifications"
+																		items: {
+																			properties: {
+																				count: {
+																					anyOf: [{
+																						type: "integer"
+																					}, {
+																						type: "string"
+																					}]
+																					description:                  "Number of replicas"
+																					"x-kubernetes-int-or-string": true
+																				}
+																				name: {
+																					description: "Name of Deployment or StatefulSet"
+																					type:        "string"
+																				}
+																			}
+																			required: [
+																				"count",
+																				"name",
+																			]
+																			type: "object"
+																		}
+																		type: "array"
 																	}
 																	version: {
 																		description: "Version controls which version of Kustomize to use for rendering manifests"
@@ -2399,15 +3029,22 @@ customresourcedefinition: "applications.argoproj.io": {
 																type:        "string"
 															}
 															targetRevision: {
-																description: "TargetRevision defines the revision of the source to sync the application to. In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD. In case of Helm, this is a semver tag for the Chart's version."
-																type:        "string"
+																description: """
+	TargetRevision defines the revision of the source to sync the application to.
+	In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD.
+	In case of Helm, this is a semver tag for the Chart's version.
+	"""
+																type: "string"
 															}
 														}
 														required: ["repoURL"]
 														type: "object"
 													}
 													sources: {
-														description: "Sources overrides the source definition set in the application. This is typically set in a Rollback operation and is nil during a Sync operation"
+														description: """
+	Sources overrides the source definition set in the application.
+	This is typically set in a Rollback operation and is nil during a Sync operation
+	"""
 														items: {
 															description: "ApplicationSource contains all required information about the source of an application"
 															properties: {
@@ -2543,8 +3180,13 @@ customresourcedefinition: "applications.argoproj.io": {
 																			type: "array"
 																		}
 																		values: {
-																			description: "Values specifies Helm values to be passed to helm template, typically defined as a block"
+																			description: "Values specifies Helm values to be passed to helm template, typically defined as a block. ValuesObject takes precedence over Values, so use one or the other."
 																			type:        "string"
+																		}
+																		valuesObject: {
+																			description:                            "ValuesObject specifies Helm values to be passed to helm template, defined as a map. This takes precedence over Values."
+																			type:                                   "object"
+																			"x-kubernetes-preserve-unknown-fields": true
 																		}
 																		version: {
 																			description: "Version is the Helm version to use for templating (\"3\")"
@@ -2561,10 +3203,19 @@ customresourcedefinition: "applications.argoproj.io": {
 																			description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
 																			type:        "object"
 																		}
+																		commonAnnotationsEnvsubst: {
+																			description: "CommonAnnotationsEnvsubst specifies whether to apply env variables substitution for annotation values"
+																			type:        "boolean"
+																		}
 																		commonLabels: {
 																			additionalProperties: type: "string"
 																			description: "CommonLabels is a list of additional labels to add to rendered manifests"
 																			type:        "object"
+																		}
+																		components: {
+																			description: "Components specifies a list of kustomize components to add to the kustomization before building"
+																			items: type: "string"
+																			type: "array"
 																		}
 																		forceCommonAnnotations: {
 																			description: "ForceCommonAnnotations specifies whether to force applying common annotations to resources for Kustomize apps"
@@ -2582,6 +3233,10 @@ customresourcedefinition: "applications.argoproj.io": {
 																			}
 																			type: "array"
 																		}
+																		labelWithoutSelector: {
+																			description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
+																			type:        "boolean"
+																		}
 																		namePrefix: {
 																			description: "NamePrefix is a prefix appended to resources for Kustomize apps"
 																			type:        "string"
@@ -2589,6 +3244,63 @@ customresourcedefinition: "applications.argoproj.io": {
 																		nameSuffix: {
 																			description: "NameSuffix is a suffix appended to resources for Kustomize apps"
 																			type:        "string"
+																		}
+																		namespace: {
+																			description: "Namespace sets the namespace that Kustomize adds to all resources"
+																			type:        "string"
+																		}
+																		patches: {
+																			description: "Patches is a list of Kustomize patches"
+																			items: {
+																				properties: {
+																					options: {
+																						additionalProperties: type: "boolean"
+																						type: "object"
+																					}
+																					patch: type: "string"
+																					path: type: "string"
+																					target: {
+																						properties: {
+																							annotationSelector: type: "string"
+																							group: type: "string"
+																							kind: type: "string"
+																							labelSelector: type: "string"
+																							name: type: "string"
+																							namespace: type: "string"
+																							version: type: "string"
+																						}
+																						type: "object"
+																					}
+																				}
+																				type: "object"
+																			}
+																			type: "array"
+																		}
+																		replicas: {
+																			description: "Replicas is a list of Kustomize Replicas override specifications"
+																			items: {
+																				properties: {
+																					count: {
+																						anyOf: [{
+																							type: "integer"
+																						}, {
+																							type: "string"
+																						}]
+																						description:                  "Number of replicas"
+																						"x-kubernetes-int-or-string": true
+																					}
+																					name: {
+																						description: "Name of Deployment or StatefulSet"
+																						type:        "string"
+																					}
+																				}
+																				required: [
+																					"count",
+																					"name",
+																				]
+																				type: "object"
+																			}
+																			type: "array"
 																		}
 																		version: {
 																			description: "Version controls which version of Kustomize to use for rendering manifests"
@@ -2665,8 +3377,12 @@ customresourcedefinition: "applications.argoproj.io": {
 																	type:        "string"
 																}
 																targetRevision: {
-																	description: "TargetRevision defines the revision of the source to sync the application to. In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD. In case of Helm, this is a semver tag for the Chart's version."
-																	type:        "string"
+																	description: """
+	TargetRevision defines the revision of the source to sync the application to.
+	In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD.
+	In case of Helm, this is a semver tag for the Chart's version.
+	"""
+																	type: "string"
 																}
 															}
 															required: ["repoURL"]
@@ -2685,16 +3401,24 @@ customresourcedefinition: "applications.argoproj.io": {
 															apply: {
 																description: "Apply will perform a `kubectl apply` to perform the sync."
 																properties: force: {
-																	description: "Force indicates whether or not to supply the --force flag to `kubectl apply`. The --force flag deletes and re-create the resource, when PATCH encounters conflict and has retried for 5 times."
-																	type:        "boolean"
+																	description: """
+	Force indicates whether or not to supply the --force flag to `kubectl apply`.
+	The --force flag deletes and re-create the resource, when PATCH encounters conflict and has
+	retried for 5 times.
+	"""
+																	type: "boolean"
 																}
 																type: "object"
 															}
 															hook: {
 																description: "Hook will submit any referenced resources to perform the sync. This is the default strategy"
 																properties: force: {
-																	description: "Force indicates whether or not to supply the --force flag to `kubectl apply`. The --force flag deletes and re-create the resource, when PATCH encounters conflict and has retried for 5 times."
-																	type:        "boolean"
+																	description: """
+	Force indicates whether or not to supply the --force flag to `kubectl apply`.
+	The --force flag deletes and re-create the resource, when PATCH encounters conflict and has
+	retried for 5 times.
+	"""
+																	type: "boolean"
 																}
 																type: "object"
 															}
@@ -2724,6 +3448,20 @@ customresourcedefinition: "applications.argoproj.io": {
 									syncResult: {
 										description: "SyncResult is the result of a Sync operation"
 										properties: {
+											managedNamespaceMetadata: {
+												description: "ManagedNamespaceMetadata contains the current sync state of managed namespace metadata"
+												properties: {
+													annotations: {
+														additionalProperties: type: "string"
+														type: "object"
+													}
+													labels: {
+														additionalProperties: type: "string"
+														type: "object"
+													}
+												}
+												type: "object"
+											}
 											resources: {
 												description: "Resources contains a list of sync result items for each individual resource in a sync operation"
 												items: {
@@ -2734,8 +3472,11 @@ customresourcedefinition: "applications.argoproj.io": {
 															type:        "string"
 														}
 														hookPhase: {
-															description: "HookPhase contains the state of any operation associated with this resource OR hook This can also contain values for non-hook resources."
-															type:        "string"
+															description: """
+	HookPhase contains the state of any operation associated with this resource OR hook
+	This can also contain values for non-hook resources.
+	"""
+															type: "string"
 														}
 														hookType: {
 															description: "HookType specifies the type of the hook. Empty for non-hook resources"
@@ -2925,8 +3666,13 @@ customresourcedefinition: "applications.argoproj.io": {
 																type: "array"
 															}
 															values: {
-																description: "Values specifies Helm values to be passed to helm template, typically defined as a block"
+																description: "Values specifies Helm values to be passed to helm template, typically defined as a block. ValuesObject takes precedence over Values, so use one or the other."
 																type:        "string"
+															}
+															valuesObject: {
+																description:                            "ValuesObject specifies Helm values to be passed to helm template, defined as a map. This takes precedence over Values."
+																type:                                   "object"
+																"x-kubernetes-preserve-unknown-fields": true
 															}
 															version: {
 																description: "Version is the Helm version to use for templating (\"3\")"
@@ -2943,10 +3689,19 @@ customresourcedefinition: "applications.argoproj.io": {
 																description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
 																type:        "object"
 															}
+															commonAnnotationsEnvsubst: {
+																description: "CommonAnnotationsEnvsubst specifies whether to apply env variables substitution for annotation values"
+																type:        "boolean"
+															}
 															commonLabels: {
 																additionalProperties: type: "string"
 																description: "CommonLabels is a list of additional labels to add to rendered manifests"
 																type:        "object"
+															}
+															components: {
+																description: "Components specifies a list of kustomize components to add to the kustomization before building"
+																items: type: "string"
+																type: "array"
 															}
 															forceCommonAnnotations: {
 																description: "ForceCommonAnnotations specifies whether to force applying common annotations to resources for Kustomize apps"
@@ -2964,6 +3719,10 @@ customresourcedefinition: "applications.argoproj.io": {
 																}
 																type: "array"
 															}
+															labelWithoutSelector: {
+																description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
+																type:        "boolean"
+															}
 															namePrefix: {
 																description: "NamePrefix is a prefix appended to resources for Kustomize apps"
 																type:        "string"
@@ -2971,6 +3730,63 @@ customresourcedefinition: "applications.argoproj.io": {
 															nameSuffix: {
 																description: "NameSuffix is a suffix appended to resources for Kustomize apps"
 																type:        "string"
+															}
+															namespace: {
+																description: "Namespace sets the namespace that Kustomize adds to all resources"
+																type:        "string"
+															}
+															patches: {
+																description: "Patches is a list of Kustomize patches"
+																items: {
+																	properties: {
+																		options: {
+																			additionalProperties: type: "boolean"
+																			type: "object"
+																		}
+																		patch: type: "string"
+																		path: type: "string"
+																		target: {
+																			properties: {
+																				annotationSelector: type: "string"
+																				group: type: "string"
+																				kind: type: "string"
+																				labelSelector: type: "string"
+																				name: type: "string"
+																				namespace: type: "string"
+																				version: type: "string"
+																			}
+																			type: "object"
+																		}
+																	}
+																	type: "object"
+																}
+																type: "array"
+															}
+															replicas: {
+																description: "Replicas is a list of Kustomize Replicas override specifications"
+																items: {
+																	properties: {
+																		count: {
+																			anyOf: [{
+																				type: "integer"
+																			}, {
+																				type: "string"
+																			}]
+																			description:                  "Number of replicas"
+																			"x-kubernetes-int-or-string": true
+																		}
+																		name: {
+																			description: "Name of Deployment or StatefulSet"
+																			type:        "string"
+																		}
+																	}
+																	required: [
+																		"count",
+																		"name",
+																	]
+																	type: "object"
+																}
+																type: "array"
 															}
 															version: {
 																description: "Version controls which version of Kustomize to use for rendering manifests"
@@ -3047,8 +3863,12 @@ customresourcedefinition: "applications.argoproj.io": {
 														type:        "string"
 													}
 													targetRevision: {
-														description: "TargetRevision defines the revision of the source to sync the application to. In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD. In case of Helm, this is a semver tag for the Chart's version."
-														type:        "string"
+														description: """
+	TargetRevision defines the revision of the source to sync the application to.
+	In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD.
+	In case of Helm, this is a semver tag for the Chart's version.
+	"""
+														type: "string"
 													}
 												}
 												required: ["repoURL"]
@@ -3191,8 +4011,13 @@ customresourcedefinition: "applications.argoproj.io": {
 																	type: "array"
 																}
 																values: {
-																	description: "Values specifies Helm values to be passed to helm template, typically defined as a block"
+																	description: "Values specifies Helm values to be passed to helm template, typically defined as a block. ValuesObject takes precedence over Values, so use one or the other."
 																	type:        "string"
+																}
+																valuesObject: {
+																	description:                            "ValuesObject specifies Helm values to be passed to helm template, defined as a map. This takes precedence over Values."
+																	type:                                   "object"
+																	"x-kubernetes-preserve-unknown-fields": true
 																}
 																version: {
 																	description: "Version is the Helm version to use for templating (\"3\")"
@@ -3209,10 +4034,19 @@ customresourcedefinition: "applications.argoproj.io": {
 																	description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
 																	type:        "object"
 																}
+																commonAnnotationsEnvsubst: {
+																	description: "CommonAnnotationsEnvsubst specifies whether to apply env variables substitution for annotation values"
+																	type:        "boolean"
+																}
 																commonLabels: {
 																	additionalProperties: type: "string"
 																	description: "CommonLabels is a list of additional labels to add to rendered manifests"
 																	type:        "object"
+																}
+																components: {
+																	description: "Components specifies a list of kustomize components to add to the kustomization before building"
+																	items: type: "string"
+																	type: "array"
 																}
 																forceCommonAnnotations: {
 																	description: "ForceCommonAnnotations specifies whether to force applying common annotations to resources for Kustomize apps"
@@ -3230,6 +4064,10 @@ customresourcedefinition: "applications.argoproj.io": {
 																	}
 																	type: "array"
 																}
+																labelWithoutSelector: {
+																	description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
+																	type:        "boolean"
+																}
 																namePrefix: {
 																	description: "NamePrefix is a prefix appended to resources for Kustomize apps"
 																	type:        "string"
@@ -3237,6 +4075,63 @@ customresourcedefinition: "applications.argoproj.io": {
 																nameSuffix: {
 																	description: "NameSuffix is a suffix appended to resources for Kustomize apps"
 																	type:        "string"
+																}
+																namespace: {
+																	description: "Namespace sets the namespace that Kustomize adds to all resources"
+																	type:        "string"
+																}
+																patches: {
+																	description: "Patches is a list of Kustomize patches"
+																	items: {
+																		properties: {
+																			options: {
+																				additionalProperties: type: "boolean"
+																				type: "object"
+																			}
+																			patch: type: "string"
+																			path: type: "string"
+																			target: {
+																				properties: {
+																					annotationSelector: type: "string"
+																					group: type: "string"
+																					kind: type: "string"
+																					labelSelector: type: "string"
+																					name: type: "string"
+																					namespace: type: "string"
+																					version: type: "string"
+																				}
+																				type: "object"
+																			}
+																		}
+																		type: "object"
+																	}
+																	type: "array"
+																}
+																replicas: {
+																	description: "Replicas is a list of Kustomize Replicas override specifications"
+																	items: {
+																		properties: {
+																			count: {
+																				anyOf: [{
+																					type: "integer"
+																				}, {
+																					type: "string"
+																				}]
+																				description:                  "Number of replicas"
+																				"x-kubernetes-int-or-string": true
+																			}
+																			name: {
+																				description: "Name of Deployment or StatefulSet"
+																				type:        "string"
+																			}
+																		}
+																		required: [
+																			"count",
+																			"name",
+																		]
+																		type: "object"
+																	}
+																	type: "array"
 																}
 																version: {
 																	description: "Version controls which version of Kustomize to use for rendering manifests"
@@ -3313,8 +4208,12 @@ customresourcedefinition: "applications.argoproj.io": {
 															type:        "string"
 														}
 														targetRevision: {
-															description: "TargetRevision defines the revision of the source to sync the application to. In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD. In case of Helm, this is a semver tag for the Chart's version."
-															type:        "string"
+															description: """
+	TargetRevision defines the revision of the source to sync the application to.
+	In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD.
+	In case of Helm, this is a semver tag for the Chart's version.
+	"""
+															type: "string"
 														}
 													}
 													required: ["repoURL"]
@@ -3346,7 +4245,10 @@ customresourcedefinition: "applications.argoproj.io": {
 							resources: {
 								description: "Resources is a list of Kubernetes resources managed by this application"
 								items: {
-									description: "ResourceStatus holds the current sync and health status of a resource TODO: describe members of this type"
+									description: """
+	ResourceStatus holds the current sync and health status of a resource
+	TODO: describe members of this type
+	"""
 									properties: {
 										group: type: "string"
 										health: {
@@ -3420,19 +4322,53 @@ customresourcedefinition: "applications.argoproj.io": {
 												description: "Destination is a reference to the application's destination used for comparison"
 												properties: {
 													name: {
-														description: "Name is an alternate way of specifying the target cluster by its symbolic name"
+														description: "Name is an alternate way of specifying the target cluster by its symbolic name. This must be set if Server is not set."
 														type:        "string"
 													}
 													namespace: {
-														description: "Namespace specifies the target namespace for the application's resources. The namespace will only be set for namespace-scoped resources that have not set a value for .metadata.namespace"
-														type:        "string"
+														description: """
+	Namespace specifies the target namespace for the application's resources.
+	The namespace will only be set for namespace-scoped resources that have not set a value for .metadata.namespace
+	"""
+														type: "string"
 													}
 													server: {
-														description: "Server specifies the URL of the target cluster and must be set to the Kubernetes control plane API"
+														description: "Server specifies the URL of the target cluster's Kubernetes control plane API. This must be set if Name is not set."
 														type:        "string"
 													}
 												}
 												type: "object"
+											}
+											ignoreDifferences: {
+												description: "IgnoreDifferences is a reference to the application's ignored differences used for comparison"
+												items: {
+													description: "ResourceIgnoreDifferences contains resource filter and list of json paths which should be ignored during comparison with live state."
+													properties: {
+														group: type: "string"
+														jqPathExpressions: {
+															items: type: "string"
+															type: "array"
+														}
+														jsonPointers: {
+															items: type: "string"
+															type: "array"
+														}
+														kind: type: "string"
+														managedFieldsManagers: {
+															description: """
+	ManagedFieldsManagers is a list of trusted managers. Fields mutated by those managers will take precedence over the
+	desired state defined in the SCM and won't be displayed in diffs
+	"""
+															items: type: "string"
+															type: "array"
+														}
+														name: type: "string"
+														namespace: type: "string"
+													}
+													required: ["kind"]
+													type: "object"
+												}
+												type: "array"
 											}
 											source: {
 												description: "Source is a reference to the application's source used for comparison"
@@ -3569,8 +4505,13 @@ customresourcedefinition: "applications.argoproj.io": {
 																type: "array"
 															}
 															values: {
-																description: "Values specifies Helm values to be passed to helm template, typically defined as a block"
+																description: "Values specifies Helm values to be passed to helm template, typically defined as a block. ValuesObject takes precedence over Values, so use one or the other."
 																type:        "string"
+															}
+															valuesObject: {
+																description:                            "ValuesObject specifies Helm values to be passed to helm template, defined as a map. This takes precedence over Values."
+																type:                                   "object"
+																"x-kubernetes-preserve-unknown-fields": true
 															}
 															version: {
 																description: "Version is the Helm version to use for templating (\"3\")"
@@ -3587,10 +4528,19 @@ customresourcedefinition: "applications.argoproj.io": {
 																description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
 																type:        "object"
 															}
+															commonAnnotationsEnvsubst: {
+																description: "CommonAnnotationsEnvsubst specifies whether to apply env variables substitution for annotation values"
+																type:        "boolean"
+															}
 															commonLabels: {
 																additionalProperties: type: "string"
 																description: "CommonLabels is a list of additional labels to add to rendered manifests"
 																type:        "object"
+															}
+															components: {
+																description: "Components specifies a list of kustomize components to add to the kustomization before building"
+																items: type: "string"
+																type: "array"
 															}
 															forceCommonAnnotations: {
 																description: "ForceCommonAnnotations specifies whether to force applying common annotations to resources for Kustomize apps"
@@ -3608,6 +4558,10 @@ customresourcedefinition: "applications.argoproj.io": {
 																}
 																type: "array"
 															}
+															labelWithoutSelector: {
+																description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
+																type:        "boolean"
+															}
 															namePrefix: {
 																description: "NamePrefix is a prefix appended to resources for Kustomize apps"
 																type:        "string"
@@ -3615,6 +4569,63 @@ customresourcedefinition: "applications.argoproj.io": {
 															nameSuffix: {
 																description: "NameSuffix is a suffix appended to resources for Kustomize apps"
 																type:        "string"
+															}
+															namespace: {
+																description: "Namespace sets the namespace that Kustomize adds to all resources"
+																type:        "string"
+															}
+															patches: {
+																description: "Patches is a list of Kustomize patches"
+																items: {
+																	properties: {
+																		options: {
+																			additionalProperties: type: "boolean"
+																			type: "object"
+																		}
+																		patch: type: "string"
+																		path: type: "string"
+																		target: {
+																			properties: {
+																				annotationSelector: type: "string"
+																				group: type: "string"
+																				kind: type: "string"
+																				labelSelector: type: "string"
+																				name: type: "string"
+																				namespace: type: "string"
+																				version: type: "string"
+																			}
+																			type: "object"
+																		}
+																	}
+																	type: "object"
+																}
+																type: "array"
+															}
+															replicas: {
+																description: "Replicas is a list of Kustomize Replicas override specifications"
+																items: {
+																	properties: {
+																		count: {
+																			anyOf: [{
+																				type: "integer"
+																			}, {
+																				type: "string"
+																			}]
+																			description:                  "Number of replicas"
+																			"x-kubernetes-int-or-string": true
+																		}
+																		name: {
+																			description: "Name of Deployment or StatefulSet"
+																			type:        "string"
+																		}
+																	}
+																	required: [
+																		"count",
+																		"name",
+																	]
+																	type: "object"
+																}
+																type: "array"
 															}
 															version: {
 																description: "Version controls which version of Kustomize to use for rendering manifests"
@@ -3691,8 +4702,12 @@ customresourcedefinition: "applications.argoproj.io": {
 														type:        "string"
 													}
 													targetRevision: {
-														description: "TargetRevision defines the revision of the source to sync the application to. In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD. In case of Helm, this is a semver tag for the Chart's version."
-														type:        "string"
+														description: """
+	TargetRevision defines the revision of the source to sync the application to.
+	In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD.
+	In case of Helm, this is a semver tag for the Chart's version.
+	"""
+														type: "string"
 													}
 												}
 												required: ["repoURL"]
@@ -3835,8 +4850,13 @@ customresourcedefinition: "applications.argoproj.io": {
 																	type: "array"
 																}
 																values: {
-																	description: "Values specifies Helm values to be passed to helm template, typically defined as a block"
+																	description: "Values specifies Helm values to be passed to helm template, typically defined as a block. ValuesObject takes precedence over Values, so use one or the other."
 																	type:        "string"
+																}
+																valuesObject: {
+																	description:                            "ValuesObject specifies Helm values to be passed to helm template, defined as a map. This takes precedence over Values."
+																	type:                                   "object"
+																	"x-kubernetes-preserve-unknown-fields": true
 																}
 																version: {
 																	description: "Version is the Helm version to use for templating (\"3\")"
@@ -3853,10 +4873,19 @@ customresourcedefinition: "applications.argoproj.io": {
 																	description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
 																	type:        "object"
 																}
+																commonAnnotationsEnvsubst: {
+																	description: "CommonAnnotationsEnvsubst specifies whether to apply env variables substitution for annotation values"
+																	type:        "boolean"
+																}
 																commonLabels: {
 																	additionalProperties: type: "string"
 																	description: "CommonLabels is a list of additional labels to add to rendered manifests"
 																	type:        "object"
+																}
+																components: {
+																	description: "Components specifies a list of kustomize components to add to the kustomization before building"
+																	items: type: "string"
+																	type: "array"
 																}
 																forceCommonAnnotations: {
 																	description: "ForceCommonAnnotations specifies whether to force applying common annotations to resources for Kustomize apps"
@@ -3874,6 +4903,10 @@ customresourcedefinition: "applications.argoproj.io": {
 																	}
 																	type: "array"
 																}
+																labelWithoutSelector: {
+																	description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
+																	type:        "boolean"
+																}
 																namePrefix: {
 																	description: "NamePrefix is a prefix appended to resources for Kustomize apps"
 																	type:        "string"
@@ -3881,6 +4914,63 @@ customresourcedefinition: "applications.argoproj.io": {
 																nameSuffix: {
 																	description: "NameSuffix is a suffix appended to resources for Kustomize apps"
 																	type:        "string"
+																}
+																namespace: {
+																	description: "Namespace sets the namespace that Kustomize adds to all resources"
+																	type:        "string"
+																}
+																patches: {
+																	description: "Patches is a list of Kustomize patches"
+																	items: {
+																		properties: {
+																			options: {
+																				additionalProperties: type: "boolean"
+																				type: "object"
+																			}
+																			patch: type: "string"
+																			path: type: "string"
+																			target: {
+																				properties: {
+																					annotationSelector: type: "string"
+																					group: type: "string"
+																					kind: type: "string"
+																					labelSelector: type: "string"
+																					name: type: "string"
+																					namespace: type: "string"
+																					version: type: "string"
+																				}
+																				type: "object"
+																			}
+																		}
+																		type: "object"
+																	}
+																	type: "array"
+																}
+																replicas: {
+																	description: "Replicas is a list of Kustomize Replicas override specifications"
+																	items: {
+																		properties: {
+																			count: {
+																				anyOf: [{
+																					type: "integer"
+																				}, {
+																					type: "string"
+																				}]
+																				description:                  "Number of replicas"
+																				"x-kubernetes-int-or-string": true
+																			}
+																			name: {
+																				description: "Name of Deployment or StatefulSet"
+																				type:        "string"
+																			}
+																		}
+																		required: [
+																			"count",
+																			"name",
+																		]
+																		type: "object"
+																	}
+																	type: "array"
 																}
 																version: {
 																	description: "Version controls which version of Kustomize to use for rendering manifests"
@@ -3957,8 +5047,12 @@ customresourcedefinition: "applications.argoproj.io": {
 															type:        "string"
 														}
 														targetRevision: {
-															description: "TargetRevision defines the revision of the source to sync the application to. In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD. In case of Helm, this is a semver tag for the Chart's version."
-															type:        "string"
+															description: """
+	TargetRevision defines the revision of the source to sync the application to.
+	In case of Git, this can be commit, tag, or branch. If omitted, will equal to HEAD.
+	In case of Helm, this is a semver tag for the Chart's version.
+	"""
+															type: "string"
 														}
 													}
 													required: ["repoURL"]

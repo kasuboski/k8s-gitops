@@ -31,8 +31,14 @@ deployment: "argocd-server": {
 					weight: 5
 				}]
 				containers: [{
-					command: ["argocd-server"]
+					args: ["/usr/local/bin/argocd-server"]
 					env: [{
+						name: "REDIS_PASSWORD"
+						valueFrom: secretKeyRef: {
+							key:  "auth"
+							name: "argocd-redis"
+						}
+					}, {
 						name: "ARGOCD_SERVER_INSECURE"
 						valueFrom: configMapKeyRef: {
 							key:      "server.insecure"
@@ -236,9 +242,37 @@ deployment: "argocd-server": {
 							optional: true
 						}
 					}, {
+						name: "ARGOCD_SERVER_LISTEN_ADDRESS"
+						valueFrom: configMapKeyRef: {
+							key:      "server.listen.address"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_SERVER_METRICS_LISTEN_ADDRESS"
+						valueFrom: configMapKeyRef: {
+							key:      "server.metrics.listen.address"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
 						name: "ARGOCD_SERVER_OTLP_ADDRESS"
 						valueFrom: configMapKeyRef: {
 							key:      "otlp.address"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_SERVER_OTLP_INSECURE"
+						valueFrom: configMapKeyRef: {
+							key:      "otlp.insecure"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_SERVER_OTLP_HEADERS"
+						valueFrom: configMapKeyRef: {
+							key:      "otlp.headers"
 							name:     "argocd-cmd-params-cm"
 							optional: true
 						}
@@ -256,8 +290,29 @@ deployment: "argocd-server": {
 							name:     "argocd-cmd-params-cm"
 							optional: true
 						}
+					}, {
+						name: "ARGOCD_K8SCLIENT_RETRY_MAX"
+						valueFrom: configMapKeyRef: {
+							key:      "server.k8sclient.retry.max"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_K8SCLIENT_RETRY_BASE_BACKOFF"
+						valueFrom: configMapKeyRef: {
+							key:      "server.k8sclient.retry.base.backoff"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_API_CONTENT_TYPES"
+						valueFrom: configMapKeyRef: {
+							key:      "server.api.content.types"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
 					}]
-					image:           "quay.io/argoproj/argocd:v2.6.2"
+					image:           "quay.io/argoproj/argocd:v2.12.4"
 					imagePullPolicy: "Always"
 					livenessProbe: {
 						httpGet: {

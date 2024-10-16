@@ -32,11 +32,22 @@ clusterrole: "argocd-server": {
 		verbs: ["get"]
 	}, {
 		apiGroups: ["argoproj.io"]
-		resources: ["applications"]
+		resources: [
+			"applications",
+			"applicationsets",
+		]
 		verbs: [
 			"get",
 			"list",
 			"watch",
 		]
+	}, {
+		apiGroups: ["batch"]
+		resources: ["jobs"]
+		verbs: ["create"]
+	}, {
+		apiGroups: ["argoproj.io"]
+		resources: ["workflows"]
+		verbs: ["create"]
 	}]
 }

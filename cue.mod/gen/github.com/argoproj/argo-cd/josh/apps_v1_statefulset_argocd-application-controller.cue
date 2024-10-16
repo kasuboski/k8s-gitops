@@ -33,8 +33,14 @@ statefulset: "argocd-application-controller": {
 					weight: 5
 				}]
 				containers: [{
-					command: ["argocd-application-controller"]
+					args: ["/usr/local/bin/argocd-application-controller"]
 					env: [{
+						name: "REDIS_PASSWORD"
+						valueFrom: secretKeyRef: {
+							key:  "auth"
+							name: "argocd-redis"
+						}
+					}, {
 						name:  "ARGOCD_CONTROLLER_REPLICAS"
 						value: "1"
 					}, {
@@ -49,6 +55,20 @@ statefulset: "argocd-application-controller": {
 						valueFrom: configMapKeyRef: {
 							key:      "timeout.hard.reconciliation"
 							name:     "argocd-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_RECONCILIATION_JITTER"
+						valueFrom: configMapKeyRef: {
+							key:      "timeout.reconciliation.jitter"
+							name:     "argocd-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_REPO_ERROR_GRACE_PERIOD_SECONDS"
+						valueFrom: configMapKeyRef: {
+							key:      "controller.repo.error.grace.period.seconds"
+							name:     "argocd-cmd-params-cm"
 							optional: true
 						}
 					}, {
@@ -171,14 +191,70 @@ statefulset: "argocd-application-controller": {
 							optional: true
 						}
 					}, {
+						name: "ARGOCD_APPLICATION_CONTROLLER_OTLP_INSECURE"
+						valueFrom: configMapKeyRef: {
+							key:      "otlp.insecure"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATION_CONTROLLER_OTLP_HEADERS"
+						valueFrom: configMapKeyRef: {
+							key:      "otlp.headers"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
 						name: "ARGOCD_APPLICATION_NAMESPACES"
 						valueFrom: configMapKeyRef: {
 							key:      "application.namespaces"
 							name:     "argocd-cmd-params-cm"
 							optional: true
 						}
+					}, {
+						name: "ARGOCD_CONTROLLER_SHARDING_ALGORITHM"
+						valueFrom: configMapKeyRef: {
+							key:      "controller.sharding.algorithm"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATION_CONTROLLER_KUBECTL_PARALLELISM_LIMIT"
+						valueFrom: configMapKeyRef: {
+							key:      "controller.kubectl.parallelism.limit"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_K8SCLIENT_RETRY_MAX"
+						valueFrom: configMapKeyRef: {
+							key:      "controller.k8sclient.retry.max"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_K8SCLIENT_RETRY_BASE_BACKOFF"
+						valueFrom: configMapKeyRef: {
+							key:      "controller.k8sclient.retry.base.backoff"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATION_CONTROLLER_SERVER_SIDE_DIFF"
+						valueFrom: configMapKeyRef: {
+							key:      "controller.diff.server.side"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_IGNORE_NORMALIZER_JQ_TIMEOUT"
+						valueFrom: configMapKeyRef: {
+							key:      "controller.ignore.normalizer.jq.timeout"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
 					}]
-					image:           "quay.io/argoproj/argocd:v2.6.2"
+					image:           "quay.io/argoproj/argocd:v2.12.4"
 					imagePullPolicy: "Always"
 					name:            "argocd-application-controller"
 					ports: [{containerPort: 8082}]

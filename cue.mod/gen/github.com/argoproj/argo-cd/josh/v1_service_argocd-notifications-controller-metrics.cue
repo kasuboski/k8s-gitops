@@ -4,7 +4,11 @@ service: "argocd-notifications-controller-metrics": {
 	apiVersion: "v1"
 	kind:       "Service"
 	metadata: {
-		labels: "app.kubernetes.io/name": "argocd-notifications-controller-metrics"
+		labels: {
+			"app.kubernetes.io/component": "notifications-controller"
+			"app.kubernetes.io/name":      "argocd-notifications-controller-metrics"
+			"app.kubernetes.io/part-of":   "argocd"
+		}
 		name:      "argocd-notifications-controller-metrics"
 		namespace: "argocd"
 	}

@@ -8,15 +8,6 @@ networkpolicy: "argocd-redis-network-policy": {
 		namespace: "argocd"
 	}
 	spec: {
-		egress: [{
-			ports: [{
-				port:     53
-				protocol: "UDP"
-			}, {
-				port:     53
-				protocol: "TCP"
-			}]
-		}]
 		ingress: [{
 			from: [{
 				podSelector: matchLabels: "app.kubernetes.io/name": "argocd-server"
@@ -31,9 +22,6 @@ networkpolicy: "argocd-redis-network-policy": {
 			}]
 		}]
 		podSelector: matchLabels: "app.kubernetes.io/name": "argocd-redis"
-		policyTypes: [
-			"Ingress",
-			"Egress",
-		]
+		policyTypes: ["Ingress"]
 	}
 }
