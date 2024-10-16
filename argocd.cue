@@ -15,6 +15,8 @@ _local: httproute: argocdserver: {
 	spec: {
 		parentRefs: [
 			{
+				group: "gateway.networking.k8s.io"
+				kind: "Gateway"
 				name: "http"
 				namespace: "envoy-gateway-system"
 			}
