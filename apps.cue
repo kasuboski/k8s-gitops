@@ -36,6 +36,7 @@ import (
 			syncOptions: [...string] | *[
 				"CreateNamespace=true",
 				"PrunePropagationPolicy=foreground",
+				"ServerSideApply=true",
 			]
 		}
 	}

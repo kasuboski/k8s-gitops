@@ -26,7 +26,8 @@
       },
       "syncOptions": [
         "CreateNamespace=true",
-        "PrunePropagationPolicy=foreground"
+        "PrunePropagationPolicy=foreground",
+        "ServerSideApply=true"
       ]
     }
   }
