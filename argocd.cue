@@ -9,41 +9,41 @@ apps: argocd: {
 
 _local: httproute: argocdserver: {
 	apiVersion: "gateway.networking.k8s.io/v1"
-	kind: "HTTPRoute"
-	metadata: name: "argocd-server"
+	kind:       "HTTPRoute"
+	metadata: name:      "argocd-server"
 	metadata: namespace: "argocd"
 	spec: {
 		parentRefs: [
 			{
-				group: "gateway.networking.k8s.io"
-				kind: "Gateway"
-				name: "http"
+				group:     "gateway.networking.k8s.io"
+				kind:      "Gateway"
+				name:      "http"
 				namespace: "envoy-gateway-system"
-			}
+			},
 		]
 		hostnames: [
-			"argocd.joshcorp.co"
+			"argocd.joshcorp.co",
 		]
 		rules: [
 			{
 				backendRefs: [
 					{
-						group: ""
-						kind: "Service"
-						name: "argocd-server"
-						port: 80
+						group:  ""
+						kind:   "Service"
+						name:   "argocd-server"
+						port:   80
 						weight: 1
-					}
+					},
 				]
 				matches: [
 					{
 						path: {
-							type: "PathPrefix"
+							type:  "PathPrefix"
 							value: "/"
 						}
-					}
+					},
 				]
-			}
+			},
 		]
 	}
 }
