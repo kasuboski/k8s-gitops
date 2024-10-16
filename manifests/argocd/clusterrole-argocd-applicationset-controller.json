@@ -1,6 +1,6 @@
 {
   "apiVersion": "rbac.authorization.k8s.io/v1",
-  "kind": "Role",
+  "kind": "ClusterRole",
   "metadata": {
     "labels": {
       "app.kubernetes.io/component": "applicationset-controller",
@@ -8,8 +8,7 @@
       "app.kubernetes.io/part-of": "argocd",
       "k8s.joshcorp.co/app": "argocd"
     },
-    "name": "argocd-applicationset-controller",
-    "namespace": "argocd"
+    "name": "argocd-applicationset-controller"
   },
   "rules": [
     {
@@ -36,12 +35,12 @@
         "argoproj.io"
       ],
       "resources": [
-        "appprojects"
+        "applicationsets/status"
       ],
       "verbs": [
         "get",
-        "list",
-        "watch"
+        "patch",
+        "update"
       ]
     },
     {
@@ -49,12 +48,12 @@
         "argoproj.io"
       ],
       "resources": [
-        "applicationsets/status"
+        "appprojects"
       ],
       "verbs": [
         "get",
-        "patch",
-        "update"
+        "list",
+        "watch"
       ]
     },
     {
@@ -77,8 +76,24 @@
         ""
       ],
       "resources": [
-        "secrets",
         "configmaps"
+      ],
+      "verbs": [
+        "create",
+        "update",
+        "delete",
+        "get",
+        "list",
+        "patch",
+        "watch"
+      ]
+    },
+    {
+      "apiGroups": [
+        ""
+      ],
+      "resources": [
+        "secrets"
       ],
       "verbs": [
         "get",
@@ -97,6 +112,23 @@
       "verbs": [
         "get",
         "list",
+        "watch"
+      ]
+    },
+    {
+      "apiGroups": [
+        "coordination.k8s.io"
+      ],
+      "resources": [
+        "leases"
+      ],
+      "verbs": [
+        "create",
+        "delete",
+        "get",
+        "list",
+        "patch",
+        "update",
         "watch"
       ]
     }

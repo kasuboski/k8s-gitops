@@ -58,9 +58,21 @@
               "--save",
               "",
               "--appendonly",
-              "no"
+              "no",
+              "--requirepass $(REDIS_PASSWORD)"
             ],
-            "image": "redis:7.0.7-alpine",
+            "env": [
+              {
+                "name": "REDIS_PASSWORD",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "key": "auth",
+                    "name": "argocd-redis"
+                  }
+                }
+              }
+            ],
+            "image": "redis:7.0.15-alpine",
             "imagePullPolicy": "Always",
             "name": "redis",
             "ports": [
@@ -74,6 +86,32 @@
                 "drop": [
                   "ALL"
                 ]
+              },
+              "readOnlyRootFilesystem": true
+            }
+          }
+        ],
+        "initContainers": [
+          {
+            "command": [
+              "argocd",
+              "admin",
+              "redis-initial-password"
+            ],
+            "image": "quay.io/argoproj/argocd:v2.12.4",
+            "imagePullPolicy": "IfNotPresent",
+            "name": "secret-init",
+            "securityContext": {
+              "allowPrivilegeEscalation": false,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              },
+              "readOnlyRootFilesystem": true,
+              "runAsNonRoot": true,
+              "seccompProfile": {
+                "type": "RuntimeDefault"
               }
             }
           }

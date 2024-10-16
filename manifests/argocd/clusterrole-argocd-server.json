@@ -52,12 +52,35 @@
         "argoproj.io"
       ],
       "resources": [
-        "applications"
+        "applications",
+        "applicationsets"
       ],
       "verbs": [
         "get",
         "list",
         "watch"
+      ]
+    },
+    {
+      "apiGroups": [
+        "batch"
+      ],
+      "resources": [
+        "jobs"
+      ],
+      "verbs": [
+        "create"
+      ]
+    },
+    {
+      "apiGroups": [
+        "argoproj.io"
+      ],
+      "resources": [
+        "workflows"
+      ],
+      "verbs": [
+        "create"
       ]
     }
   ]

@@ -9,20 +9,6 @@
     "namespace": "argocd"
   },
   "spec": {
-    "egress": [
-      {
-        "ports": [
-          {
-            "port": 53,
-            "protocol": "UDP"
-          },
-          {
-            "port": 53,
-            "protocol": "TCP"
-          }
-        ]
-      }
-    ],
     "ingress": [
       {
         "from": [
@@ -62,8 +48,7 @@
       }
     },
     "policyTypes": [
-      "Ingress",
-      "Egress"
+      "Ingress"
     ]
   }
 }
