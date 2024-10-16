@@ -45,15 +45,15 @@ import (
 #App: {
 	name:      string
 	namespace: string
-	resources: [string]: [string]: #Resource
 }
 #App: resources: #Schema
 
 apps: [string]: #App
 apps: [Name=string]: {
 	name: Name
-	resources: [string]: [string]: metadata: {
+	resources: [string]: [R=string]: metadata: {
 		labels: "k8s.joshcorp.co/app": Name
+		name: string | *R
 	}
 }
 

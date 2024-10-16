@@ -20,5 +20,4 @@ secrets/doppler-operator.cue: secrets/doppler-operator.yaml
 
 .PHONY: cue-k8s
 cue-k8s:
-	go get k8s.io/api/core/v1 && cue get go k8s.io/api/core/v1
-	go get k8s.io/api/apps/v1 && cue get go k8s.io/api/apps/v1
+	go get k8s.io/api && cue get go k8s.io/api/...
