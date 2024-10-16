@@ -1,0 +1,43 @@
+{
+  "apiVersion": "gateway.networking.k8s.io/v1",
+  "kind": "HTTPRoute",
+  "metadata": {
+    "labels": {
+      "k8s.joshcorp.co/app": "argocd"
+    },
+    "name": "argocd-server",
+    "namespace": "argocd"
+  },
+  "spec": {
+    "hostnames": [
+      "argocd.joshcorp.co"
+    ],
+    "parentRefs": [
+      {
+        "name": "http",
+        "namespace": "envoy-gateway-system"
+      }
+    ],
+    "rules": [
+      {
+        "backendRefs": [
+          {
+            "group": "",
+            "kind": "Service",
+            "name": "argocd-server",
+            "port": 80,
+            "weight": 1
+          }
+        ],
+        "matches": [
+          {
+            "path": {
+              "type": "PathPrefix",
+              "value": "/"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

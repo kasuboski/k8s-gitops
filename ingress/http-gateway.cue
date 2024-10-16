@@ -9,6 +9,6 @@ gateway: http: {
 		name:     "http"
 		protocol: "HTTP"
 		port:     80
-		allowedRoutes: namespaces: from: "ALL"
+		allowedRoutes: namespaces: from: "All"
 	}]
 }
