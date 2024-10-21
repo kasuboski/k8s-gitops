@@ -30,6 +30,7 @@ vendor: "github.com/argoproj/argo-cd/josh": kustomize: path:            "argocd"
 vendor: "github.com/kasuboski/k8s-gitops/kubesystem": kustomize: path:  "kube-system"
 vendor: "github.com/kasuboski/k8s-gitops/descheduler": kustomize: path: "descheduler"
 vendor: "github.com/metallb/metallb": kustomize: path:                  "networking/metallb"
+vendor: "github.com/rancher/local-path-provisioner/josh": kustomize: path:   "storage/local-path-provisioner"
 vendor: "github.com/kasuboski/k8s-gitops/media": kustomize: path:       "media"
 
 vendorList: [...#Vendor]

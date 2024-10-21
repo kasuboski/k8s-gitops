@@ -5,25 +5,25 @@ storageclass: "local-storage": {
   volumeBindingMode: "WaitForFirstConsumer"
 }
 
-persistentvolume: "adel-speicher": {
-  spec: {
-    capacity: storage: "100Gi"
-    volumeMode: "Filesystem"
-    accessModes: ["ReadWriteOnce"]
-    persistentVolumeReclaimPolicy: "Retain"
-    storageClassName: "local-storage"
-    local: path: "/mnt/speicher"
-    nodeAffinity: required: nodeSelectorTerms: [
-      {
-        matchExpressions: [{
-          key: "kubernetes.io/hostname"
-          operator: "In"
-          values: ["adel"]
-      }]
-      }
-    ]
-  }
-}
+// persistentvolume: "adel-speicher": {
+//   spec: {
+//     capacity: storage: "100Gi"
+//     volumeMode: "Filesystem"
+//     accessModes: ["ReadWriteOnce"]
+//     persistentVolumeReclaimPolicy: "Retain"
+//     storageClassName: "local-storage"
+//     local: path: "/mnt/speicher"
+//     nodeAffinity: required: nodeSelectorTerms: [
+//       {
+//         matchExpressions: [{
+//           key: "kubernetes.io/hostname"
+//           operator: "In"
+//           values: ["adel"]
+//       }]
+//       }
+//     ]
+//   }
+// }
 
 persistentvolume: storage: {
   spec: {

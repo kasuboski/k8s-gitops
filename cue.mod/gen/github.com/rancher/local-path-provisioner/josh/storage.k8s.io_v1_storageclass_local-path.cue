@@ -1,0 +1,13 @@
+package josh
+
+storageclass: "local-path": {
+	apiVersion: "storage.k8s.io/v1"
+	kind:       "StorageClass"
+	metadata: {
+		annotations: "storageclass.kubernetes.io/is-default-class": "true"
+		name: "local-path"
+	}
+	provisioner:       "rancher.io/local-path"
+	reclaimPolicy:     "Delete"
+	volumeBindingMode: "WaitForFirstConsumer"
+}
