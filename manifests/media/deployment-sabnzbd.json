@@ -60,11 +60,6 @@
               }
             },
             "securityContext": {
-              "capabilities": {
-                "drop": [
-                  "All"
-                ]
-              },
               "runAsNonRoot": false
             },
             "volumeMounts": [
