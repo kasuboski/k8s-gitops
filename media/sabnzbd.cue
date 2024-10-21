@@ -19,9 +19,7 @@ deployment: sabnzbd: {
 			}
 			ports: [{name: "web", containerPort: 8080}]
 			securityContext: {
-        runAsUser: 1000
-        runAsGroup: 1000
-				runAsNonRoot: true
+				runAsNonRoot: false
 				capabilities: drop: ["All"]
 			}
 			volumeMounts: [{
