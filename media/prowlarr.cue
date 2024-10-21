@@ -2,13 +2,10 @@ package media
 
 deployment: prowlarr: {
 	spec: template: spec: {
-		securityContext: fsGroup: 1000
 		containers: [{
 			name:  "prowlarr"
 			image: "lscr.io/linuxserver/prowlarr"
 			_envMap: {
-				PUID: "1000"
-				PGID: "1000"
 				TZ:   "America/Chicago"
 			}
 			env: [for k, v in _envMap {name: k, value: v}]
