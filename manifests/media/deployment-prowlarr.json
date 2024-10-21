@@ -68,12 +68,7 @@
               }
             },
             "securityContext": {
-              "capabilities": {
-                "drop": [
-                  "All"
-                ]
-              },
-              "runAsNonRoot": true
+              "runAsNonRoot": false
             },
             "startupProbe": {
               "failureThreshold": 30,

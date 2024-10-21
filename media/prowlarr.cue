@@ -31,8 +31,8 @@ deployment: prowlarr: {
 			}
 			ports: [{name: "http", containerPort: 9696}]
 			securityContext: {
-				runAsNonRoot: true
-				capabilities: drop: ["All"]
+				runAsNonRoot: false
+				// capabilities: drop: ["All"]
 			}
 			volumeMounts: [{
 				name:      "prowlarr-config"
