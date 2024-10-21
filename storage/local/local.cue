@@ -29,7 +29,7 @@ persistentvolume: storage: {
   spec: {
     storageClassName: "manual"
     capacity: storage: "1Mi"
-    accessModes: ["ReadWriteOnce"]
+    accessModes: ["ReadWriteMany"]
     nfs: {
       server: "fettig.lan"
       path: "/storage"
