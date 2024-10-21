@@ -1,0 +1,117 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "labels": {
+      "app": "sonarr",
+      "app.kubernetes.io/name": "sonarr",
+      "k8s.joshcorp.co/app": "media"
+    },
+    "name": "sonarr"
+  },
+  "spec": {
+    "selector": {
+      "matchLabels": {
+        "app.kubernetes.io/name": "sonarr"
+      }
+    },
+    "strategy": {
+      "type": "Recreate"
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "sonarr",
+          "app.kubernetes.io/name": "sonarr"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "env": [
+              {
+                "name": "TZ",
+                "value": "America/Chicago"
+              }
+            ],
+            "image": "lscr.io/linuxserver/sonarr",
+            "livenessProbe": {
+              "failureThreshold": 5,
+              "initialDelaySeconds": 60,
+              "periodSeconds": 10,
+              "tcpSocket": {
+                "port": "http"
+              }
+            },
+            "name": "sonarr",
+            "ports": [
+              {
+                "containerPort": 8989,
+                "name": "http"
+              }
+            ],
+            "readinessProbe": {
+              "failureThreshold": 5,
+              "initialDelaySeconds": 60,
+              "periodSeconds": 10,
+              "tcpSocket": {
+                "port": "http"
+              }
+            },
+            "resources": {
+              "limits": {
+                "cpu": "500m",
+                "memory": "512Mi"
+              },
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              }
+            },
+            "securityContext": {
+              "runAsNonRoot": false
+            },
+            "volumeMounts": [
+              {
+                "mountPath": "/config",
+                "name": "sonarr-config"
+              },
+              {
+                "mountPath": "/tv",
+                "name": "media",
+                "subPath": "Video/TV Shows"
+              },
+              {
+                "mountPath": "/downloads",
+                "name": "media",
+                "subPath": "downloads"
+              }
+            ]
+          }
+        ],
+        "nodeSelector": {
+          "kubernetes.io/hostname": "adel"
+        },
+        "securityContext": {
+          "seccompProfile": {
+            "type": "RuntimeDefault"
+          }
+        },
+        "volumes": [
+          {
+            "name": "sonarr-config",
+            "persistentVolumeClaim": {
+              "claimName": "sonarr"
+            }
+          },
+          {
+            "name": "media",
+            "persistentVolumeClaim": {
+              "claimName": "media-storage"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
