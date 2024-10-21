@@ -35,7 +35,7 @@ service: [Name=string]: corev1.#Service & {
 			{
 				name:       "http"
 				port:       80
-				targetPort: "web"
+				targetPort: "http"
 			},
 		]
 	}

@@ -3,16 +3,16 @@
   "kind": "Deployment",
   "metadata": {
     "labels": {
-      "app": "sabnzbd",
-      "app.kubernetes.io/name": "sabnzbd",
+      "app": "prowlarr",
+      "app.kubernetes.io/name": "prowlarr",
       "k8s.joshcorp.co/app": "media"
     },
-    "name": "sabnzbd"
+    "name": "prowlarr"
   },
   "spec": {
     "selector": {
       "matchLabels": {
-        "app.kubernetes.io/name": "sabnzbd"
+        "app.kubernetes.io/name": "prowlarr"
       }
     },
     "strategy": {
@@ -21,8 +21,8 @@
     "template": {
       "metadata": {
         "labels": {
-          "app": "sabnzbd",
-          "app.kubernetes.io/name": "sabnzbd"
+          "app": "prowlarr",
+          "app.kubernetes.io/name": "prowlarr"
         }
       },
       "spec": {
@@ -42,34 +42,51 @@
                 "value": "America/Chicago"
               }
             ],
-            "image": "lscr.io/linuxserver/sabnzbd",
-            "name": "sabnzbd",
+            "image": "lscr.io/linuxserver/prowlarr",
+            "name": "prowlarr",
             "ports": [
               {
-                "containerPort": 8080,
+                "containerPort": 9696,
                 "name": "http"
               }
             ],
+            "readinessProbe": {
+              "failureThreshold": 5,
+              "periodSeconds": 10,
+              "tcpSocket": {
+                "port": "http"
+              }
+            },
             "resources": {
               "limits": {
-                "cpu": "2000m",
-                "memory": "2Gi"
+                "cpu": "500m",
+                "memory": "512Mi"
               },
               "requests": {
-                "cpu": "100m"
+                "cpu": "100m",
+                "memory": "128Mi"
               }
             },
             "securityContext": {
-              "runAsNonRoot": false
+              "capabilities": {
+                "drop": [
+                  "All"
+                ]
+              },
+              "runAsNonRoot": true
+            },
+            "startupProbe": {
+              "failureThreshold": 30,
+              "initialDelaySeconds": 5,
+              "periodSeconds": 10,
+              "tcpSocket": {
+                "port": "http"
+              }
             },
             "volumeMounts": [
               {
                 "mountPath": "/config",
-                "name": "sabnzbd-config"
-              },
-              {
-                "mountPath": "/downloads",
-                "name": "data"
+                "name": "prowlarr-config"
               }
             ]
           }
@@ -85,15 +102,9 @@
         },
         "volumes": [
           {
-            "name": "sabnzbd-config",
+            "name": "prowlarr-config",
             "persistentVolumeClaim": {
-              "claimName": "sabnzbd"
-            }
-          },
-          {
-            "name": "data",
-            "persistentVolumeClaim": {
-              "claimName": "media-storage"
+              "claimName": "prowlarr"
             }
           }
         ]

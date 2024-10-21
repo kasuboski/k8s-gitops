@@ -1,0 +1,46 @@
+{
+  "apiVersion": "gateway.networking.k8s.io/v1",
+  "kind": "HTTPRoute",
+  "metadata": {
+    "labels": {
+      "app": "prowlarr",
+      "app.kubernetes.io/name": "prowlarr",
+      "k8s.joshcorp.co/app": "media"
+    },
+    "name": "prowlarr"
+  },
+  "spec": {
+    "hostnames": [
+      "prowlarr.joshcorp.co"
+    ],
+    "parentRefs": [
+      {
+        "group": "gateway.networking.k8s.io",
+        "kind": "Gateway",
+        "name": "http",
+        "namespace": "envoy-gateway-system"
+      }
+    ],
+    "rules": [
+      {
+        "backendRefs": [
+          {
+            "group": "",
+            "kind": "Service",
+            "name": "prowlarr",
+            "port": 80,
+            "weight": 1
+          }
+        ],
+        "matches": [
+          {
+            "path": {
+              "type": "PathPrefix",
+              "value": "/"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

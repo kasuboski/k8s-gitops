@@ -3,11 +3,11 @@
   "kind": "Service",
   "metadata": {
     "labels": {
-      "app": "sabnzbd",
-      "app.kubernetes.io/name": "sabnzbd",
+      "app": "prowlarr",
+      "app.kubernetes.io/name": "prowlarr",
       "k8s.joshcorp.co/app": "media"
     },
-    "name": "sabnzbd"
+    "name": "prowlarr"
   },
   "spec": {
     "ports": [
@@ -18,7 +18,7 @@
       }
     ],
     "selector": {
-      "app.kubernetes.io/name": "sabnzbd"
+      "app.kubernetes.io/name": "prowlarr"
     }
   }
 }

@@ -17,7 +17,7 @@ deployment: sabnzbd: {
 				limits: cpu:    "2000m"
 				limits: memory: "2Gi"
 			}
-			ports: [{name: "web", containerPort: 8080}]
+			ports: [{name: "http", containerPort: 8080}]
 			securityContext: {
 				runAsNonRoot: false
 				// capabilities: drop: ["All"]
