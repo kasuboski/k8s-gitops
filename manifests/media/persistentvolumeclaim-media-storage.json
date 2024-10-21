@@ -3,6 +3,8 @@
   "kind": "PersistentVolumeClaim",
   "metadata": {
     "labels": {
+      "app": "media-storage",
+      "app.kubernetes.io/name": "media-storage",
       "k8s.joshcorp.co/app": "media"
     },
     "name": "media-storage"

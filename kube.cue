@@ -36,7 +36,7 @@ import (
 }
 #Schema: persistentvolumeclaim: [string]: corev1.#PersistentVolumeClaim & {
 	apiVersion: "v1"
-	kind:       "PersistenVolumeClaim"
+	kind:       "PersistentVolumeClaim"
 }
 
 #Schema: deployment: [string]: appsv1.#Deployment & {

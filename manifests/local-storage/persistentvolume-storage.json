@@ -3,13 +3,13 @@
   "kind": "PersistentVolume",
   "metadata": {
     "labels": {
-      "k8s.joshcorp.co/app": "media"
+      "k8s.joshcorp.co/app": "local-storage"
     },
     "name": "storage"
   },
   "spec": {
     "accessModes": [
-      "ReadWriteMany"
+      "ReadWriteOnce"
     ],
     "capacity": {
       "storage": "1Mi"

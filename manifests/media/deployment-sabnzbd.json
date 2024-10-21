@@ -3,6 +3,8 @@
   "kind": "Deployment",
   "metadata": {
     "labels": {
+      "app": "sabnzbd",
+      "app.kubernetes.io/name": "sabnzbd",
       "k8s.joshcorp.co/app": "media"
     },
     "name": "sabnzbd"
@@ -57,6 +59,14 @@
                 "cpu": "100m"
               }
             },
+            "securityContext": {
+              "capabilities": {
+                "drop": [
+                  "All"
+                ]
+              },
+              "runAsNonRoot": true
+            },
             "volumeMounts": [
               {
                 "mountPath": "/config",
@@ -64,17 +74,19 @@
               },
               {
                 "mountPath": "/downloads",
-                "name": "data",
-                "subPath": "downloads"
+                "name": "data"
               }
             ]
           }
         ],
         "nodeSelector": {
-          "topology.kubernetes.io/zone": "austin"
+          "kubernetes.io/hostname": "adel"
         },
         "securityContext": {
-          "fsGroup": 1000
+          "fsGroup": 1000,
+          "seccompProfile": {
+            "type": "RuntimeDefault"
+          }
         },
         "volumes": [
           {
