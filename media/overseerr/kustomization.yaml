@@ -1,7 +1,0 @@
-resources:
-  - overseerr-deploy.yaml
-  - ingress.yaml
-
-images:
-  - name: sctx/overseerr
-    newTag: 1.33.2
