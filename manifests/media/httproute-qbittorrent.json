@@ -1,0 +1,46 @@
+{
+  "apiVersion": "gateway.networking.k8s.io/v1",
+  "kind": "HTTPRoute",
+  "metadata": {
+    "labels": {
+      "app": "qbittorrent",
+      "app.kubernetes.io/name": "qbittorrent",
+      "k8s.joshcorp.co/app": "media"
+    },
+    "name": "qbittorrent"
+  },
+  "spec": {
+    "hostnames": [
+      "qbittorrent.joshcorp.co"
+    ],
+    "parentRefs": [
+      {
+        "group": "gateway.networking.k8s.io",
+        "kind": "Gateway",
+        "name": "http",
+        "namespace": "envoy-gateway-system"
+      }
+    ],
+    "rules": [
+      {
+        "backendRefs": [
+          {
+            "group": "",
+            "kind": "Service",
+            "name": "qbittorrent",
+            "port": 80,
+            "weight": 1
+          }
+        ],
+        "matches": [
+          {
+            "path": {
+              "type": "PathPrefix",
+              "value": "/"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "labels": {
+      "app": "qbittorrent",
+      "app.kubernetes.io/name": "qbittorrent",
+      "k8s.joshcorp.co/app": "media"
+    },
+    "name": "qbittorrent"
+  },
+  "spec": {
+    "selector": {
+      "matchLabels": {
+        "app.kubernetes.io/name": "qbittorrent"
+      }
+    },
+    "strategy": {
+      "type": "Recreate"
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "qbittorrent",
+          "app.kubernetes.io/name": "qbittorrent"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "env": [
+              {
+                "name": "PUID",
+                "value": "1000"
+              },
+              {
+                "name": "PGID",
+                "value": "1000"
+              },
+              {
+                "name": "TZ",
+                "value": "America/Chicago"
+              },
+              {
+                "name": "WEBUI_PORT",
+                "value": "8080"
+              }
+            ],
+            "image": "lscr.io/linuxserver/qbittorrent",
+            "name": "qbittorrent",
+            "ports": [
+              {
+                "containerPort": 8080,
+                "name": "http"
+              }
+            ],
+            "resources": {
+              "limits": {
+                "cpu": "1000m",
+                "memory": "256Mi"
+              },
+              "requests": {
+                "cpu": "200m"
+              }
+            },
+            "securityContext": {
+              "runAsNonRoot": false
+            },
+            "volumeMounts": [
+              {
+                "mountPath": "/config",
+                "name": "qbittorrent-config"
+              },
+              {
+                "mountPath": "/downloads",
+                "name": "data",
+                "subPath": "downloads"
+              },
+              {
+                "mountPath": "/watch",
+                "name": "data",
+                "subPath": "watch"
+              }
+            ]
+          },
+          {
+            "env": [
+              {
+                "name": "FIREWALL",
+                "value": "on"
+              },
+              {
+                "name": "ROUTE",
+                "value": "10.0.0.0/8"
+              },
+              {
+                "name": "ROUTE_2",
+                "value": "100.64.0.0/10"
+              }
+            ],
+            "image": "dperson/openvpn-client",
+            "livenessProbe": {
+              "exec": {
+                "command": [
+                  "sh",
+                  "-c",
+                  "[ \"$(curl -s https://ifconfig.co/city)\" != \"Austin\" ]"
+                ]
+              },
+              "initialDelaySeconds": 30,
+              "periodSeconds": 60
+            },
+            "name": "vpn",
+            "resources": {
+              "limits": {
+                "cpu": "500m",
+                "memory": "64Mi",
+                "squat.ai/tun": "1"
+              },
+              "requests": {
+                "cpu": "100m"
+              }
+            },
+            "securityContext": {
+              "allowPrivilegeEscalation": false,
+              "capabilities": {
+                "add": [
+                  "NET_ADMIN"
+                ]
+              }
+            },
+            "volumeMounts": [
+              {
+                "mountPath": "/vpn",
+                "name": "vpn-config"
+              }
+            ]
+          }
+        ],
+        "nodeSelector": {
+          "kubernetes.io/hostname": "adel"
+        },
+        "securityContext": {
+          "fsGroup": 1000,
+          "seccompProfile": {
+            "type": "RuntimeDefault"
+          }
+        },
+        "volumes": [
+          {
+            "name": "qbittorrent-config",
+            "persistentVolumeClaim": {
+              "claimName": "qbittorrent"
+            }
+          },
+          {
+            "name": "data",
+            "persistentVolumeClaim": {
+              "claimName": "media-storage"
+            }
+          },
+          {
+            "name": "vpn-config",
+            "projected": {
+              "sources": [
+                {
+                  "secret": {
+                    "items": [
+                      {
+                        "key": "VPN_AUTH",
+                        "path": "vpn.auth"
+                      },
+                      {
+                        "key": "VPN_CA",
+                        "path": "ca.crt"
+                      },
+                      {
+                        "key": "VPN_CLIENT_CERT",
+                        "path": "client.crt"
+                      },
+                      {
+                        "key": "VPN_CLIENT_KEY",
+                        "path": "client.key"
+                      }
+                    ],
+                    "name": "media-secret"
+                  }
+                },
+                {
+                  "configMap": {
+                    "name": "vpn-config"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}
