@@ -5,6 +5,11 @@ import (
 	corev1 "k8s.io/api/core/v1"
 )
 
+namespace: media: corev1.#Namespace & {
+	// needed just for the vpn sidecar
+	metadata: labels: "pod-security.kubernetes.io/enforce": "privileged"
+}
+
 deployment: [Name=string]: appsv1.#Deployment & {
 	apiVersion: "apps/v1"
 	kind:       "Deployment"
