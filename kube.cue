@@ -22,6 +22,12 @@ import (
 	apiVersion: "v1"
 	kind:       "Namespace"
 }
+
+#Schema: configmap: [string]: corev1.#ConfigMap & {
+	apiVersion: "v1"
+	kind: "ConfigMap"
+}
+
 #Schema: service: [string]: corev1.#Service & {
 	apiVersion: "v1"
 	kind:       "Service"
