@@ -69,7 +69,8 @@
               },
               {
                 "mountPath": "/downloads",
-                "name": "data"
+                "name": "data",
+                "subPath": "downloads"
               }
             ]
           }

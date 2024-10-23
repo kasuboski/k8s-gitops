@@ -27,6 +27,7 @@ deployment: sabnzbd: {
 				mountPath: "/config"
 			}, {
 				name:      "data"
+				subPath: "downloads"
 				mountPath: "/downloads"
 			}]
 		}]
