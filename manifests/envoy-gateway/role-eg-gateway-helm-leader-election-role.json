@@ -1,0 +1,64 @@
+{
+  "apiVersion": "rbac.authorization.k8s.io/v1",
+  "kind": "Role",
+  "metadata": {
+    "labels": {
+      "app.kubernetes.io/instance": "eg",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/name": "gateway-helm",
+      "app.kubernetes.io/version": "latest",
+      "helm.sh/chart": "gateway-helm-v0.0.0-latest",
+      "k8s.joshcorp.co/app": "envoy-gateway"
+    },
+    "name": "eg-gateway-helm-leader-election-role",
+    "namespace": "envoy-gateway-system"
+  },
+  "rules": [
+    {
+      "apiGroups": [
+        ""
+      ],
+      "resources": [
+        "configmaps"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "watch",
+        "create",
+        "update",
+        "patch",
+        "delete"
+      ]
+    },
+    {
+      "apiGroups": [
+        "coordination.k8s.io"
+      ],
+      "resources": [
+        "leases"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "watch",
+        "create",
+        "update",
+        "patch",
+        "delete"
+      ]
+    },
+    {
+      "apiGroups": [
+        ""
+      ],
+      "resources": [
+        "events"
+      ],
+      "verbs": [
+        "create",
+        "patch"
+      ]
+    }
+  ]
+}

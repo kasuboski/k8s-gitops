@@ -31,6 +31,7 @@ vendor: "github.com/kasuboski/k8s-gitops/kubesystem": kustomize: path:     "kube
 vendor: "github.com/kasuboski/k8s-gitops/descheduler": kustomize: path:    "descheduler"
 vendor: "github.com/metallb/metallb": kustomize: path:                     "networking/metallb"
 vendor: "github.com/rancher/local-path-provisioner/josh": kustomize: path: "storage/local-path-provisioner"
+vendor: "github.com/pl4nty/cloudflare-kubernetes-gateway/cloudflare": kustomize: path: "github.com/pl4nty/cloudflare-kubernetes-gateway//config/default?ref=v0.7.0"
 
 vendorList: [...#Vendor]
 vendorList: [for _, v in vendor {v}]

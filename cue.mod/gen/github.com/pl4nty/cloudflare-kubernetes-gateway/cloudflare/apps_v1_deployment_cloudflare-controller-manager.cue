@@ -1,0 +1,93 @@
+package cloudflare
+
+deployment: "cloudflare-controller-manager": {
+	apiVersion: "apps/v1"
+	kind:       "Deployment"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/managed-by": "kustomize"
+			"app.kubernetes.io/name":       "cloudflare-kubernetes-gateway"
+			"control-plane":                "controller-manager"
+		}
+		name:      "cloudflare-controller-manager"
+		namespace: "cloudflare-gateway"
+	}
+	spec: {
+		replicas: 1
+		selector: matchLabels: "control-plane": "controller-manager"
+		template: {
+			metadata: {
+				annotations: "kubectl.kubernetes.io/default-container": "manager"
+				labels: "control-plane": "controller-manager"
+			}
+			spec: {
+				affinity: nodeAffinity: requiredDuringSchedulingIgnoredDuringExecution: nodeSelectorTerms: [{
+					matchExpressions: [{
+						key:      "kubernetes.io/arch"
+						operator: "In"
+						values: [
+							"amd64",
+							"arm64",
+							"ppc64le",
+							"s390x",
+						]
+					}, {
+						key:      "kubernetes.io/os"
+						operator: "In"
+						values: ["linux"]
+					}]
+				}]
+				containers: [{
+					args: [
+						"--metrics-bind-address=:8080",
+						"--leader-elect",
+						"--health-probe-bind-address=:8081",
+					]
+					command: ["/ko-app/cmd"]
+					env: [{
+						name:  "GATEWAY_IMAGE"
+						value: "cloudflare/cloudflared:2024.10.0"
+					}]
+					image: "ghcr.io/pl4nty/cloudflare-kubernetes-gateway:v0.7.0"
+					livenessProbe: {
+						httpGet: {
+							path: "/healthz"
+							port: 8081
+						}
+						initialDelaySeconds: 15
+						periodSeconds:       20
+					}
+					name: "manager"
+					readinessProbe: {
+						httpGet: {
+							path: "/readyz"
+							port: 8081
+						}
+						initialDelaySeconds: 5
+						periodSeconds:       10
+					}
+					resources: {
+						limits: {
+							cpu:    "500m"
+							memory: "512Mi"
+						}
+						requests: {
+							cpu:    "10m"
+							memory: "64Mi"
+						}
+					}
+					securityContext: {
+						allowPrivilegeEscalation: false
+						capabilities: drop: ["ALL"]
+					}
+				}]
+				securityContext: {
+					runAsNonRoot: true
+					seccompProfile: type: "RuntimeDefault"
+				}
+				serviceAccountName:            "cloudflare-controller-manager"
+				terminationGracePeriodSeconds: 10
+			}
+		}
+	}
+}

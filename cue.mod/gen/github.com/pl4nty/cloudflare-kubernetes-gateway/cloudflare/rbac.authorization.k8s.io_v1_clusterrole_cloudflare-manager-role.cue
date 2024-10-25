@@ -1,0 +1,58 @@
+package cloudflare
+
+clusterrole: "cloudflare-manager-role": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "ClusterRole"
+	metadata: name: "cloudflare-manager-role"
+	rules: [{
+		apiGroups: ["apps"]
+		resources: ["deployments"]
+		verbs: [
+			"create",
+			"get",
+			"list",
+			"update",
+			"watch",
+		]
+	}, {
+		apiGroups: [""]
+		resources: ["events"]
+		verbs: ["create"]
+	}, {
+		apiGroups: [""]
+		resources: ["secrets"]
+		verbs: [
+			"get",
+			"list",
+			"watch",
+		]
+	}, {
+		apiGroups: ["gateway.networking.k8s.io"]
+		resources: [
+			"gatewayclasses",
+			"gateways",
+		]
+		verbs: [
+			"get",
+			"list",
+			"update",
+			"watch",
+		]
+	}, {
+		apiGroups: ["gateway.networking.k8s.io"]
+		resources: [
+			"gatewayclasses/finalizers",
+			"gatewayclasses/status",
+			"gateways/finalizers",
+			"gateways/status",
+		]
+		verbs: ["update"]
+	}, {
+		apiGroups: ["gateway.networking.k8s.io"]
+		resources: ["httproutes"]
+		verbs: [
+			"list",
+			"watch",
+		]
+	}]
+}

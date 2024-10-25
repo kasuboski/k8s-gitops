@@ -1,4 +1,4 @@
-package ingress
+package envoy_gateway
 
 gateway: http: {
 	apiVersion: "gateway.networking.k8s.io/v1"

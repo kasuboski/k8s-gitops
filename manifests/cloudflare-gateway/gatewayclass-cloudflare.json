@@ -1,0 +1,18 @@
+{
+  "apiVersion": "gateway.networking.k8s.io/v1",
+  "kind": "GatewayClass",
+  "metadata": {
+    "labels": {
+      "k8s.joshcorp.co/app": "cloudflare-gateway"
+    },
+    "name": "cloudflare"
+  },
+  "spec": {
+    "controllerName": "github.com/pl4nty/cloudflare-kubernetes-gateway",
+    "parametersRef": {
+      "kind": "Secret",
+      "name": "cloudflare",
+      "namespace": "cloudflare-gateway"
+    }
+  }
+}

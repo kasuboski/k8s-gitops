@@ -5,17 +5,17 @@
     "finalizers": [
       "resources-finalizer.argocd.argoproj.io"
     ],
-    "name": "ingress",
+    "name": "cloudflare-gateway",
     "namespace": "argocd"
   },
   "spec": {
     "destination": {
-      "namespace": "envoy-gateway-system",
+      "namespace": "cloudflare-gateway",
       "server": "https://kubernetes.default.svc"
     },
     "project": "default",
     "source": {
-      "path": "manifests/ingress",
+      "path": "manifests/cloudflare-gateway",
       "repoURL": "https://github.com/kasuboski/k8s-gitops.git",
       "targetRevision": "feature/talos"
     },
