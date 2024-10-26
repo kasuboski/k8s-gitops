@@ -1,10 +1,17 @@
 package apps
 
 import (
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	corev1 "k8s.io/api/core/v1"
 	appsv1 "k8s.io/api/apps/v1"
 	storagev1 "k8s.io/api/storage/v1"
 )
+
+#Resource: {
+	metav1.#PartialObjectMetadata
+	metadata: name: #Name
+	...
+}
 
 #KindObject: {
 	for _, a in apps {for kind, _ in a.resources {(kind): _}}
@@ -13,6 +20,9 @@ import (
 
 // cue eval -e '#KindGen'
 #Kinds: ["cronjob", "clusterrole", "clusterrolebinding", "configmap", "serviceaccount", "deployment", "customresourcedefinition", "namespace", "role", "rolebinding", "service", "job", "gatewayclass", "gateway", "apiservice", "validatingwebhookconfiguration", "daemonset", "secret", "ipaddresspool", "l2advertisement", "dopplersecret", "storageclass", "persistentvolume", "persistentvolumeclaim", "statefulset", "networkpolicy", "appproject", "httproute"]
+
+#dnsNameRegex: =~"^[a-z0-9][a-z0-9\\-\\.:]{0,251}[a-z0-9]$"
+#Name:         string & #dnsNameRegex
 
 #Schema: {
 	for kind in #Kinds {(kind): [string]: #Resource}

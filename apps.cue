@@ -4,11 +4,6 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-#Resource: {
-	metav1.#PartialObjectMetadata
-	...
-}
-
 #ArgoApp: metav1.#Object & {
 	apiVersion: "argoproj.io/v1alpha1"
 	kind:       "Application"
