@@ -10,6 +10,7 @@
   "spec": {
     "controllerName": "github.com/pl4nty/cloudflare-kubernetes-gateway",
     "parametersRef": {
+      "group": "",
       "kind": "Secret",
       "name": "cloudflare",
       "namespace": "cloudflare-gateway"
