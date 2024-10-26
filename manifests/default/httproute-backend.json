@@ -3,16 +3,15 @@
   "kind": "HTTPRoute",
   "metadata": {
     "labels": {
-      "app": "argocdserver",
-      "app.kubernetes.io/name": "argocdserver",
-      "k8s.joshcorp.co/app": "argocd"
+      "app": "backend",
+      "app.kubernetes.io/name": "backend",
+      "k8s.joshcorp.co/app": "default"
     },
-    "name": "argocd-server",
-    "namespace": "argocd"
+    "name": "backend"
   },
   "spec": {
     "hostnames": [
-      "argocd.joshcorp.co"
+      "joshcorp.co"
     ],
     "parentRefs": [
       {
@@ -34,7 +33,7 @@
           {
             "group": "",
             "kind": "Service",
-            "name": "argocd-server",
+            "name": "joshcorp-landing",
             "port": 80,
             "weight": 1
           }

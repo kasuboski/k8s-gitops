@@ -1,0 +1,58 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "labels": {
+      "k8s.joshcorp.co/app": "default"
+    },
+    "name": "joshcorp-landing"
+  },
+  "spec": {
+    "selector": {
+      "matchLabels": {
+        "app.kubernetes.io/name": "joshcorp-landing"
+      }
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "joshcorp-landing",
+          "app.kubernetes.io/name": "joshcorp-landing"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "image": "kasuboski/joshcorp-site:aefdbd92d641e8dfa857e06920bca58ff3b50b9f",
+            "name": "joshcorp-landing",
+            "ports": [
+              {
+                "containerPort": 8080,
+                "name": "http"
+              }
+            ],
+            "resources": {
+              "limits": {
+                "cpu": "100m",
+                "memory": "64Mi"
+              }
+            },
+            "securityContext": {
+              "allowPrivilegeEscalation": false,
+              "capabilities": {
+                "drop": [
+                  "All"
+                ]
+              },
+              "runAsNonRoot": true,
+              "runAsUser": 1000,
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

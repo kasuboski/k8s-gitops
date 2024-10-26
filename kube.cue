@@ -25,7 +25,7 @@ import (
 
 #Schema: configmap: [string]: corev1.#ConfigMap & {
 	apiVersion: "v1"
-	kind: "ConfigMap"
+	kind:       "ConfigMap"
 }
 
 #Schema: service: [string]: corev1.#Service & {
@@ -61,4 +61,36 @@ import (
 #Schema: storageclass: [string]: storagev1.#StorageClass & {
 	apiVersion: "storage.k8s.io/v1"
 	kind:       "StorageClass"
+}
+
+#Schema: httproute: [Name=string]: {
+	apiVersion: "gateway.networking.k8s.io/v1"
+	kind:       "HTTPRoute"
+	metadata: name: string | *Name
+	metadata: labels: "app.kubernetes.io/name": string | *Name
+	metadata: labels: app:                      string | *Name
+	spec: {
+		parentRefs: [...{
+			group:     string | *"gateway.networking.k8s.io"
+			kind:      string | *"Gateway"
+			name:      string
+			namespace: string
+		}]
+		hostnames: [string]
+		rules: [...{
+			backendRefs: [...{
+				group:  string | *""
+				kind:   string | *"Service"
+				name:   string | *Name
+				port:   int | *80
+				weight: int | *1
+			}]
+			matches: [...{
+				path: {
+					type:  string | *"PathPrefix"
+					value: string | *"/"
+				}
+			}]
+		}]
+	}
 }

@@ -62,32 +62,24 @@ appsResources: {for appName, a in apps {{(appName): [for _, n in a.resources for
 
 appOut: [...#ArgoApp]
 appOut: [for n, a in apps {
-	metadata: {
-		name: n
-	}
+	metadata: name: n
 	spec: {
 		source: {
 			targetRevision: "feature/talos"
 			path:           "manifests/\(n)"
 		}
-		destination: {
-			namespace: a.namespace
-		}
+		destination: namespace: a.namespace
 	}
 }]
 
 appsApp: #ArgoApp
 appsApp: {
-	metadata: {
-		name: "apps"
-	}
+	metadata: name: "apps"
 	spec: {
 		source: {
 			path:           "manifests/apps"
 			targetRevision: "feature/talos"
 		}
-		destination: {
-			namespace: "argocd"
-		}
+		destination: namespace: "argocd"
 	}
 }
