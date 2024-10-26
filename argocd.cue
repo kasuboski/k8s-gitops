@@ -24,7 +24,7 @@ _local: httproute: argocdserver: {
 				group:     "gateway.networking.k8s.io"
 				kind:      "Gateway"
 				name:      "cloudflare"
-				namespace: "cloudflare-gateway-system"
+				namespace: "cloudflare-gateway"
 			},
 		]
 		hostnames: [
