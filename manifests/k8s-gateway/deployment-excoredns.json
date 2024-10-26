@@ -44,7 +44,7 @@
               {
                 "containerPort": 8181,
                 "name": "http-8181",
-                "protocol": "HTTP"
+                "protocol": "TCP"
               }
             ],
             "readinessProbe": {
