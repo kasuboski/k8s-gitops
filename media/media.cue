@@ -65,10 +65,12 @@ httproute: [Name=string]: {
 	spec: {
 		parentRefs: [
 			{
-				group:     "gateway.networking.k8s.io"
-				kind:      "Gateway"
 				name:      "http"
 				namespace: "envoy-gateway-system"
+			},
+			{
+				name:      "cloudflare"
+				namespace: "cloudflare-gateway"
 			},
 		]
 		hostnames: [string] | *["\(Name).joshcorp.co"]
@@ -96,11 +98,9 @@ httproute: [Name=string]: {
 	}
 }
 
-persistentvolumeclaim: "media-storage": {
-	spec: {
-		accessModes: ["ReadWriteMany"]
-		storageClassName: "manual"
-		volumeName:       "storage"
-		resources: requests: storage: "1Mi"
-	}
+persistentvolumeclaim: "media-storage": spec: {
+	accessModes: ["ReadWriteMany"]
+	storageClassName: "manual"
+	volumeName:       "storage"
+	resources: requests: storage: "1Mi"
 }
