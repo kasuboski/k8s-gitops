@@ -40,8 +40,19 @@
                 "containerPort": 1053,
                 "name": "tcp-1053",
                 "protocol": "TCP"
+              },
+              {
+                "containerPort": 8181,
+                "name": "http-8181",
+                "protocol": "HTTP"
               }
             ],
+            "readinessProbe": {
+              "httpGet": {
+                "path": "/ready",
+                "port": 8181
+              }
+            },
             "resources": {
               "limits": {
                 "cpu": "100m",

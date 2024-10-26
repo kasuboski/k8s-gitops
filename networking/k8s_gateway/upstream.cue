@@ -129,10 +129,16 @@ deployment: excoredns: {
 							memory: "128Mi"
 						}
 					}
+					readinessProbe: {
+						httpGet: path: "/ready"
+						httpGet: port: 8181
+					}
 					ports: [{
 						containerPort: 1053, protocol: "UDP", name: "udp-1053"
 					}, {
 						containerPort: 1053, protocol: "TCP", name: "tcp-1053"
+					}, {
+						containerPort: 8181, protocol: "HTTP", name: "http-8181"
 					}]
 				}]
 				volumes: [{
