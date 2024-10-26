@@ -138,7 +138,7 @@ deployment: excoredns: {
 					}, {
 						containerPort: 1053, protocol: "TCP", name: "tcp-1053"
 					}, {
-						containerPort: 8181, protocol: "HTTP", name: "http-8181"
+						containerPort: 8181, protocol: "TCP", name: "http-8181"
 					}]
 				}]
 				volumes: [{
