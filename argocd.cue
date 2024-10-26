@@ -20,6 +20,12 @@ _local: httproute: argocdserver: {
 				name:      "http"
 				namespace: "envoy-gateway-system"
 			},
+			{
+				group:     "gateway.networking.k8s.io"
+				kind:      "Gateway"
+				name:      "cloudflare"
+				namespace: "cloudflare-gateway-system"
+			},
 		]
 		hostnames: [
 			"argocd.joshcorp.co",

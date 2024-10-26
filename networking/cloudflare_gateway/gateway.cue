@@ -13,7 +13,7 @@ gatewayclass: eg: {
   }
 }
 
-gateway: http: {
+gateway: cloudflare: {
 	apiVersion: "gateway.networking.k8s.io/v1"
 	kind:       "Gateway"
 	metadata: name:         "cloudflare"
