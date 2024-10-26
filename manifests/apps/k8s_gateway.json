@@ -1,0 +1,34 @@
+{
+  "apiVersion": "argoproj.io/v1alpha1",
+  "kind": "Application",
+  "metadata": {
+    "finalizers": [
+      "resources-finalizer.argocd.argoproj.io"
+    ],
+    "name": "k8s_gateway",
+    "namespace": "argocd"
+  },
+  "spec": {
+    "destination": {
+      "namespace": "k8s-gateway",
+      "server": "https://kubernetes.default.svc"
+    },
+    "project": "default",
+    "source": {
+      "path": "manifests/k8s_gateway",
+      "repoURL": "https://github.com/kasuboski/k8s-gitops.git",
+      "targetRevision": "feature/talos"
+    },
+    "syncPolicy": {
+      "automated": {
+        "prune": true,
+        "selfHeal": true
+      },
+      "syncOptions": [
+        "CreateNamespace=true",
+        "PrunePropagationPolicy=foreground",
+        "ServerSideApply=true"
+      ]
+    }
+  }
+}
