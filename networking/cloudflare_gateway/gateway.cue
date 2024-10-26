@@ -5,12 +5,12 @@ gatewayclass: eg: {
 	kind:       "GatewayClass"
 	metadata: name:       "cloudflare"
 	spec: controllerName: "github.com/pl4nty/cloudflare-kubernetes-gateway"
-  spec: parametersRef: {
-		group: ""
-    kind: "Secret"
-    namespace: "cloudflare-gateway"
-    name: "cloudflare"
-  }
+	spec: parametersRef: {
+		group:     ""
+		kind:      "Secret"
+		namespace: "cloudflare-gateway"
+		name:      "cloudflare"
+	}
 }
 
 gateway: cloudflare: {

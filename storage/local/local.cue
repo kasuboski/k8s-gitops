@@ -1,8 +1,8 @@
 package local
 
 storageclass: "local-storage": {
-  provisioner: "kubernetes.io/no-provisioner"
-  volumeBindingMode: "WaitForFirstConsumer"
+	provisioner:       "kubernetes.io/no-provisioner"
+	volumeBindingMode: "WaitForFirstConsumer"
 }
 
 // persistentvolume: "adel-speicher": {
@@ -25,28 +25,26 @@ storageclass: "local-storage": {
 //   }
 // }
 
-persistentvolume: storage: {
-  spec: {
-    storageClassName: "manual"
-    capacity: storage: "1Mi"
-    accessModes: ["ReadWriteMany"]
-    nfs: {
-      server: "fettig.lan"
-      path: "/storage"
-    }
-    nodeAffinity: required: nodeSelectorTerms: [
-      {
-        matchExpressions: [{
-          key: "topology.kubernetes.io/region"
-          operator: "In"
-          values: ["home"]
-        },
-        {
-          key: "topology.kubernetes.io/zone"
-          operator: "In"
-          values: ["austin"]
-        }]
-      }
-    ]
-  }
+persistentvolume: storage: spec: {
+	storageClassName: "manual"
+	capacity: storage: "1Mi"
+	accessModes: ["ReadWriteMany"]
+	nfs: {
+		server: "fettig.lan"
+		path:   "/storage"
+	}
+	nodeAffinity: required: nodeSelectorTerms: [
+		{
+			matchExpressions: [{
+				key:      "topology.kubernetes.io/region"
+				operator: "In"
+				values: ["home"]
+			},
+				{
+					key:      "topology.kubernetes.io/zone"
+					operator: "In"
+					values: ["austin"]
+				}]
+		},
+	]
 }
