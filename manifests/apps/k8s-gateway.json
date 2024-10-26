@@ -5,7 +5,7 @@
     "finalizers": [
       "resources-finalizer.argocd.argoproj.io"
     ],
-    "name": "k8s_gateway",
+    "name": "k8s-gateway",
     "namespace": "argocd"
   },
   "spec": {
@@ -15,7 +15,7 @@
     },
     "project": "default",
     "source": {
-      "path": "manifests/k8s_gateway",
+      "path": "manifests/k8s-gateway",
       "repoURL": "https://github.com/kasuboski/k8s-gitops.git",
       "targetRevision": "feature/talos"
     },
