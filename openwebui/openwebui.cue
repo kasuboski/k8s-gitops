@@ -20,6 +20,11 @@ deployment: openwebui: spec: {
 			}]
 			_envMap: OLLAMA_BASE_URL: "https://ollama.joshcorp.co"
 			env: [for k, v in _envMap {name: k, value: v}]
+			envFrom: [
+				{
+					secretRef: name: "openwebui-token"
+				}
+			]
 			resources: {
 				limits: cpu:    "4000m"
 				limits: memory: "4Gi"

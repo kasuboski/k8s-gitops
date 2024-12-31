@@ -32,6 +32,13 @@
                 "value": "https://ollama.joshcorp.co"
               }
             ],
+            "envFrom": [
+              {
+                "secretRef": {
+                  "name": "openwebui-token"
+                }
+              }
+            ],
             "image": "ghcr.io/open-webui/open-webui:v0.5.2",
             "name": "openwebui",
             "ports": [

@@ -2,7 +2,7 @@
 
 set -ex
 
-APPS="grafana-agent media default builder ingress-nginx"
+APPS="grafana-agent media default builder openwebui"
 
 for a in $APPS
 do
