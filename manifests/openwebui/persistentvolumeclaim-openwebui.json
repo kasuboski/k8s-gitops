@@ -1,0 +1,23 @@
+{
+  "apiVersion": "v1",
+  "kind": "PersistentVolumeClaim",
+  "metadata": {
+    "labels": {
+      "app": "openwebui",
+      "app.kubernetes.io/name": "openwebui",
+      "k8s.joshcorp.co/app": "openwebui"
+    },
+    "name": "openwebui"
+  },
+  "spec": {
+    "accessModes": [
+      "ReadWriteOnce"
+    ],
+    "resources": {
+      "requests": {
+        "storage": "25Gi"
+      }
+    },
+    "storageClassName": "local-path"
+  }
+}
