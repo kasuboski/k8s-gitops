@@ -22,7 +22,7 @@ deployment: openwebui: spec: {
 			env: [for k, v in _envMap {name: k, value: v}]
 			envFrom: [
 				{
-					secretRef: name: "openwebui-token"
+					secretRef: name: "openwebui"
 				}
 			]
 			resources: {
