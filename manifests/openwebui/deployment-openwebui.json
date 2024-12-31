@@ -13,6 +13,9 @@
         "app.kubernetes.io/name": "openwebui"
       }
     },
+    "strategy": {
+      "type": "Recreate"
+    },
     "template": {
       "metadata": {
         "labels": {
@@ -67,6 +70,9 @@
             ]
           }
         ],
+        "nodeSelector": {
+          "kubernetes.io/hostname": "adel"
+        },
         "volumes": [
           {
             "name": "openwebui",

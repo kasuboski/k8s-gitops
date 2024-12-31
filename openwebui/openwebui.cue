@@ -2,12 +2,14 @@ package openwebui
 
 _imageTag: "v0.5.2"
 deployment: openwebui: spec: {
+	strategy: type: "Recreate"
 	selector: matchLabels: "app.kubernetes.io/name": "openwebui"
 	template: metadata: labels: {
 		app:                      "openwebui"
 		"app.kubernetes.io/name": "openwebui"
 	}
 	template: spec: {
+		nodeSelector: "kubernetes.io/hostname": "adel"
 		containers: [{
 			name:  "openwebui"
 			image: "ghcr.io/open-webui/open-webui:\(_imageTag)"
