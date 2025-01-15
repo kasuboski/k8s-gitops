@@ -10,7 +10,7 @@ deployment: radarr: spec: template: spec: {
 			requests: cpu:    "100m"
 			requests: memory: "128Mi"
 			limits: cpu:      "500m"
-			limits: memory:   "512Mi"
+			limits: memory:   "1Gi"
 		}
 		readinessProbe: {
 			tcpSocket: port: "http"
