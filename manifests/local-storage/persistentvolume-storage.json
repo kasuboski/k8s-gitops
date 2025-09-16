@@ -16,7 +16,7 @@
     },
     "nfs": {
       "path": "/storage",
-      "server": "fettig.lan"
+      "server": "zwerg.lan"
     },
     "nodeAffinity": {
       "required": {

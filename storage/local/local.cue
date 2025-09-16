@@ -30,7 +30,7 @@ persistentvolume: storage: spec: {
 	capacity: storage: "1Mi"
 	accessModes: ["ReadWriteMany"]
 	nfs: {
-		server: "fettig.lan"
+		server: "zwerg.lan"
 		path:   "/storage"
 	}
 	nodeAffinity: required: nodeSelectorTerms: [
