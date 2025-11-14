@@ -1,0 +1,10 @@
+machine:
+  install:
+    disk: /dev/sdb
+    wipe: true
+    # diskSelector:
+    #   size: 256GB
+    #   type: ssd
+    #   wwid: naa.500a0751108e09d7
+  network:
+    hostname: adel

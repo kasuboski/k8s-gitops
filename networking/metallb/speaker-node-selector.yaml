@@ -1,9 +1,0 @@
-apiVersion: apps/v1
-kind: DaemonSet
-metadata:
-  name: speaker
-spec:
-  template:
-    spec:
-      nodeSelector:
-        topology.kubernetes.io/zone: austin

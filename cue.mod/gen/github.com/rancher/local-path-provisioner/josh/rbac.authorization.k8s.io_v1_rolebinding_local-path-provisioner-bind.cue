@@ -1,0 +1,20 @@
+package josh
+
+rolebinding: "local-path-provisioner-bind": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "RoleBinding"
+	metadata: {
+		name:      "local-path-provisioner-bind"
+		namespace: "local-path-storage"
+	}
+	roleRef: {
+		apiGroup: "rbac.authorization.k8s.io"
+		kind:     "Role"
+		name:     "local-path-provisioner-role"
+	}
+	subjects: [{
+		kind:      "ServiceAccount"
+		name:      "local-path-provisioner-service-account"
+		namespace: "local-path-storage"
+	}]
+}

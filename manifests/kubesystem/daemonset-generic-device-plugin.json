@@ -1,0 +1,91 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "DaemonSet",
+  "metadata": {
+    "labels": {
+      "app.kubernetes.io/name": "generic-device-plugin",
+      "k8s.joshcorp.co/app": "kubesystem"
+    },
+    "name": "generic-device-plugin"
+  },
+  "spec": {
+    "selector": {
+      "matchLabels": {
+        "app.kubernetes.io/name": "generic-device-plugin"
+      }
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app.kubernetes.io/name": "generic-device-plugin"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "args": [
+              "--device",
+              "{\"name\":\"tun\",\"groups\":[{\"count\":1000,\"paths\":[{\"path\":\"/dev/net/tun\"}]}]}"
+            ],
+            "image": "ghcr.io/squat/generic-device-plugin",
+            "name": "generic-device-plugin",
+            "ports": [
+              {
+                "containerPort": 8080,
+                "name": "http"
+              }
+            ],
+            "resources": {
+              "limits": {
+                "cpu": "50",
+                "memory": "20Mi"
+              },
+              "requests": {
+                "cpu": "50m",
+                "memory": "10Mi"
+              }
+            },
+            "securityContext": {
+              "privileged": true
+            },
+            "volumeMounts": [
+              {
+                "mountPath": "/var/lib/kubelet/device-plugins",
+                "name": "device-plugin"
+              },
+              {
+                "mountPath": "/dev",
+                "name": "dev"
+              }
+            ]
+          }
+        ],
+        "priorityClassName": "system-node-critical",
+        "tolerations": [
+          {
+            "effect": "NoExecute",
+            "operator": "Exists"
+          },
+          {
+            "effect": "NoSchedule",
+            "operator": "Exists"
+          }
+        ],
+        "volumes": [
+          {
+            "hostPath": {
+              "path": "/var/lib/kubelet/device-plugins"
+            },
+            "name": "device-plugin"
+          },
+          {
+            "hostPath": {
+              "path": "/dev"
+            },
+            "name": "dev"
+          }
+        ]
+      }
+    }
+  }
+}

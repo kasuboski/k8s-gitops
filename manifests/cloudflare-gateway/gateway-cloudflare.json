@@ -1,0 +1,25 @@
+{
+  "apiVersion": "gateway.networking.k8s.io/v1",
+  "kind": "Gateway",
+  "metadata": {
+    "labels": {
+      "k8s.joshcorp.co/app": "cloudflare-gateway"
+    },
+    "name": "cloudflare"
+  },
+  "spec": {
+    "gatewayClassName": "cloudflare",
+    "listeners": [
+      {
+        "allowedRoutes": {
+          "namespaces": {
+            "from": "All"
+          }
+        },
+        "name": "https",
+        "port": 443,
+        "protocol": "HTTPS"
+      }
+    ]
+  }
+}

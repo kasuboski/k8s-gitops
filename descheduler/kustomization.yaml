@@ -1,4 +1,6 @@
 resources:
-- github.com/kubernetes-sigs/descheduler/kubernetes/cronjob?ref=v0.28.0
+- github.com/kubernetes-sigs/descheduler/kubernetes/cronjob?ref=v0.31.0
 patchesStrategicMerge:
 - policy.yaml
+
+namespace: kube-system

@@ -1,0 +1,53 @@
+package josh
+
+clusterrole: "argocd-server": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "ClusterRole"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/component": "server"
+			"app.kubernetes.io/name":      "argocd-server"
+			"app.kubernetes.io/part-of":   "argocd"
+		}
+		name: "argocd-server"
+	}
+	rules: [{
+		apiGroups: ["*"]
+		resources: ["*"]
+		verbs: [
+			"delete",
+			"get",
+			"patch",
+		]
+	}, {
+		apiGroups: [""]
+		resources: ["events"]
+		verbs: ["list"]
+	}, {
+		apiGroups: [""]
+		resources: [
+			"pods",
+			"pods/log",
+		]
+		verbs: ["get"]
+	}, {
+		apiGroups: ["argoproj.io"]
+		resources: [
+			"applications",
+			"applicationsets",
+		]
+		verbs: [
+			"get",
+			"list",
+			"watch",
+		]
+	}, {
+		apiGroups: ["batch"]
+		resources: ["jobs"]
+		verbs: ["create"]
+	}, {
+		apiGroups: ["argoproj.io"]
+		resources: ["workflows"]
+		verbs: ["create"]
+	}]
+}

@@ -1,0 +1,20 @@
+package kubesystem
+
+clusterrolebinding: "system:metrics-server": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "ClusterRoleBinding"
+	metadata: {
+		labels: "k8s-app": "metrics-server"
+		name: "system:metrics-server"
+	}
+	roleRef: {
+		apiGroup: "rbac.authorization.k8s.io"
+		kind:     "ClusterRole"
+		name:     "system:metrics-server"
+	}
+	subjects: [{
+		kind:      "ServiceAccount"
+		name:      "metrics-server"
+		namespace: "kube-system"
+	}]
+}

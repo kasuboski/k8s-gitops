@@ -1,0 +1,52 @@
+{
+  "apiVersion": "gateway.networking.k8s.io/v1",
+  "kind": "HTTPRoute",
+  "metadata": {
+    "labels": {
+      "app": "sabnzbd",
+      "app.kubernetes.io/name": "sabnzbd",
+      "k8s.joshcorp.co/app": "media"
+    },
+    "name": "sabnzbd"
+  },
+  "spec": {
+    "hostnames": [
+      "sabnzbd.joshcorp.co"
+    ],
+    "parentRefs": [
+      {
+        "group": "gateway.networking.k8s.io",
+        "kind": "Gateway",
+        "name": "http",
+        "namespace": "envoy-gateway-system"
+      },
+      {
+        "group": "gateway.networking.k8s.io",
+        "kind": "Gateway",
+        "name": "cloudflare",
+        "namespace": "cloudflare-gateway"
+      }
+    ],
+    "rules": [
+      {
+        "backendRefs": [
+          {
+            "group": "",
+            "kind": "Service",
+            "name": "sabnzbd",
+            "port": 80,
+            "weight": 1
+          }
+        ],
+        "matches": [
+          {
+            "path": {
+              "type": "PathPrefix",
+              "value": "/"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

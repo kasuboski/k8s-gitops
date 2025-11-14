@@ -24,6 +24,7 @@ nodes: $(RESULT_FOLDER)/controlplane.yaml $(RESULT_FOLDER)/worker.yaml $(RESULT_
 	@../k8s gen nc blueberry
 	@../k8s gen nc pumpkin
 	@../k8s gen nc apple
+	@../k8s gen nc adel
 
 $(CLUSTER_FILES_RESULT) &: $(RESULT_FOLDER)/secrets.yaml
 	@talosctl gen config --with-secrets $(RESULT_FOLDER)/secrets.yaml $(CLUSTER_NAME) https://$(CLUSTER_ENDPOINT):6443 -o $(RESULT_FOLDER) --force

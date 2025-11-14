@@ -1,0 +1,117 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "labels": {
+      "app": "lidarr",
+      "app.kubernetes.io/name": "lidarr",
+      "k8s.joshcorp.co/app": "media"
+    },
+    "name": "lidarr"
+  },
+  "spec": {
+    "selector": {
+      "matchLabels": {
+        "app.kubernetes.io/name": "lidarr"
+      }
+    },
+    "strategy": {
+      "type": "Recreate"
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "lidarr",
+          "app.kubernetes.io/name": "lidarr"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "env": [
+              {
+                "name": "TZ",
+                "value": "America/Chicago"
+              }
+            ],
+            "image": "lscr.io/linuxserver/lidarr",
+            "livenessProbe": {
+              "failureThreshold": 5,
+              "initialDelaySeconds": 60,
+              "periodSeconds": 10,
+              "tcpSocket": {
+                "port": "http"
+              }
+            },
+            "name": "lidarr",
+            "ports": [
+              {
+                "containerPort": 8686,
+                "name": "http"
+              }
+            ],
+            "readinessProbe": {
+              "failureThreshold": 5,
+              "initialDelaySeconds": 60,
+              "periodSeconds": 10,
+              "tcpSocket": {
+                "port": "http"
+              }
+            },
+            "resources": {
+              "limits": {
+                "cpu": "500m",
+                "memory": "512Mi"
+              },
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              }
+            },
+            "securityContext": {
+              "runAsNonRoot": false
+            },
+            "volumeMounts": [
+              {
+                "mountPath": "/config",
+                "name": "lidarr-config"
+              },
+              {
+                "mountPath": "/music",
+                "name": "media",
+                "subPath": "Music"
+              },
+              {
+                "mountPath": "/downloads",
+                "name": "media",
+                "subPath": "downloads"
+              }
+            ]
+          }
+        ],
+        "nodeSelector": {
+          "kubernetes.io/hostname": "adel"
+        },
+        "securityContext": {
+          "seccompProfile": {
+            "type": "RuntimeDefault"
+          }
+        },
+        "volumes": [
+          {
+            "name": "lidarr-config",
+            "persistentVolumeClaim": {
+              "claimName": "lidarr"
+            }
+          },
+          {
+            "name": "media",
+            "persistentVolumeClaim": {
+              "claimName": "media-storage"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

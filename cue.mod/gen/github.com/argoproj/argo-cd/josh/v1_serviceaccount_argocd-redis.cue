@@ -1,0 +1,15 @@
+package josh
+
+serviceaccount: "argocd-redis": {
+	apiVersion: "v1"
+	kind:       "ServiceAccount"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/component": "redis"
+			"app.kubernetes.io/name":      "argocd-redis"
+			"app.kubernetes.io/part-of":   "argocd"
+		}
+		name:      "argocd-redis"
+		namespace: "argocd"
+	}
+}

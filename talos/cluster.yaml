@@ -28,3 +28,7 @@ nodes:
     patches:
     - austin-labels-patch.yaml
     - sdcard-install-patch.yaml
+  adel:
+    role: worker
+    patches:
+    - austin-labels-patch.yaml

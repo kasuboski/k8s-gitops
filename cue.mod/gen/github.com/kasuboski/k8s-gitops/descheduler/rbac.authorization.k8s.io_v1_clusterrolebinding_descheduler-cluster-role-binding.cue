@@ -1,0 +1,17 @@
+package descheduler
+
+clusterrolebinding: "descheduler-cluster-role-binding": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "ClusterRoleBinding"
+	metadata: name: "descheduler-cluster-role-binding"
+	roleRef: {
+		apiGroup: "rbac.authorization.k8s.io"
+		kind:     "ClusterRole"
+		name:     "descheduler-cluster-role"
+	}
+	subjects: [{
+		kind:      "ServiceAccount"
+		name:      "descheduler-sa"
+		namespace: "kube-system"
+	}]
+}

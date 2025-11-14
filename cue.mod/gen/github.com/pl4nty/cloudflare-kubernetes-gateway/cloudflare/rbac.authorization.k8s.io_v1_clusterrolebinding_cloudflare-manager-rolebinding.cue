@@ -1,0 +1,23 @@
+package cloudflare
+
+clusterrolebinding: "cloudflare-manager-rolebinding": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "ClusterRoleBinding"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/managed-by": "kustomize"
+			"app.kubernetes.io/name":       "cloudflare-kubernetes-gateway"
+		}
+		name: "cloudflare-manager-rolebinding"
+	}
+	roleRef: {
+		apiGroup: "rbac.authorization.k8s.io"
+		kind:     "ClusterRole"
+		name:     "cloudflare-manager-role"
+	}
+	subjects: [{
+		kind:      "ServiceAccount"
+		name:      "cloudflare-controller-manager"
+		namespace: "cloudflare-gateway"
+	}]
+}

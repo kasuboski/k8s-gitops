@@ -24,11 +24,13 @@
       devShells.default = pkgs.mkShell {
         packages = with pkgs; [
           cobra-cli
+          cue
           doppler
           go
           kubecolor
           kubectl
           kustomize_4
+          yq-go
         ];
       };
     });

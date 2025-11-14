@@ -1,0 +1,40 @@
+{
+  "apiVersion": "networking.k8s.io/v1",
+  "kind": "NetworkPolicy",
+  "metadata": {
+    "labels": {
+      "k8s.joshcorp.co/app": "argocd"
+    },
+    "name": "argocd-applicationset-controller-network-policy",
+    "namespace": "argocd"
+  },
+  "spec": {
+    "ingress": [
+      {
+        "from": [
+          {
+            "namespaceSelector": {}
+          }
+        ],
+        "ports": [
+          {
+            "port": 7000,
+            "protocol": "TCP"
+          },
+          {
+            "port": 8080,
+            "protocol": "TCP"
+          }
+        ]
+      }
+    ],
+    "podSelector": {
+      "matchLabels": {
+        "app.kubernetes.io/name": "argocd-applicationset-controller"
+      }
+    },
+    "policyTypes": [
+      "Ingress"
+    ]
+  }
+}

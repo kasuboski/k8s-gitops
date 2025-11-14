@@ -1,0 +1,84 @@
+package josh
+
+deployment: "argocd-redis": {
+	apiVersion: "apps/v1"
+	kind:       "Deployment"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/component": "redis"
+			"app.kubernetes.io/name":      "argocd-redis"
+			"app.kubernetes.io/part-of":   "argocd"
+		}
+		name:      "argocd-redis"
+		namespace: "argocd"
+	}
+	spec: {
+		selector: matchLabels: "app.kubernetes.io/name": "argocd-redis"
+		template: {
+			metadata: labels: "app.kubernetes.io/name": "argocd-redis"
+			spec: {
+				affinity: podAntiAffinity: preferredDuringSchedulingIgnoredDuringExecution: [{
+					podAffinityTerm: {
+						labelSelector: matchLabels: "app.kubernetes.io/name": "argocd-redis"
+						topologyKey: "kubernetes.io/hostname"
+					}
+					weight: 100
+				}, {
+					podAffinityTerm: {
+						labelSelector: matchLabels: "app.kubernetes.io/part-of": "argocd"
+						topologyKey: "kubernetes.io/hostname"
+					}
+					weight: 5
+				}]
+				containers: [{
+					args: [
+						"--save",
+						"",
+						"--appendonly",
+						"no",
+						"--requirepass $(REDIS_PASSWORD)",
+					]
+					env: [{
+						name: "REDIS_PASSWORD"
+						valueFrom: secretKeyRef: {
+							key:  "auth"
+							name: "argocd-redis"
+						}
+					}]
+					image:           "redis:7.0.15-alpine"
+					imagePullPolicy: "Always"
+					name:            "redis"
+					ports: [{containerPort: 6379}]
+					securityContext: {
+						allowPrivilegeEscalation: false
+						capabilities: drop: ["ALL"]
+						readOnlyRootFilesystem: true
+					}
+				}]
+				initContainers: [{
+					command: [
+						"argocd",
+						"admin",
+						"redis-initial-password",
+					]
+					image:           "quay.io/argoproj/argocd:v2.12.4"
+					imagePullPolicy: "IfNotPresent"
+					name:            "secret-init"
+					securityContext: {
+						allowPrivilegeEscalation: false
+						capabilities: drop: ["ALL"]
+						readOnlyRootFilesystem: true
+						runAsNonRoot:           true
+						seccompProfile: type: "RuntimeDefault"
+					}
+				}]
+				securityContext: {
+					runAsNonRoot: true
+					runAsUser:    999
+					seccompProfile: type: "RuntimeDefault"
+				}
+				serviceAccountName: "argocd-redis"
+			}
+		}
+	}
+}

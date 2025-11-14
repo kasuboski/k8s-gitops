@@ -1,0 +1,20 @@
+package metallb
+
+clusterrolebinding: "metallb-system:speaker": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "ClusterRoleBinding"
+	metadata: {
+		labels: app: "metallb"
+		name: "metallb-system:speaker"
+	}
+	roleRef: {
+		apiGroup: "rbac.authorization.k8s.io"
+		kind:     "ClusterRole"
+		name:     "metallb-system:speaker"
+	}
+	subjects: [{
+		kind:      "ServiceAccount"
+		name:      "speaker"
+		namespace: "metallb-system"
+	}]
+}

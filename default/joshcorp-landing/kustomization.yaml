@@ -1,7 +1,0 @@
-resources:
-- deploy.yaml
-- ingress.yaml
-
-images:
-- name: kasuboski/joshcorp-site
-  newTag: aefdbd92d641e8dfa857e06920bca58ff3b50b9f

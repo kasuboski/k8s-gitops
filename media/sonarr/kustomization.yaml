@@ -1,3 +1,0 @@
-resources:
-  - sonarr-deploy.yaml
-  - sonarr-ingress.yaml

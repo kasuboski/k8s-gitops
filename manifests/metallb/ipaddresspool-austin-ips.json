@@ -1,0 +1,15 @@
+{
+  "apiVersion": "metallb.io/v1beta1",
+  "kind": "IPAddressPool",
+  "metadata": {
+    "labels": {
+      "k8s.joshcorp.co/app": "metallb"
+    },
+    "name": "austin-ips"
+  },
+  "spec": {
+    "addresses": [
+      "192.168.86.243-192.168.86.250"
+    ]
+  }
+}

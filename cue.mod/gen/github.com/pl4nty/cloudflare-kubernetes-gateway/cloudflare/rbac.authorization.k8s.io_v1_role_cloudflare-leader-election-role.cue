@@ -1,0 +1,46 @@
+package cloudflare
+
+role: "cloudflare-leader-election-role": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "Role"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/managed-by": "kustomize"
+			"app.kubernetes.io/name":       "cloudflare-kubernetes-gateway"
+		}
+		name:      "cloudflare-leader-election-role"
+		namespace: "cloudflare-gateway"
+	}
+	rules: [{
+		apiGroups: [""]
+		resources: ["configmaps"]
+		verbs: [
+			"get",
+			"list",
+			"watch",
+			"create",
+			"update",
+			"patch",
+			"delete",
+		]
+	}, {
+		apiGroups: ["coordination.k8s.io"]
+		resources: ["leases"]
+		verbs: [
+			"get",
+			"list",
+			"watch",
+			"create",
+			"update",
+			"patch",
+			"delete",
+		]
+	}, {
+		apiGroups: [""]
+		resources: ["events"]
+		verbs: [
+			"create",
+			"patch",
+		]
+	}]
+}

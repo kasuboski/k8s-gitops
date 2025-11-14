@@ -1,0 +1,14 @@
+{
+  "apiVersion": "v1",
+  "data": {
+    "excludel2.yaml": "announcedInterfacesToExclude:\n  - ^docker.*\n  - ^cbr.*\n  - ^dummy.*\n  - ^virbr.*\n  - ^lxcbr.*\n  - ^veth.*\n  - ^lo$\n  - ^cali.*\n  - ^tunl.*\n  - ^flannel.*\n  - ^kube-ipvs.*\n  - ^cni.*\n  - ^nodelocaldns.*\n"
+  },
+  "kind": "ConfigMap",
+  "metadata": {
+    "labels": {
+      "k8s.joshcorp.co/app": "metallb"
+    },
+    "name": "metallb-excludel2",
+    "namespace": "metallb-system"
+  }
+}

@@ -1,10 +1,9 @@
 namespace: metallb-system
-
 resources:
-  - github.com/metallb/metallb/config/native?ref=v0.13.9
-  - austin-ips.yaml
-  - austin-advertisement.yaml
+  - github.com/metallb/metallb/config/native?ref=v0.14.8
+  # - austin-ips.yaml
+  # - austin-advertisement.yaml
 
-patchesStrategicMerge:
-  - controller-node-selector.yaml
-  - speaker-node-selector.yaml
+# patchesStrategicMerge:
+#   - controller-node-selector.yaml
+#   - speaker-node-selector.yaml

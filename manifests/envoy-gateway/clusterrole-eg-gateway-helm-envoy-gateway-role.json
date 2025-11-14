@@ -1,0 +1,179 @@
+{
+  "apiVersion": "rbac.authorization.k8s.io/v1",
+  "kind": "ClusterRole",
+  "metadata": {
+    "creationTimestamp": null,
+    "labels": {
+      "k8s.joshcorp.co/app": "envoy-gateway"
+    },
+    "name": "eg-gateway-helm-envoy-gateway-role"
+  },
+  "rules": [
+    {
+      "apiGroups": [
+        ""
+      ],
+      "resources": [
+        "nodes",
+        "namespaces"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "watch"
+      ]
+    },
+    {
+      "apiGroups": [
+        "gateway.networking.k8s.io"
+      ],
+      "resources": [
+        "gatewayclasses"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "patch",
+        "update",
+        "watch"
+      ]
+    },
+    {
+      "apiGroups": [
+        "gateway.networking.k8s.io"
+      ],
+      "resources": [
+        "gatewayclasses/status"
+      ],
+      "verbs": [
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "multicluster.x-k8s.io"
+      ],
+      "resources": [
+        "serviceimports"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "watch"
+      ]
+    },
+    {
+      "apiGroups": [
+        ""
+      ],
+      "resources": [
+        "configmaps",
+        "secrets",
+        "services"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "watch"
+      ]
+    },
+    {
+      "apiGroups": [
+        "apps"
+      ],
+      "resources": [
+        "deployments"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "watch"
+      ]
+    },
+    {
+      "apiGroups": [
+        "discovery.k8s.io"
+      ],
+      "resources": [
+        "endpointslices"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "watch"
+      ]
+    },
+    {
+      "apiGroups": [
+        "gateway.envoyproxy.io"
+      ],
+      "resources": [
+        "envoyproxies",
+        "envoypatchpolicies",
+        "clienttrafficpolicies",
+        "backendtrafficpolicies",
+        "securitypolicies",
+        "envoyextensionpolicies",
+        "backends"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "watch"
+      ]
+    },
+    {
+      "apiGroups": [
+        "gateway.envoyproxy.io"
+      ],
+      "resources": [
+        "envoypatchpolicies/status",
+        "clienttrafficpolicies/status",
+        "backendtrafficpolicies/status",
+        "securitypolicies/status",
+        "envoyextensionpolicies/status",
+        "backends/status"
+      ],
+      "verbs": [
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "gateway.networking.k8s.io"
+      ],
+      "resources": [
+        "gateways",
+        "grpcroutes",
+        "httproutes",
+        "referencegrants",
+        "tcproutes",
+        "tlsroutes",
+        "udproutes",
+        "backendtlspolicies"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "watch"
+      ]
+    },
+    {
+      "apiGroups": [
+        "gateway.networking.k8s.io"
+      ],
+      "resources": [
+        "gateways/status",
+        "grpcroutes/status",
+        "httproutes/status",
+        "tcproutes/status",
+        "tlsroutes/status",
+        "udproutes/status",
+        "backendtlspolicies/status"
+      ],
+      "verbs": [
+        "update"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+package josh
+
+deployment: "local-path-provisioner": {
+	apiVersion: "apps/v1"
+	kind:       "Deployment"
+	metadata: {
+		name:      "local-path-provisioner"
+		namespace: "local-path-storage"
+	}
+	spec: {
+		replicas: 1
+		selector: matchLabels: app: "local-path-provisioner"
+		template: {
+			metadata: labels: app: "local-path-provisioner"
+			spec: {
+				containers: [{
+					command: [
+						"local-path-provisioner",
+						"--debug",
+						"start",
+						"--config",
+						"/etc/config/config.json",
+					]
+					env: [{
+						name: "POD_NAMESPACE"
+						valueFrom: fieldRef: fieldPath: "metadata.namespace"
+					}, {
+						name:  "CONFIG_MOUNT_PATH"
+						value: "/etc/config/"
+					}]
+					image:           "rancher/local-path-provisioner:v0.0.30"
+					imagePullPolicy: "IfNotPresent"
+					name:            "local-path-provisioner"
+					volumeMounts: [{
+						mountPath: "/etc/config/"
+						name:      "config-volume"
+					}]
+				}]
+				serviceAccountName: "local-path-provisioner-service-account"
+				volumes: [{
+					configMap: name: "local-path-config"
+					name: "config-volume"
+				}]
+			}
+		}
+	}
+}

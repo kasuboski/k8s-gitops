@@ -1,0 +1,64 @@
+{
+  "apiVersion": "rbac.authorization.k8s.io/v1",
+  "kind": "Role",
+  "metadata": {
+    "labels": {
+      "app.kubernetes.io/instance": "eg",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/name": "gateway-helm",
+      "app.kubernetes.io/version": "latest",
+      "helm.sh/chart": "gateway-helm-v0.0.0-latest",
+      "k8s.joshcorp.co/app": "envoy-gateway"
+    },
+    "name": "eg-gateway-helm-infra-manager",
+    "namespace": "envoy-gateway-system"
+  },
+  "rules": [
+    {
+      "apiGroups": [
+        ""
+      ],
+      "resources": [
+        "serviceaccounts",
+        "services"
+      ],
+      "verbs": [
+        "create",
+        "get",
+        "delete",
+        "patch"
+      ]
+    },
+    {
+      "apiGroups": [
+        "apps"
+      ],
+      "resources": [
+        "deployments",
+        "daemonsets"
+      ],
+      "verbs": [
+        "create",
+        "get",
+        "delete",
+        "patch"
+      ]
+    },
+    {
+      "apiGroups": [
+        "autoscaling",
+        "policy"
+      ],
+      "resources": [
+        "horizontalpodautoscalers",
+        "poddisruptionbudgets"
+      ],
+      "verbs": [
+        "create",
+        "get",
+        "delete",
+        "patch"
+      ]
+    }
+  ]
+}

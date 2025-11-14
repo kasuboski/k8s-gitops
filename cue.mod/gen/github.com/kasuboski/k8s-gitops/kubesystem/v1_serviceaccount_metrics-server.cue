@@ -1,0 +1,11 @@
+package kubesystem
+
+serviceaccount: "metrics-server": {
+	apiVersion: "v1"
+	kind:       "ServiceAccount"
+	metadata: {
+		labels: "k8s-app": "metrics-server"
+		name:      "metrics-server"
+		namespace: "kube-system"
+	}
+}

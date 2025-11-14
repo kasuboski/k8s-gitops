@@ -1,0 +1,97 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "labels": {
+      "k8s.joshcorp.co/app": "openwebui"
+    },
+    "name": "openwebui"
+  },
+  "spec": {
+    "selector": {
+      "matchLabels": {
+        "app.kubernetes.io/name": "openwebui"
+      }
+    },
+    "strategy": {
+      "type": "Recreate"
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "openwebui",
+          "app.kubernetes.io/name": "openwebui"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "env": [
+              {
+                "name": "OLLAMA_BASE_URL",
+                "value": "https://ollama.joshcorp.co"
+              }
+            ],
+            "envFrom": [
+              {
+                "secretRef": {
+                  "name": "openwebui"
+                }
+              }
+            ],
+            "image": "ghcr.io/open-webui/open-webui:v0.5.2",
+            "name": "openwebui",
+            "ports": [
+              {
+                "containerPort": 8080,
+                "name": "http"
+              }
+            ],
+            "resources": {
+              "limits": {
+                "cpu": "4000m",
+                "memory": "4Gi"
+              },
+              "requests": {
+                "cpu": "1000m"
+              }
+            },
+            "securityContext": {
+              "allowPrivilegeEscalation": false,
+              "capabilities": {
+                "drop": [
+                  "All"
+                ]
+              },
+              "runAsNonRoot": true,
+              "runAsUser": 1000,
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              }
+            },
+            "volumeMounts": [
+              {
+                "mountPath": "/app/backend/data",
+                "name": "openwebui"
+              }
+            ]
+          }
+        ],
+        "nodeSelector": {
+          "kubernetes.io/hostname": "adel"
+        },
+        "securityContext": {
+          "fsGroup": 1000
+        },
+        "volumes": [
+          {
+            "name": "openwebui",
+            "persistentVolumeClaim": {
+              "claimName": "openwebui"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

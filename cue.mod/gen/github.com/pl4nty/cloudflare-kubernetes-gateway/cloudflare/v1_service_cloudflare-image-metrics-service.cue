@@ -1,0 +1,27 @@
+package cloudflare
+
+service: "cloudflare-image-metrics-service": {
+	apiVersion: "v1"
+	kind:       "Service"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/managed-by": "kustomize"
+			"app.kubernetes.io/name":       "cloudflare-kubernetes-gateway"
+			"control-plane":                "image"
+		}
+		name:      "cloudflare-image-metrics-service"
+		namespace: "cloudflare-gateway"
+	}
+	spec: {
+		ports: [{
+			name:       "http"
+			port:       2000
+			protocol:   "TCP"
+			targetPort: 2000
+		}]
+		selector: {
+			"app.kubernetes.io/managed-by": "GatewayController"
+			"app.kubernetes.io/name":       "cloudflare-kubernetes-gateway"
+		}
+	}
+}
