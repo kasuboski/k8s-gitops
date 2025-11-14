@@ -60,7 +60,7 @@ appOut: [for n, a in apps {
 	metadata: name: n
 	spec: {
 		source: {
-			targetRevision: "feature/talos"
+			targetRevision: "main"
 			path:           "manifests/\(n)"
 		}
 		destination: namespace: a.namespace

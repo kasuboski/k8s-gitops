@@ -17,7 +17,7 @@
     "source": {
       "path": "manifests/apps",
       "repoURL": "https://github.com/kasuboski/k8s-gitops.git",
-      "targetRevision": "main"
+      "targetRevision": "feature/talos"
     },
     "syncPolicy": {
       "automated": {

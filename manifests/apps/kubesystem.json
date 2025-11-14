@@ -17,7 +17,7 @@
     "source": {
       "path": "manifests/kubesystem",
       "repoURL": "https://github.com/kasuboski/k8s-gitops.git",
-      "targetRevision": "feature/talos"
+      "targetRevision": "main"
     },
     "syncPolicy": {
       "automated": {

@@ -5,4 +5,4 @@ This repo is synced with the cluster using [ArgoCD](https://argoproj.github.io/p
 
 The cluster is described more [here](https://www.joshkasuboski.com/posts/home-k8s-raspberry-update/).
 
-Secrets are managed by [Doppler](https://www.doppler.com/). This syncs values to a namespace based on a `DopplerSecret` definition. Secrets are still encrypted in this repo using git-crypt. You can find a walkthrough [here](https://buddy.works/guides/git-crypt).
+Secrets are managed by [Doppler](https://www.doppler.com/). This syncs values to a namespace based on a `DopplerSecret` definition.
