@@ -9,7 +9,7 @@
     flake-utils,
     ...
   } @ inputs: let
-    goVersion = 23;
+    goVersion = 24;
     goOverlay = final: prev: {
       go = final."go_1_${toString goVersion}";
     };

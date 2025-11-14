@@ -12,8 +12,8 @@ func TestAppsResources(t *testing.T) {
 	require.NoError(t, err)
 
 	require.NotNil(t, b)
-	assert.Contains(t, b, "ingress")
-	assert.NotEmpty(t, b["ingress"])
+	assert.Contains(t, b, "envoy-gateway")
+	assert.NotEmpty(t, b["envoy-gateway"])
 
 	assert.Contains(t, b, "secrets")
 	assert.NotEmpty(t, b["secrets"])
