@@ -83,11 +83,13 @@ func GenerateConfigsFromCUE(ctx context.Context, clusterName, endpoint, secretsF
 }
 
 func loadNodesFromCUE() (map[string]CUENodeConfig, error) {
+	return loadNodesFromCUEWithPath("./machines")
+}
+
+func loadNodesFromCUEWithPath(path string) (map[string]CUENodeConfig, error) {
 	ctx := cuecontext.New()
 
-	instances := load.Instances([]string{"./machines"}, &load.Config{
-		Dir: ".",
-	})
+	instances := load.Instances([]string{path}, nil)
 	if len(instances) == 0 {
 		return nil, fmt.Errorf("no CUE instances found")
 	}
