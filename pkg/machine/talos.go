@@ -107,5 +107,7 @@ func ReadClusterConfig(filepath string) (*ClusterConfig, error) {
 }
 
 func DefaultNodePatches() []string {
-	return []string{"kubelet-cert-patch.yaml", "kubelet-ip-patch.yaml", "result/tailscale-extensionconfig.yaml"}
+	// All patches are now defined in CUE
+	// Tailscale extension config can be added here if needed: "result/tailscale-extensionconfig.yaml"
+	return []string{}
 }
