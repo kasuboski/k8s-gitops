@@ -1,8 +1,0 @@
-apiVersion: v1alpha1
-kind: VolumeConfig
-name: EPHEMERAL
-provisioning:
-  diskSelector:
-    match: disk.transport == 'usb'
-  minSize: 2GB
-

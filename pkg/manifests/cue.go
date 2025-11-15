@@ -32,9 +32,7 @@ func (r Resource) Name() string {
 }
 
 func AppsResources(path string) (map[string][]Resource, error) {
-	ctx := cuecontext.New()
-	insts := load.Instances([]string{path}, nil)
-	v := ctx.BuildInstance(insts[0])
+	v := loadCue(path)
 	v = v.LookupPath(cue.ParsePath("appsResources"))
 	bs, err := json.Marshal(v)
 	if err != nil {
