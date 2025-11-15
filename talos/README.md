@@ -17,7 +17,7 @@ make validate NODE=cherry
 
 ## Where to Update
 
-**All configuration is in `../machines.cue`** at the project root:
+**All configuration is in `../machines/machines.cue`**:
 
 ```cue
 // Add/modify common patches
@@ -47,7 +47,7 @@ nodes: {
 
 ```bash
 # Validate all patches against Talos schema
-cue vet ../machines.cue
+cue vet ../machines
 ```
 
 CUE catches typos and type errors before config generation:

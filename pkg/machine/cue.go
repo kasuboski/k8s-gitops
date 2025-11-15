@@ -85,7 +85,7 @@ func GenerateConfigsFromCUE(ctx context.Context, clusterName, endpoint, secretsF
 func loadNodesFromCUE() (map[string]CUENodeConfig, error) {
 	ctx := cuecontext.New()
 
-	instances := load.Instances([]string{"./machines.cue"}, &load.Config{
+	instances := load.Instances([]string{"./machines"}, &load.Config{
 		Dir: ".",
 	})
 	if len(instances) == 0 {
