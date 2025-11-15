@@ -1,19 +1,41 @@
 package machines
 
+import (
+	talos "github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
+)
+
+// Patch is a strategic merge patch for Talos config
+// We reference Talos types for validation but all fields are optional
+#Patch: {
+	machine?: {
+		kubelet?:     talos.#KubeletConfig
+		network?:     talos.#NetworkConfig
+		install?:     talos.#InstallConfig
+		nodeLabels?:  {[string]: string}
+		...
+	}
+	cluster?: {
+		etcd?: talos.#EtcdConfig
+		...
+	}
+	// Allow other top-level fields for things like VolumeConfig
+	...
+}
+
 // Cluster-wide patches - applied to all nodes
 commonPatches: {
-	kubeletCert: {
+	kubeletCert: #Patch & {
 		machine: kubelet: extraArgs: "rotate-server-certificates": "true"
 	}
 
-	kubeletIP: {
+	kubeletIP: #Patch & {
 		machine: kubelet: nodeIP: validSubnets: [
 			"0.0.0.0/0",
 			"!100.64.0.0/10", // ignore tailscale
 		]
 	}
 
-	austinLabels: {
+	austinLabels: #Patch & {
 		machine: nodeLabels: {
 			"topology.kubernetes.io/region": "home"
 			"topology.kubernetes.io/zone":   "austin"
@@ -23,7 +45,7 @@ commonPatches: {
 
 // Control plane specific patches
 controlPlanePatches: {
-	vip: {
+	vip: #Patch & {
 		machine: network: interfaces: [{
 			deviceSelector: physical: true
 			dhcp: true
@@ -31,7 +53,7 @@ controlPlanePatches: {
 		}]
 	}
 
-	etcdAdvertise: {
+	etcdAdvertise: #Patch & {
 		cluster: etcd: advertisedSubnets: [
 			"0.0.0.0/0",
 			"!100.64.0.0/10", // ignore tailscale
@@ -48,37 +70,37 @@ controlPlanePatches: {
 		}
 	}
 
-	sdcardInstall: {
+	sdcardInstall: #Patch & {
 		machine: install: disk: "/dev/mmcblk0"
 	}
 }
 
 // Worker specific patches
 workerPatches: {
-	sdcardInstall: {
+	sdcardInstall: #Patch & {
 		machine: install: disk: "/dev/mmcblk0"
 	}
 }
 
 // Per-node patches
 nodePatches: {
-	cherry: {
+	cherry: #Patch & {
 		machine: network: hostname: "cherry"
 	}
 
-	blueberry: {
+	blueberry: #Patch & {
 		machine: network: hostname: "blueberry"
 	}
 
-	pumpkin: {
+	pumpkin: #Patch & {
 		machine: network: hostname: "pumpkin"
 	}
 
-	apple: {
+	apple: #Patch & {
 		machine: network: hostname: "apple"
 	}
 
-	adel: {
+	adel: #Patch & {
 		machine: {
 			install: {
 				disk: "/dev/sdb"
@@ -89,9 +111,15 @@ nodePatches: {
 	}
 }
 
+// Node definition schema
+#Node: {
+	role: "controlplane" | "worker"
+	patches: [...#Patch]
+}
+
 // Node definitions with their patch lists
 nodes: {
-	cherry: {
+	cherry: #Node & {
 		role: "controlplane"
 		patches: [
 			commonPatches.kubeletCert,
@@ -105,7 +133,7 @@ nodes: {
 		]
 	}
 
-	blueberry: {
+	blueberry: #Node & {
 		role: "controlplane"
 		patches: [
 			commonPatches.kubeletCert,
@@ -119,7 +147,7 @@ nodes: {
 		]
 	}
 
-	pumpkin: {
+	pumpkin: #Node & {
 		role: "controlplane"
 		patches: [
 			commonPatches.kubeletCert,
@@ -133,7 +161,7 @@ nodes: {
 		]
 	}
 
-	apple: {
+	apple: #Node & {
 		role: "worker"
 		patches: [
 			commonPatches.kubeletCert,
@@ -144,7 +172,7 @@ nodes: {
 		]
 	}
 
-	adel: {
+	adel: #Node & {
 		role: "worker"
 		patches: [
 			commonPatches.kubeletCert,
