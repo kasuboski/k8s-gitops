@@ -1,6 +1,6 @@
-.PHONY: cluster-nodes
-cluster-nodes: k8s
-	@$(MAKE) -C talos nodes
+.PHONY: cluster-configs
+cluster-configs: k8s
+	@$(MAKE) -C talos configs
 
 .PHONY: k8s
 k8s:

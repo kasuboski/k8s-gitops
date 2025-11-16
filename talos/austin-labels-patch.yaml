@@ -1,4 +1,0 @@
-machine:
-  nodeLabels:
-    topology.kubernetes.io/region: home
-    topology.kubernetes.io/zone: austin
