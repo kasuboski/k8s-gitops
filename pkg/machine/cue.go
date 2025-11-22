@@ -32,14 +32,7 @@ func GenerateConfigsFromCUE(ctx context.Context, clusterName, endpoint, secretsF
 		return fmt.Errorf("generate base configs: %w", err)
 	}
 
-	// 3. Generate Tailscale extension config with Doppler substitution
-	tailscaleConfig := filepath.Join(secretsDir, "tailscale-extensionconfig.yaml")
-	if err := generateTailscaleConfig(ctx, tailscaleConfig); err != nil {
-		// Warning only - Tailscale is optional
-		fmt.Printf("Warning: Could not generate Tailscale config: %v\n", err)
-	}
-
-	// 4. For each node, write patches and apply them
+	// 3. For each node, write patches and apply them
 	for nodeName, nodeConfig := range nodes {
 		baseConfig := filepath.Join(secretsDir, nodeConfig.Role+".yaml")
 		outputFile := filepath.Join(outputDir, nodeName+".yaml")
@@ -58,11 +51,6 @@ func GenerateConfigsFromCUE(ctx context.Context, clusterName, endpoint, secretsF
 			defer os.Remove(patchFile) // Clean up temp patch file
 
 			patchArgs = append(patchArgs, "--patch", "@"+patchFile)
-		}
-
-		// Add Tailscale extension config if it exists
-		if _, err := os.Stat(tailscaleConfig); err == nil {
-			patchArgs = append(patchArgs, "--patch", "@"+tailscaleConfig)
 		}
 
 		// Run talosctl machineconfig patch
@@ -139,16 +127,5 @@ func generateBaseConfigs(ctx context.Context, clusterName, endpoint, secretsFile
 		return fmt.Errorf("talosctl gen config: %s: %w", string(output), err)
 	}
 
-	return nil
-}
-
-func generateTailscaleConfig(ctx context.Context, outputFile string) error {
-	// Run the substitute script from talos/ directory
-	cmd := exec.CommandContext(ctx, "bash", "./substitute-tailscale.sh", outputFile)
-	cmd.Dir = "talos"
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		return fmt.Errorf("substitute tailscale config: %s: %w", string(output), err)
-	}
 	return nil
 }

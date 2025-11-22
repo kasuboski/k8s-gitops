@@ -108,6 +108,6 @@ func ReadClusterConfig(filepath string) (*ClusterConfig, error) {
 
 func DefaultNodePatches() []string {
 	// All patches are now defined in CUE
-	// Tailscale extension config can be added here if needed: "result/tailscale-extensionconfig.yaml"
+	// KubeSpan is used for secure node-to-node networking instead of Tailscale
 	return []string{}
 }

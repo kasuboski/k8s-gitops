@@ -1,5 +1,5 @@
 CLUSTER_NAME = pi
-CLUSTER_ENDPOINT = 192.168.86.19
+CLUSTER_ENDPOINT = k8s-api.joshcorp.co
 
 RESULT_FOLDER = result
 
