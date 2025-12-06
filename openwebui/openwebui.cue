@@ -9,7 +9,7 @@ deployment: openwebui: spec: {
 		"app.kubernetes.io/name": "openwebui"
 	}
 	template: spec: {
-		securityContext: fsGroup: 1000
+		securityContext: fsGroup:               1000
 		nodeSelector: "kubernetes.io/hostname": "adel"
 		containers: [{
 			name:  "openwebui"
@@ -23,7 +23,7 @@ deployment: openwebui: spec: {
 			envFrom: [
 				{
 					secretRef: name: "openwebui"
-				}
+				},
 			]
 			resources: {
 				limits: cpu:    "4000m"
@@ -55,7 +55,7 @@ persistentvolumeclaim: [Name=string]: {
 	metadata: labels: "app.kubernetes.io/name": Name
 	metadata: labels: app:                      Name
 	spec: {
-		storageClassName: string | *"local-path"
+		storageClassName: string | *"longhorn"
 		accessModes: [...string] | *["ReadWriteOnce"]
 		resources: requests: storage: string | *"100Mi"
 	}

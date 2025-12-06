@@ -18,6 +18,6 @@
         "storage": "25Gi"
       }
     },
-    "storageClassName": "local-path"
+    "storageClassName": "longhorn"
   }
 }
