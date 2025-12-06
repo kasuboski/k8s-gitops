@@ -35,12 +35,12 @@
         "argoproj.io"
       ],
       "resources": [
-        "applicationsets/status"
+        "appprojects"
       ],
       "verbs": [
         "get",
-        "patch",
-        "update"
+        "list",
+        "watch"
       ]
     },
     {
@@ -48,12 +48,12 @@
         "argoproj.io"
       ],
       "resources": [
-        "appprojects"
+        "applicationsets/status"
       ],
       "verbs": [
         "get",
-        "list",
-        "watch"
+        "patch",
+        "update"
       ]
     },
     {
@@ -76,38 +76,8 @@
         ""
       ],
       "resources": [
+        "secrets",
         "configmaps"
-      ],
-      "verbs": [
-        "create",
-        "update",
-        "delete",
-        "get",
-        "list",
-        "patch",
-        "watch"
-      ]
-    },
-    {
-      "apiGroups": [
-        ""
-      ],
-      "resources": [
-        "secrets"
-      ],
-      "verbs": [
-        "get",
-        "list",
-        "watch"
-      ]
-    },
-    {
-      "apiGroups": [
-        "apps",
-        "extensions"
-      ],
-      "resources": [
-        "deployments"
       ],
       "verbs": [
         "get",
@@ -123,13 +93,23 @@
         "leases"
       ],
       "verbs": [
-        "create",
-        "delete",
+        "create"
+      ]
+    },
+    {
+      "apiGroups": [
+        "coordination.k8s.io"
+      ],
+      "resourceNames": [
+        "58ac56fa.applicationsets.argoproj.io"
+      ],
+      "resources": [
+        "leases"
+      ],
+      "verbs": [
         "get",
-        "list",
-        "patch",
         "update",
-        "watch"
+        "create"
       ]
     }
   ]

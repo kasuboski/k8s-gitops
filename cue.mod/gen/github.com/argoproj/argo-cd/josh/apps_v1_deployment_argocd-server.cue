@@ -186,13 +186,6 @@ deployment: "argocd-server": {
 							optional: true
 						}
 					}, {
-						name: "ARGOCD_SERVER_LOGIN_ATTEMPTS_EXPIRATION"
-						valueFrom: configMapKeyRef: {
-							key:      "server.login.attempts.expiration"
-							name:     "argocd-cmd-params-cm"
-							optional: true
-						}
-					}, {
 						name: "ARGOCD_SERVER_STATIC_ASSETS"
 						valueFrom: configMapKeyRef: {
 							key:      "server.staticassets"
@@ -277,6 +270,13 @@ deployment: "argocd-server": {
 							optional: true
 						}
 					}, {
+						name: "ARGOCD_SERVER_OTLP_ATTRS"
+						valueFrom: configMapKeyRef: {
+							key:      "otlp.attrs"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
 						name: "ARGOCD_APPLICATION_NAMESPACES"
 						valueFrom: configMapKeyRef: {
 							key:      "application.namespaces"
@@ -311,8 +311,64 @@ deployment: "argocd-server": {
 							name:     "argocd-cmd-params-cm"
 							optional: true
 						}
+					}, {
+						name: "ARGOCD_SERVER_WEBHOOK_PARALLELISM_LIMIT"
+						valueFrom: configMapKeyRef: {
+							key:      "server.webhook.parallelism.limit"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_ENABLE_NEW_GIT_FILE_GLOBBING"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.enable.new.git.file.globbing"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_SCM_ROOT_CA_PATH"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.scm.root.ca.path"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_ALLOWED_SCM_PROVIDERS"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.allowed.scm.providers"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_ENABLE_SCM_PROVIDERS"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.enable.scm.providers"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_ENABLE_GITHUB_API_METRICS"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.enable.github.api.metrics"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_HYDRATOR_ENABLED"
+						valueFrom: configMapKeyRef: {
+							key:      "hydrator.enabled"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_SYNC_WITH_REPLACE_ALLOWED"
+						valueFrom: configMapKeyRef: {
+							key:      "server.sync.replace.allowed"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
 					}]
-					image:           "quay.io/argoproj/argocd:v2.12.4"
+					image:           "quay.io/argoproj/argocd:v3.2.1"
 					imagePullPolicy: "Always"
 					livenessProbe: {
 						httpGet: {
@@ -362,8 +418,12 @@ deployment: "argocd-server": {
 					}, {
 						mountPath: "/tmp"
 						name:      "tmp"
+					}, {
+						mountPath: "/home/argocd/params"
+						name:      "argocd-cmd-params-cm"
 					}]
 				}]
+				nodeSelector: "kubernetes.io/os": "linux"
 				serviceAccountName: "argocd-server"
 				volumes: [{
 					emptyDir: {}
@@ -406,6 +466,16 @@ deployment: "argocd-server": {
 						optional:   true
 						secretName: "argocd-dex-server-tls"
 					}
+				}, {
+					configMap: {
+						items: [{
+							key:  "server.profile.enabled"
+							path: "profiler.enabled"
+						}]
+						name:     "argocd-cmd-params-cm"
+						optional: true
+					}
+					name: "argocd-cmd-params-cm"
 				}]
 			}
 		}

@@ -45,7 +45,7 @@ deployment: "argocd-redis": {
 							name: "argocd-redis"
 						}
 					}]
-					image:           "redis:7.0.15-alpine"
+					image:           "public.ecr.aws/docker/library/redis:8.2.2-alpine"
 					imagePullPolicy: "Always"
 					name:            "redis"
 					ports: [{containerPort: 6379}]
@@ -61,7 +61,7 @@ deployment: "argocd-redis": {
 						"admin",
 						"redis-initial-password",
 					]
-					image:           "quay.io/argoproj/argocd:v2.12.4"
+					image:           "quay.io/argoproj/argocd:v3.2.1"
 					imagePullPolicy: "IfNotPresent"
 					name:            "secret-init"
 					securityContext: {
@@ -72,6 +72,7 @@ deployment: "argocd-redis": {
 						seccompProfile: type: "RuntimeDefault"
 					}
 				}]
+				nodeSelector: "kubernetes.io/os": "linux"
 				securityContext: {
 					runAsNonRoot: true
 					runAsUser:    999

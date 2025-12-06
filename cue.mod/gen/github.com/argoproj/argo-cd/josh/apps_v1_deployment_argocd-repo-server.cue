@@ -61,6 +61,13 @@ deployment: "argocd-repo-server": {
 							optional: true
 						}
 					}, {
+						name: "ARGOCD_LOG_FORMAT_TIMESTAMP"
+						valueFrom: configMapKeyRef: {
+							key:      "log.format.timestamp"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
 						name: "ARGOCD_REPO_SERVER_PARALLELISM_LIMIT"
 						valueFrom: configMapKeyRef: {
 							key:      "reposerver.parallelism.limit"
@@ -166,6 +173,13 @@ deployment: "argocd-repo-server": {
 							optional: true
 						}
 					}, {
+						name: "ARGOCD_REPO_SERVER_OTLP_ATTRS"
+						valueFrom: configMapKeyRef: {
+							key:      "otlp.attrs"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
 						name: "ARGOCD_REPO_SERVER_MAX_COMBINED_DIRECTORY_MANIFESTS_SIZE"
 						valueFrom: configMapKeyRef: {
 							key:      "reposerver.max.combined.directory.manifests.size"
@@ -176,6 +190,13 @@ deployment: "argocd-repo-server": {
 						name: "ARGOCD_REPO_SERVER_PLUGIN_TAR_EXCLUSIONS"
 						valueFrom: configMapKeyRef: {
 							key:      "reposerver.plugin.tar.exclusions"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_REPO_SERVER_PLUGIN_USE_MANIFEST_GENERATE_PATHS"
+						valueFrom: configMapKeyRef: {
+							key:      "reposerver.plugin.use.manifest.generate.paths"
 							name:     "argocd-cmd-params-cm"
 							optional: true
 						}
@@ -215,6 +236,27 @@ deployment: "argocd-repo-server": {
 							optional: true
 						}
 					}, {
+						name: "ARGOCD_REPO_SERVER_OCI_MANIFEST_MAX_EXTRACTED_SIZE"
+						valueFrom: configMapKeyRef: {
+							key:      "reposerver.oci.manifest.max.extracted.size"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_REPO_SERVER_DISABLE_OCI_MANIFEST_MAX_EXTRACTED_SIZE"
+						valueFrom: configMapKeyRef: {
+							key:      "reposerver.disable.oci.manifest.max.extracted.size"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_REPO_SERVER_OCI_LAYER_MEDIA_TYPES"
+						valueFrom: configMapKeyRef: {
+							key:      "reposerver.oci.layer.media.types"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
 						name: "ARGOCD_REVISION_CACHE_LOCK_TIMEOUT"
 						valueFrom: configMapKeyRef: {
 							key:      "reposerver.revision.cache.lock.timeout"
@@ -243,6 +285,13 @@ deployment: "argocd-repo-server": {
 							optional: true
 						}
 					}, {
+						name: "ARGOCD_REPO_SERVER_ENABLE_BUILTIN_GIT_CONFIG"
+						valueFrom: configMapKeyRef: {
+							key:      "reposerver.enable.builtin.git.config"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
 						name: "ARGOCD_GRPC_MAX_SIZE_MB"
 						valueFrom: configMapKeyRef: {
 							key:      "reposerver.grpc.max.size"
@@ -266,7 +315,7 @@ deployment: "argocd-repo-server": {
 						name:  "HELM_DATA_HOME"
 						value: "/helm-working-dir"
 					}]
-					image:           "quay.io/argoproj/argocd:v2.12.4"
+					image:           "quay.io/argoproj/argocd:v3.2.1"
 					imagePullPolicy: "Always"
 					livenessProbe: {
 						failureThreshold: 3
@@ -332,7 +381,7 @@ deployment: "argocd-repo-server": {
 						"/usr/local/bin/argocd",
 						"/var/run/argocd/argocd-cmp-server",
 					]
-					image: "quay.io/argoproj/argocd:v2.12.4"
+					image: "quay.io/argoproj/argocd:v3.2.1"
 					name:  "copyutil"
 					securityContext: {
 						allowPrivilegeEscalation: false
@@ -346,6 +395,7 @@ deployment: "argocd-repo-server": {
 						name:      "var-files"
 					}]
 				}]
+				nodeSelector: "kubernetes.io/os": "linux"
 				serviceAccountName: "argocd-repo-server"
 				volumes: [{
 					configMap: name: "argocd-ssh-known-hosts-cm"

@@ -35,6 +35,13 @@ deployment: "argocd-notifications-controller": {
 							optional: true
 						}
 					}, {
+						name: "ARGOCD_LOG_FORMAT_TIMESTAMP"
+						valueFrom: configMapKeyRef: {
+							key:      "log.format.timestamp"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
 						name: "ARGOCD_APPLICATION_NAMESPACES"
 						valueFrom: configMapKeyRef: {
 							key:      "application.namespaces"
@@ -48,8 +55,15 @@ deployment: "argocd-notifications-controller": {
 							name:     "argocd-cmd-params-cm"
 							optional: true
 						}
+					}, {
+						name: "ARGOCD_NOTIFICATION_CONTROLLER_REPO_SERVER_PLAINTEXT"
+						valueFrom: configMapKeyRef: {
+							key:      "notificationscontroller.repo.server.plaintext"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
 					}]
-					image:           "quay.io/argoproj/argocd:v2.12.4"
+					image:           "quay.io/argoproj/argocd:v3.2.1"
 					imagePullPolicy: "Always"
 					livenessProbe: tcpSocket: port: 9001
 					name: "argocd-notifications-controller"
@@ -67,6 +81,7 @@ deployment: "argocd-notifications-controller": {
 					}]
 					workingDir: "/app"
 				}]
+				nodeSelector: "kubernetes.io/os": "linux"
 				securityContext: {
 					runAsNonRoot: true
 					seccompProfile: type: "RuntimeDefault"

@@ -4,6 +4,11 @@ networkpolicy: "argocd-redis-network-policy": {
 	apiVersion: "networking.k8s.io/v1"
 	kind:       "NetworkPolicy"
 	metadata: {
+		labels: {
+			"app.kubernetes.io/component": "redis"
+			"app.kubernetes.io/name":      "argocd-redis"
+			"app.kubernetes.io/part-of":   "argocd"
+		}
 		name:      "argocd-redis-network-policy"
 		namespace: "argocd"
 	}

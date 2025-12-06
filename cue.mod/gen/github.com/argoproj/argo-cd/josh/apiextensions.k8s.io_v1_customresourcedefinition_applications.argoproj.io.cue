@@ -126,12 +126,21 @@ customresourcedefinition: "applications.argoproj.io": {
 										format:      "int64"
 										type:        "integer"
 									}
+									refresh: {
+										description: "Refresh indicates if the latest revision should be used on retry instead of the initial one (default: false)"
+										type:        "boolean"
+									}
 								}
 								type: "object"
 							}
 							sync: {
 								description: "Sync contains parameters for the operation"
 								properties: {
+									autoHealAttemptsCount: {
+										description: "SelfHealAttemptsCount contains the number of auto-heal attempts"
+										format:      "int64"
+										type:        "integer"
+									}
 									dryRun: {
 										description: "DryRun specifies to perform a `kubectl apply --dry-run` without actually performing the sync"
 										type:        "boolean"
@@ -254,6 +263,14 @@ customresourcedefinition: "applications.argoproj.io": {
 											helm: {
 												description: "Helm holds helm specific options"
 												properties: {
+													apiVersions: {
+														description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+														items: type: "string"
+														type: "array"
+													}
 													fileParameters: {
 														description: "FileParameters are file parameters to the helm template"
 														items: {
@@ -275,6 +292,17 @@ customresourcedefinition: "applications.argoproj.io": {
 													ignoreMissingValueFiles: {
 														description: "IgnoreMissingValueFiles prevents helm template from failing when valueFiles do not exist locally by not appending them to helm template --values"
 														type:        "boolean"
+													}
+													kubeVersion: {
+														description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+														type: "string"
+													}
+													namespace: {
+														description: "Namespace is an optional namespace to template with. If left empty, defaults to the app's destination namespace."
+														type:        "string"
 													}
 													parameters: {
 														description: "Parameters is a list of Helm parameters which are passed to the helm template command upon manifest generation"
@@ -310,6 +338,14 @@ customresourcedefinition: "applications.argoproj.io": {
 														description: "SkipCrds skips custom resource definition installation step (Helm's --skip-crds)"
 														type:        "boolean"
 													}
+													skipSchemaValidation: {
+														description: "SkipSchemaValidation skips JSON schema validation (Helm's --skip-schema-validation)"
+														type:        "boolean"
+													}
+													skipTests: {
+														description: "SkipTests skips test manifest installation step (Helm's --skip-tests)."
+														type:        "boolean"
+													}
 													valueFiles: {
 														description: "ValuesFiles is a list of Helm value files to use when generating a template"
 														items: type: "string"
@@ -334,6 +370,14 @@ customresourcedefinition: "applications.argoproj.io": {
 											kustomize: {
 												description: "Kustomize holds kustomize specific options"
 												properties: {
+													apiVersions: {
+														description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+														items: type: "string"
+														type: "array"
+													}
 													commonAnnotations: {
 														additionalProperties: type: "string"
 														description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
@@ -361,6 +405,10 @@ customresourcedefinition: "applications.argoproj.io": {
 														description: "ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps"
 														type:        "boolean"
 													}
+													ignoreMissingComponents: {
+														description: "IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file"
+														type:        "boolean"
+													}
 													images: {
 														description: "Images is a list of Kustomize image override specifications"
 														items: {
@@ -368,6 +416,17 @@ customresourcedefinition: "applications.argoproj.io": {
 															type:        "string"
 														}
 														type: "array"
+													}
+													kubeVersion: {
+														description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+														type: "string"
+													}
+													labelIncludeTemplates: {
+														description: "LabelIncludeTemplates specifies whether to apply common labels to resource templates or not"
+														type:        "boolean"
 													}
 													labelWithoutSelector: {
 														description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
@@ -444,6 +503,10 @@ customresourcedefinition: "applications.argoproj.io": {
 													}
 												}
 												type: "object"
+											}
+											name: {
+												description: "Name is used to refer to a source and is displayed in the UI. It is used in multi-source Applications."
+												type:        "string"
 											}
 											path: {
 												description: "Path is a directory path within the Git repository, and is only valid for applications sourced from Git."
@@ -602,6 +665,14 @@ customresourcedefinition: "applications.argoproj.io": {
 												helm: {
 													description: "Helm holds helm specific options"
 													properties: {
+														apiVersions: {
+															description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+															items: type: "string"
+															type: "array"
+														}
 														fileParameters: {
 															description: "FileParameters are file parameters to the helm template"
 															items: {
@@ -623,6 +694,17 @@ customresourcedefinition: "applications.argoproj.io": {
 														ignoreMissingValueFiles: {
 															description: "IgnoreMissingValueFiles prevents helm template from failing when valueFiles do not exist locally by not appending them to helm template --values"
 															type:        "boolean"
+														}
+														kubeVersion: {
+															description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+															type: "string"
+														}
+														namespace: {
+															description: "Namespace is an optional namespace to template with. If left empty, defaults to the app's destination namespace."
+															type:        "string"
 														}
 														parameters: {
 															description: "Parameters is a list of Helm parameters which are passed to the helm template command upon manifest generation"
@@ -658,6 +740,14 @@ customresourcedefinition: "applications.argoproj.io": {
 															description: "SkipCrds skips custom resource definition installation step (Helm's --skip-crds)"
 															type:        "boolean"
 														}
+														skipSchemaValidation: {
+															description: "SkipSchemaValidation skips JSON schema validation (Helm's --skip-schema-validation)"
+															type:        "boolean"
+														}
+														skipTests: {
+															description: "SkipTests skips test manifest installation step (Helm's --skip-tests)."
+															type:        "boolean"
+														}
 														valueFiles: {
 															description: "ValuesFiles is a list of Helm value files to use when generating a template"
 															items: type: "string"
@@ -682,6 +772,14 @@ customresourcedefinition: "applications.argoproj.io": {
 												kustomize: {
 													description: "Kustomize holds kustomize specific options"
 													properties: {
+														apiVersions: {
+															description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+															items: type: "string"
+															type: "array"
+														}
 														commonAnnotations: {
 															additionalProperties: type: "string"
 															description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
@@ -709,6 +807,10 @@ customresourcedefinition: "applications.argoproj.io": {
 															description: "ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps"
 															type:        "boolean"
 														}
+														ignoreMissingComponents: {
+															description: "IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file"
+															type:        "boolean"
+														}
 														images: {
 															description: "Images is a list of Kustomize image override specifications"
 															items: {
@@ -716,6 +818,17 @@ customresourcedefinition: "applications.argoproj.io": {
 																type:        "string"
 															}
 															type: "array"
+														}
+														kubeVersion: {
+															description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+															type: "string"
+														}
+														labelIncludeTemplates: {
+															description: "LabelIncludeTemplates specifies whether to apply common labels to resource templates or not"
+															type:        "boolean"
 														}
 														labelWithoutSelector: {
 															description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
@@ -792,6 +905,10 @@ customresourcedefinition: "applications.argoproj.io": {
 														}
 													}
 													type: "object"
+												}
+												name: {
+													description: "Name is used to refer to a source and is displayed in the UI. It is used in multi-source Applications."
+													type:        "string"
 												}
 												path: {
 													description: "Path is a directory path within the Git repository, and is only valid for applications sourced from Git."
@@ -1076,6 +1193,14 @@ customresourcedefinition: "applications.argoproj.io": {
 									helm: {
 										description: "Helm holds helm specific options"
 										properties: {
+											apiVersions: {
+												description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+												items: type: "string"
+												type: "array"
+											}
 											fileParameters: {
 												description: "FileParameters are file parameters to the helm template"
 												items: {
@@ -1097,6 +1222,17 @@ customresourcedefinition: "applications.argoproj.io": {
 											ignoreMissingValueFiles: {
 												description: "IgnoreMissingValueFiles prevents helm template from failing when valueFiles do not exist locally by not appending them to helm template --values"
 												type:        "boolean"
+											}
+											kubeVersion: {
+												description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+												type: "string"
+											}
+											namespace: {
+												description: "Namespace is an optional namespace to template with. If left empty, defaults to the app's destination namespace."
+												type:        "string"
 											}
 											parameters: {
 												description: "Parameters is a list of Helm parameters which are passed to the helm template command upon manifest generation"
@@ -1132,6 +1268,14 @@ customresourcedefinition: "applications.argoproj.io": {
 												description: "SkipCrds skips custom resource definition installation step (Helm's --skip-crds)"
 												type:        "boolean"
 											}
+											skipSchemaValidation: {
+												description: "SkipSchemaValidation skips JSON schema validation (Helm's --skip-schema-validation)"
+												type:        "boolean"
+											}
+											skipTests: {
+												description: "SkipTests skips test manifest installation step (Helm's --skip-tests)."
+												type:        "boolean"
+											}
 											valueFiles: {
 												description: "ValuesFiles is a list of Helm value files to use when generating a template"
 												items: type: "string"
@@ -1156,6 +1300,14 @@ customresourcedefinition: "applications.argoproj.io": {
 									kustomize: {
 										description: "Kustomize holds kustomize specific options"
 										properties: {
+											apiVersions: {
+												description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+												items: type: "string"
+												type: "array"
+											}
 											commonAnnotations: {
 												additionalProperties: type: "string"
 												description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
@@ -1183,6 +1335,10 @@ customresourcedefinition: "applications.argoproj.io": {
 												description: "ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps"
 												type:        "boolean"
 											}
+											ignoreMissingComponents: {
+												description: "IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file"
+												type:        "boolean"
+											}
 											images: {
 												description: "Images is a list of Kustomize image override specifications"
 												items: {
@@ -1190,6 +1346,17 @@ customresourcedefinition: "applications.argoproj.io": {
 													type:        "string"
 												}
 												type: "array"
+											}
+											kubeVersion: {
+												description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+												type: "string"
+											}
+											labelIncludeTemplates: {
+												description: "LabelIncludeTemplates specifies whether to apply common labels to resource templates or not"
+												type:        "boolean"
 											}
 											labelWithoutSelector: {
 												description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
@@ -1266,6 +1433,10 @@ customresourcedefinition: "applications.argoproj.io": {
 											}
 										}
 										type: "object"
+									}
+									name: {
+										description: "Name is used to refer to a source and is displayed in the UI. It is used in multi-source Applications."
+										type:        "string"
 									}
 									path: {
 										description: "Path is a directory path within the Git repository, and is only valid for applications sourced from Git."
@@ -1346,6 +1517,78 @@ customresourcedefinition: "applications.argoproj.io": {
 								required: ["repoURL"]
 								type: "object"
 							}
+							sourceHydrator: {
+								description: "SourceHydrator provides a way to push hydrated manifests back to git before syncing them to the cluster."
+								properties: {
+									drySource: {
+										description: "DrySource specifies where the dry \"don't repeat yourself\" manifest source lives."
+										properties: {
+											path: {
+												description: "Path is a directory path within the Git repository where the manifests are located"
+												type:        "string"
+											}
+											repoURL: {
+												description: "RepoURL is the URL to the git repository that contains the application manifests"
+												type:        "string"
+											}
+											targetRevision: {
+												description: "TargetRevision defines the revision of the source to hydrate"
+												type:        "string"
+											}
+										}
+										required: [
+											"path",
+											"repoURL",
+											"targetRevision",
+										]
+										type: "object"
+									}
+									hydrateTo: {
+										description: """
+	HydrateTo specifies an optional "staging" location to push hydrated manifests to. An external system would then
+	have to move manifests to the SyncSource, e.g. by pull request.
+	"""
+										properties: targetBranch: {
+											description: "TargetBranch is the branch to which hydrated manifests should be committed"
+											type:        "string"
+										}
+										required: ["targetBranch"]
+										type: "object"
+									}
+									syncSource: {
+										description: "SyncSource specifies where to sync hydrated manifests from."
+										properties: {
+											path: {
+												description: """
+	Path is a directory path within the git repository where hydrated manifests should be committed to and synced
+	from. The Path should never point to the root of the repo. If hydrateTo is set, this is just the path from which
+	hydrated manifests will be synced.
+	"""
+												minLength: 1
+												pattern:   "^.{2,}|[^./]$"
+												type:      "string"
+											}
+											targetBranch: {
+												description: """
+	TargetBranch is the branch from which hydrated manifests will be synced.
+	If HydrateTo is not set, this is also the branch to which hydrated manifests are committed.
+	"""
+												type: "string"
+											}
+										}
+										required: [
+											"path",
+											"targetBranch",
+										]
+										type: "object"
+									}
+								}
+								required: [
+									"drySource",
+									"syncSource",
+								]
+								type: "object"
+							}
 							sources: {
 								description: "Sources is a reference to the location of the application's manifests or chart"
 								items: {
@@ -1421,6 +1664,14 @@ customresourcedefinition: "applications.argoproj.io": {
 										helm: {
 											description: "Helm holds helm specific options"
 											properties: {
+												apiVersions: {
+													description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+													items: type: "string"
+													type: "array"
+												}
 												fileParameters: {
 													description: "FileParameters are file parameters to the helm template"
 													items: {
@@ -1442,6 +1693,17 @@ customresourcedefinition: "applications.argoproj.io": {
 												ignoreMissingValueFiles: {
 													description: "IgnoreMissingValueFiles prevents helm template from failing when valueFiles do not exist locally by not appending them to helm template --values"
 													type:        "boolean"
+												}
+												kubeVersion: {
+													description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+													type: "string"
+												}
+												namespace: {
+													description: "Namespace is an optional namespace to template with. If left empty, defaults to the app's destination namespace."
+													type:        "string"
 												}
 												parameters: {
 													description: "Parameters is a list of Helm parameters which are passed to the helm template command upon manifest generation"
@@ -1477,6 +1739,14 @@ customresourcedefinition: "applications.argoproj.io": {
 													description: "SkipCrds skips custom resource definition installation step (Helm's --skip-crds)"
 													type:        "boolean"
 												}
+												skipSchemaValidation: {
+													description: "SkipSchemaValidation skips JSON schema validation (Helm's --skip-schema-validation)"
+													type:        "boolean"
+												}
+												skipTests: {
+													description: "SkipTests skips test manifest installation step (Helm's --skip-tests)."
+													type:        "boolean"
+												}
 												valueFiles: {
 													description: "ValuesFiles is a list of Helm value files to use when generating a template"
 													items: type: "string"
@@ -1501,6 +1771,14 @@ customresourcedefinition: "applications.argoproj.io": {
 										kustomize: {
 											description: "Kustomize holds kustomize specific options"
 											properties: {
+												apiVersions: {
+													description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+													items: type: "string"
+													type: "array"
+												}
 												commonAnnotations: {
 													additionalProperties: type: "string"
 													description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
@@ -1528,6 +1806,10 @@ customresourcedefinition: "applications.argoproj.io": {
 													description: "ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps"
 													type:        "boolean"
 												}
+												ignoreMissingComponents: {
+													description: "IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file"
+													type:        "boolean"
+												}
 												images: {
 													description: "Images is a list of Kustomize image override specifications"
 													items: {
@@ -1535,6 +1817,17 @@ customresourcedefinition: "applications.argoproj.io": {
 														type:        "string"
 													}
 													type: "array"
+												}
+												kubeVersion: {
+													description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+													type: "string"
+												}
+												labelIncludeTemplates: {
+													description: "LabelIncludeTemplates specifies whether to apply common labels to resource templates or not"
+													type:        "boolean"
 												}
 												labelWithoutSelector: {
 													description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
@@ -1611,6 +1904,10 @@ customresourcedefinition: "applications.argoproj.io": {
 												}
 											}
 											type: "object"
+										}
+										name: {
+											description: "Name is used to refer to a source and is displayed in the UI. It is used in multi-source Applications."
+											type:        "string"
 										}
 										path: {
 											description: "Path is a directory path within the Git repository, and is only valid for applications sourced from Git."
@@ -1703,6 +2000,10 @@ customresourcedefinition: "applications.argoproj.io": {
 												description: "AllowEmpty allows apps have zero live resources (default: false)"
 												type:        "boolean"
 											}
+											enabled: {
+												description: "Enable allows apps to explicitly control automated sync"
+												type:        "boolean"
+											}
 											prune: {
 												description: "Prune specifies whether to delete resources from the cluster that are not found in the sources anymore as part of automated sync (default: false)"
 												type:        "boolean"
@@ -1754,6 +2055,10 @@ customresourcedefinition: "applications.argoproj.io": {
 												description: "Limit is the maximum number of attempts for retrying a failed sync. If set to 0, no retries will be performed."
 												format:      "int64"
 												type:        "integer"
+											}
+											refresh: {
+												description: "Refresh indicates if the latest revision should be used on retry instead of the initial one (default: false)"
+												type:        "boolean"
 											}
 										}
 										type: "object"
@@ -1810,12 +2115,21 @@ customresourcedefinition: "applications.argoproj.io": {
 							health: {
 								description: "Health contains information about the application's current health status"
 								properties: {
-									message: {
-										description: "Message is a human-readable informational message describing the health status"
+									lastTransitionTime: {
+										description: "LastTransitionTime is the time the HealthStatus was set or updated"
+										format:      "date-time"
 										type:        "string"
 									}
+									message: {
+										description: """
+	Message is a human-readable informational message describing the health status
+
+	Deprecated: this field is not used and will be removed in a future release.
+	"""
+										type: "string"
+									}
 									status: {
-										description: "Status holds the status code of the application or resource"
+										description: "Status holds the status code of the application"
 										type:        "string"
 									}
 								}
@@ -1937,6 +2251,14 @@ customresourcedefinition: "applications.argoproj.io": {
 												helm: {
 													description: "Helm holds helm specific options"
 													properties: {
+														apiVersions: {
+															description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+															items: type: "string"
+															type: "array"
+														}
 														fileParameters: {
 															description: "FileParameters are file parameters to the helm template"
 															items: {
@@ -1958,6 +2280,17 @@ customresourcedefinition: "applications.argoproj.io": {
 														ignoreMissingValueFiles: {
 															description: "IgnoreMissingValueFiles prevents helm template from failing when valueFiles do not exist locally by not appending them to helm template --values"
 															type:        "boolean"
+														}
+														kubeVersion: {
+															description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+															type: "string"
+														}
+														namespace: {
+															description: "Namespace is an optional namespace to template with. If left empty, defaults to the app's destination namespace."
+															type:        "string"
 														}
 														parameters: {
 															description: "Parameters is a list of Helm parameters which are passed to the helm template command upon manifest generation"
@@ -1993,6 +2326,14 @@ customresourcedefinition: "applications.argoproj.io": {
 															description: "SkipCrds skips custom resource definition installation step (Helm's --skip-crds)"
 															type:        "boolean"
 														}
+														skipSchemaValidation: {
+															description: "SkipSchemaValidation skips JSON schema validation (Helm's --skip-schema-validation)"
+															type:        "boolean"
+														}
+														skipTests: {
+															description: "SkipTests skips test manifest installation step (Helm's --skip-tests)."
+															type:        "boolean"
+														}
 														valueFiles: {
 															description: "ValuesFiles is a list of Helm value files to use when generating a template"
 															items: type: "string"
@@ -2017,6 +2358,14 @@ customresourcedefinition: "applications.argoproj.io": {
 												kustomize: {
 													description: "Kustomize holds kustomize specific options"
 													properties: {
+														apiVersions: {
+															description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+															items: type: "string"
+															type: "array"
+														}
 														commonAnnotations: {
 															additionalProperties: type: "string"
 															description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
@@ -2044,6 +2393,10 @@ customresourcedefinition: "applications.argoproj.io": {
 															description: "ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps"
 															type:        "boolean"
 														}
+														ignoreMissingComponents: {
+															description: "IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file"
+															type:        "boolean"
+														}
 														images: {
 															description: "Images is a list of Kustomize image override specifications"
 															items: {
@@ -2051,6 +2404,17 @@ customresourcedefinition: "applications.argoproj.io": {
 																type:        "string"
 															}
 															type: "array"
+														}
+														kubeVersion: {
+															description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+															type: "string"
+														}
+														labelIncludeTemplates: {
+															description: "LabelIncludeTemplates specifies whether to apply common labels to resource templates or not"
+															type:        "boolean"
 														}
 														labelWithoutSelector: {
 															description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
@@ -2127,6 +2491,10 @@ customresourcedefinition: "applications.argoproj.io": {
 														}
 													}
 													type: "object"
+												}
+												name: {
+													description: "Name is used to refer to a source and is displayed in the UI. It is used in multi-source Applications."
+													type:        "string"
 												}
 												path: {
 													description: "Path is a directory path within the Git repository, and is only valid for applications sourced from Git."
@@ -2282,6 +2650,14 @@ customresourcedefinition: "applications.argoproj.io": {
 													helm: {
 														description: "Helm holds helm specific options"
 														properties: {
+															apiVersions: {
+																description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+																items: type: "string"
+																type: "array"
+															}
 															fileParameters: {
 																description: "FileParameters are file parameters to the helm template"
 																items: {
@@ -2303,6 +2679,17 @@ customresourcedefinition: "applications.argoproj.io": {
 															ignoreMissingValueFiles: {
 																description: "IgnoreMissingValueFiles prevents helm template from failing when valueFiles do not exist locally by not appending them to helm template --values"
 																type:        "boolean"
+															}
+															kubeVersion: {
+																description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+																type: "string"
+															}
+															namespace: {
+																description: "Namespace is an optional namespace to template with. If left empty, defaults to the app's destination namespace."
+																type:        "string"
 															}
 															parameters: {
 																description: "Parameters is a list of Helm parameters which are passed to the helm template command upon manifest generation"
@@ -2338,6 +2725,14 @@ customresourcedefinition: "applications.argoproj.io": {
 																description: "SkipCrds skips custom resource definition installation step (Helm's --skip-crds)"
 																type:        "boolean"
 															}
+															skipSchemaValidation: {
+																description: "SkipSchemaValidation skips JSON schema validation (Helm's --skip-schema-validation)"
+																type:        "boolean"
+															}
+															skipTests: {
+																description: "SkipTests skips test manifest installation step (Helm's --skip-tests)."
+																type:        "boolean"
+															}
 															valueFiles: {
 																description: "ValuesFiles is a list of Helm value files to use when generating a template"
 																items: type: "string"
@@ -2362,6 +2757,14 @@ customresourcedefinition: "applications.argoproj.io": {
 													kustomize: {
 														description: "Kustomize holds kustomize specific options"
 														properties: {
+															apiVersions: {
+																description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+																items: type: "string"
+																type: "array"
+															}
 															commonAnnotations: {
 																additionalProperties: type: "string"
 																description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
@@ -2389,6 +2792,10 @@ customresourcedefinition: "applications.argoproj.io": {
 																description: "ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps"
 																type:        "boolean"
 															}
+															ignoreMissingComponents: {
+																description: "IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file"
+																type:        "boolean"
+															}
 															images: {
 																description: "Images is a list of Kustomize image override specifications"
 																items: {
@@ -2396,6 +2803,17 @@ customresourcedefinition: "applications.argoproj.io": {
 																	type:        "string"
 																}
 																type: "array"
+															}
+															kubeVersion: {
+																description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+																type: "string"
+															}
+															labelIncludeTemplates: {
+																description: "LabelIncludeTemplates specifies whether to apply common labels to resource templates or not"
+																type:        "boolean"
 															}
 															labelWithoutSelector: {
 																description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
@@ -2472,6 +2890,10 @@ customresourcedefinition: "applications.argoproj.io": {
 															}
 														}
 														type: "object"
+													}
+													name: {
+														description: "Name is used to refer to a source and is displayed in the UI. It is used in multi-source Applications."
+														type:        "string"
 													}
 													path: {
 														description: "Path is a directory path within the Git repository, and is only valid for applications sourced from Git."
@@ -2642,12 +3064,21 @@ customresourcedefinition: "applications.argoproj.io": {
 														format:      "int64"
 														type:        "integer"
 													}
+													refresh: {
+														description: "Refresh indicates if the latest revision should be used on retry instead of the initial one (default: false)"
+														type:        "boolean"
+													}
 												}
 												type: "object"
 											}
 											sync: {
 												description: "Sync contains parameters for the operation"
 												properties: {
+													autoHealAttemptsCount: {
+														description: "SelfHealAttemptsCount contains the number of auto-heal attempts"
+														format:      "int64"
+														type:        "integer"
+													}
 													dryRun: {
 														description: "DryRun specifies to perform a `kubectl apply --dry-run` without actually performing the sync"
 														type:        "boolean"
@@ -2770,6 +3201,14 @@ customresourcedefinition: "applications.argoproj.io": {
 															helm: {
 																description: "Helm holds helm specific options"
 																properties: {
+																	apiVersions: {
+																		description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+																		items: type: "string"
+																		type: "array"
+																	}
 																	fileParameters: {
 																		description: "FileParameters are file parameters to the helm template"
 																		items: {
@@ -2791,6 +3230,17 @@ customresourcedefinition: "applications.argoproj.io": {
 																	ignoreMissingValueFiles: {
 																		description: "IgnoreMissingValueFiles prevents helm template from failing when valueFiles do not exist locally by not appending them to helm template --values"
 																		type:        "boolean"
+																	}
+																	kubeVersion: {
+																		description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+																		type: "string"
+																	}
+																	namespace: {
+																		description: "Namespace is an optional namespace to template with. If left empty, defaults to the app's destination namespace."
+																		type:        "string"
 																	}
 																	parameters: {
 																		description: "Parameters is a list of Helm parameters which are passed to the helm template command upon manifest generation"
@@ -2826,6 +3276,14 @@ customresourcedefinition: "applications.argoproj.io": {
 																		description: "SkipCrds skips custom resource definition installation step (Helm's --skip-crds)"
 																		type:        "boolean"
 																	}
+																	skipSchemaValidation: {
+																		description: "SkipSchemaValidation skips JSON schema validation (Helm's --skip-schema-validation)"
+																		type:        "boolean"
+																	}
+																	skipTests: {
+																		description: "SkipTests skips test manifest installation step (Helm's --skip-tests)."
+																		type:        "boolean"
+																	}
 																	valueFiles: {
 																		description: "ValuesFiles is a list of Helm value files to use when generating a template"
 																		items: type: "string"
@@ -2850,6 +3308,14 @@ customresourcedefinition: "applications.argoproj.io": {
 															kustomize: {
 																description: "Kustomize holds kustomize specific options"
 																properties: {
+																	apiVersions: {
+																		description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+																		items: type: "string"
+																		type: "array"
+																	}
 																	commonAnnotations: {
 																		additionalProperties: type: "string"
 																		description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
@@ -2877,6 +3343,10 @@ customresourcedefinition: "applications.argoproj.io": {
 																		description: "ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps"
 																		type:        "boolean"
 																	}
+																	ignoreMissingComponents: {
+																		description: "IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file"
+																		type:        "boolean"
+																	}
 																	images: {
 																		description: "Images is a list of Kustomize image override specifications"
 																		items: {
@@ -2884,6 +3354,17 @@ customresourcedefinition: "applications.argoproj.io": {
 																			type:        "string"
 																		}
 																		type: "array"
+																	}
+																	kubeVersion: {
+																		description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+																		type: "string"
+																	}
+																	labelIncludeTemplates: {
+																		description: "LabelIncludeTemplates specifies whether to apply common labels to resource templates or not"
+																		type:        "boolean"
 																	}
 																	labelWithoutSelector: {
 																		description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
@@ -2960,6 +3441,10 @@ customresourcedefinition: "applications.argoproj.io": {
 																	}
 																}
 																type: "object"
+															}
+															name: {
+																description: "Name is used to refer to a source and is displayed in the UI. It is used in multi-source Applications."
+																type:        "string"
 															}
 															path: {
 																description: "Path is a directory path within the Git repository, and is only valid for applications sourced from Git."
@@ -3118,6 +3603,14 @@ customresourcedefinition: "applications.argoproj.io": {
 																helm: {
 																	description: "Helm holds helm specific options"
 																	properties: {
+																		apiVersions: {
+																			description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+																			items: type: "string"
+																			type: "array"
+																		}
 																		fileParameters: {
 																			description: "FileParameters are file parameters to the helm template"
 																			items: {
@@ -3139,6 +3632,17 @@ customresourcedefinition: "applications.argoproj.io": {
 																		ignoreMissingValueFiles: {
 																			description: "IgnoreMissingValueFiles prevents helm template from failing when valueFiles do not exist locally by not appending them to helm template --values"
 																			type:        "boolean"
+																		}
+																		kubeVersion: {
+																			description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+																			type: "string"
+																		}
+																		namespace: {
+																			description: "Namespace is an optional namespace to template with. If left empty, defaults to the app's destination namespace."
+																			type:        "string"
 																		}
 																		parameters: {
 																			description: "Parameters is a list of Helm parameters which are passed to the helm template command upon manifest generation"
@@ -3174,6 +3678,14 @@ customresourcedefinition: "applications.argoproj.io": {
 																			description: "SkipCrds skips custom resource definition installation step (Helm's --skip-crds)"
 																			type:        "boolean"
 																		}
+																		skipSchemaValidation: {
+																			description: "SkipSchemaValidation skips JSON schema validation (Helm's --skip-schema-validation)"
+																			type:        "boolean"
+																		}
+																		skipTests: {
+																			description: "SkipTests skips test manifest installation step (Helm's --skip-tests)."
+																			type:        "boolean"
+																		}
 																		valueFiles: {
 																			description: "ValuesFiles is a list of Helm value files to use when generating a template"
 																			items: type: "string"
@@ -3198,6 +3710,14 @@ customresourcedefinition: "applications.argoproj.io": {
 																kustomize: {
 																	description: "Kustomize holds kustomize specific options"
 																	properties: {
+																		apiVersions: {
+																			description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+																			items: type: "string"
+																			type: "array"
+																		}
 																		commonAnnotations: {
 																			additionalProperties: type: "string"
 																			description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
@@ -3225,6 +3745,10 @@ customresourcedefinition: "applications.argoproj.io": {
 																			description: "ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps"
 																			type:        "boolean"
 																		}
+																		ignoreMissingComponents: {
+																			description: "IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file"
+																			type:        "boolean"
+																		}
 																		images: {
 																			description: "Images is a list of Kustomize image override specifications"
 																			items: {
@@ -3232,6 +3756,17 @@ customresourcedefinition: "applications.argoproj.io": {
 																				type:        "string"
 																			}
 																			type: "array"
+																		}
+																		kubeVersion: {
+																			description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+																			type: "string"
+																		}
+																		labelIncludeTemplates: {
+																			description: "LabelIncludeTemplates specifies whether to apply common labels to resource templates or not"
+																			type:        "boolean"
 																		}
 																		labelWithoutSelector: {
 																			description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
@@ -3308,6 +3843,10 @@ customresourcedefinition: "applications.argoproj.io": {
 																		}
 																	}
 																	type: "object"
+																}
+																name: {
+																	description: "Name is used to refer to a source and is displayed in the UI. It is used in multi-source Applications."
+																	type:        "string"
 																}
 																path: {
 																	description: "Path is a directory path within the Git repository, and is only valid for applications sourced from Git."
@@ -3482,6 +4021,11 @@ customresourcedefinition: "applications.argoproj.io": {
 															description: "HookType specifies the type of the hook. Empty for non-hook resources"
 															type:        "string"
 														}
+														images: {
+															description: "Images contains the images related to the ResourceResult"
+															items: type: "string"
+															type: "array"
+														}
 														kind: {
 															description: "Kind specifies the API kind of the resource"
 															type:        "string"
@@ -3604,6 +4148,14 @@ customresourcedefinition: "applications.argoproj.io": {
 													helm: {
 														description: "Helm holds helm specific options"
 														properties: {
+															apiVersions: {
+																description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+																items: type: "string"
+																type: "array"
+															}
 															fileParameters: {
 																description: "FileParameters are file parameters to the helm template"
 																items: {
@@ -3625,6 +4177,17 @@ customresourcedefinition: "applications.argoproj.io": {
 															ignoreMissingValueFiles: {
 																description: "IgnoreMissingValueFiles prevents helm template from failing when valueFiles do not exist locally by not appending them to helm template --values"
 																type:        "boolean"
+															}
+															kubeVersion: {
+																description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+																type: "string"
+															}
+															namespace: {
+																description: "Namespace is an optional namespace to template with. If left empty, defaults to the app's destination namespace."
+																type:        "string"
 															}
 															parameters: {
 																description: "Parameters is a list of Helm parameters which are passed to the helm template command upon manifest generation"
@@ -3660,6 +4223,14 @@ customresourcedefinition: "applications.argoproj.io": {
 																description: "SkipCrds skips custom resource definition installation step (Helm's --skip-crds)"
 																type:        "boolean"
 															}
+															skipSchemaValidation: {
+																description: "SkipSchemaValidation skips JSON schema validation (Helm's --skip-schema-validation)"
+																type:        "boolean"
+															}
+															skipTests: {
+																description: "SkipTests skips test manifest installation step (Helm's --skip-tests)."
+																type:        "boolean"
+															}
 															valueFiles: {
 																description: "ValuesFiles is a list of Helm value files to use when generating a template"
 																items: type: "string"
@@ -3684,6 +4255,14 @@ customresourcedefinition: "applications.argoproj.io": {
 													kustomize: {
 														description: "Kustomize holds kustomize specific options"
 														properties: {
+															apiVersions: {
+																description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+																items: type: "string"
+																type: "array"
+															}
 															commonAnnotations: {
 																additionalProperties: type: "string"
 																description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
@@ -3711,6 +4290,10 @@ customresourcedefinition: "applications.argoproj.io": {
 																description: "ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps"
 																type:        "boolean"
 															}
+															ignoreMissingComponents: {
+																description: "IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file"
+																type:        "boolean"
+															}
 															images: {
 																description: "Images is a list of Kustomize image override specifications"
 																items: {
@@ -3718,6 +4301,17 @@ customresourcedefinition: "applications.argoproj.io": {
 																	type:        "string"
 																}
 																type: "array"
+															}
+															kubeVersion: {
+																description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+																type: "string"
+															}
+															labelIncludeTemplates: {
+																description: "LabelIncludeTemplates specifies whether to apply common labels to resource templates or not"
+																type:        "boolean"
 															}
 															labelWithoutSelector: {
 																description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
@@ -3794,6 +4388,10 @@ customresourcedefinition: "applications.argoproj.io": {
 															}
 														}
 														type: "object"
+													}
+													name: {
+														description: "Name is used to refer to a source and is displayed in the UI. It is used in multi-source Applications."
+														type:        "string"
 													}
 													path: {
 														description: "Path is a directory path within the Git repository, and is only valid for applications sourced from Git."
@@ -3949,6 +4547,14 @@ customresourcedefinition: "applications.argoproj.io": {
 														helm: {
 															description: "Helm holds helm specific options"
 															properties: {
+																apiVersions: {
+																	description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+																	items: type: "string"
+																	type: "array"
+																}
 																fileParameters: {
 																	description: "FileParameters are file parameters to the helm template"
 																	items: {
@@ -3970,6 +4576,17 @@ customresourcedefinition: "applications.argoproj.io": {
 																ignoreMissingValueFiles: {
 																	description: "IgnoreMissingValueFiles prevents helm template from failing when valueFiles do not exist locally by not appending them to helm template --values"
 																	type:        "boolean"
+																}
+																kubeVersion: {
+																	description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+																	type: "string"
+																}
+																namespace: {
+																	description: "Namespace is an optional namespace to template with. If left empty, defaults to the app's destination namespace."
+																	type:        "string"
 																}
 																parameters: {
 																	description: "Parameters is a list of Helm parameters which are passed to the helm template command upon manifest generation"
@@ -4005,6 +4622,14 @@ customresourcedefinition: "applications.argoproj.io": {
 																	description: "SkipCrds skips custom resource definition installation step (Helm's --skip-crds)"
 																	type:        "boolean"
 																}
+																skipSchemaValidation: {
+																	description: "SkipSchemaValidation skips JSON schema validation (Helm's --skip-schema-validation)"
+																	type:        "boolean"
+																}
+																skipTests: {
+																	description: "SkipTests skips test manifest installation step (Helm's --skip-tests)."
+																	type:        "boolean"
+																}
 																valueFiles: {
 																	description: "ValuesFiles is a list of Helm value files to use when generating a template"
 																	items: type: "string"
@@ -4029,6 +4654,14 @@ customresourcedefinition: "applications.argoproj.io": {
 														kustomize: {
 															description: "Kustomize holds kustomize specific options"
 															properties: {
+																apiVersions: {
+																	description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+																	items: type: "string"
+																	type: "array"
+																}
 																commonAnnotations: {
 																	additionalProperties: type: "string"
 																	description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
@@ -4056,6 +4689,10 @@ customresourcedefinition: "applications.argoproj.io": {
 																	description: "ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps"
 																	type:        "boolean"
 																}
+																ignoreMissingComponents: {
+																	description: "IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file"
+																	type:        "boolean"
+																}
 																images: {
 																	description: "Images is a list of Kustomize image override specifications"
 																	items: {
@@ -4063,6 +4700,17 @@ customresourcedefinition: "applications.argoproj.io": {
 																		type:        "string"
 																	}
 																	type: "array"
+																}
+																kubeVersion: {
+																	description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+																	type: "string"
+																}
+																labelIncludeTemplates: {
+																	description: "LabelIncludeTemplates specifies whether to apply common labels to resource templates or not"
+																	type:        "boolean"
 																}
 																labelWithoutSelector: {
 																	description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
@@ -4139,6 +4787,10 @@ customresourcedefinition: "applications.argoproj.io": {
 																}
 															}
 															type: "object"
+														}
+														name: {
+															description: "Name is used to refer to a source and is displayed in the UI. It is used in multi-source Applications."
+															type:        "string"
 														}
 														path: {
 															description: "Path is a directory path within the Git repository, and is only valid for applications sourced from Git."
@@ -4245,44 +4897,284 @@ customresourcedefinition: "applications.argoproj.io": {
 							resources: {
 								description: "Resources is a list of Kubernetes resources managed by this application"
 								items: {
-									description: """
-	ResourceStatus holds the current sync and health status of a resource
-	TODO: describe members of this type
-	"""
+									description: "ResourceStatus holds the current synchronization and health status of a Kubernetes resource."
 									properties: {
-										group: type: "string"
+										group: {
+											description: "Group represents the API group of the resource (e.g., \"apps\" for Deployments)."
+											type:        "string"
+										}
 										health: {
-											description: "HealthStatus contains information about the currently observed health state of an application or resource"
+											description: "Health indicates the health status of the resource (e.g., Healthy, Degraded, Progressing)."
 											properties: {
+												lastTransitionTime: {
+													description: """
+	LastTransitionTime is the time the HealthStatus was set or updated
+
+	Deprecated: this field is not used and will be removed in a future release.
+	"""
+													format: "date-time"
+													type:   "string"
+												}
 												message: {
 													description: "Message is a human-readable informational message describing the health status"
 													type:        "string"
 												}
 												status: {
-													description: "Status holds the status code of the application or resource"
+													description: "Status holds the status code of the resource"
 													type:        "string"
 												}
 											}
 											type: "object"
 										}
-										hook: type: "boolean"
-										kind: type: "string"
-										name: type: "string"
-										namespace: type: "string"
-										requiresPruning: type: "boolean"
+										hook: {
+											description: "Hook is true if the resource is used as a lifecycle hook in an Argo CD application."
+											type:        "boolean"
+										}
+										kind: {
+											description: "Kind specifies the type of the resource (e.g., \"Deployment\", \"Service\")."
+											type:        "string"
+										}
+										name: {
+											description: "Name is the unique name of the resource within the namespace."
+											type:        "string"
+										}
+										namespace: {
+											description: "Namespace defines the Kubernetes namespace where the resource is located."
+											type:        "string"
+										}
+										requiresDeletionConfirmation: {
+											description: "RequiresDeletionConfirmation is true if the resource requires explicit user confirmation before deletion."
+											type:        "boolean"
+										}
+										requiresPruning: {
+											description: "RequiresPruning is true if the resource needs to be pruned (deleted) as part of synchronization."
+											type:        "boolean"
+										}
 										status: {
-											description: "SyncStatusCode is a type which represents possible comparison results"
+											description: "Status represents the synchronization state of the resource (e.g., Synced, OutOfSync)."
 											type:        "string"
 										}
 										syncWave: {
+											description: """
+	SyncWave determines the order in which resources are applied during a sync operation.
+	Lower values are applied first.
+	"""
 											format: "int64"
 											type:   "integer"
 										}
-										version: type: "string"
+										version: {
+											description: "Version indicates the API version of the resource (e.g., \"v1\", \"v1beta1\")."
+											type:        "string"
+										}
 									}
 									type: "object"
 								}
 								type: "array"
+							}
+							sourceHydrator: {
+								description: "SourceHydrator stores information about the current state of source hydration"
+								properties: {
+									currentOperation: {
+										description: "CurrentOperation holds the status of the hydrate operation"
+										properties: {
+											drySHA: {
+												description: "DrySHA holds the resolved revision (sha) of the dry source as of the most recent reconciliation"
+												type:        "string"
+											}
+											finishedAt: {
+												description: "FinishedAt indicates when the hydrate operation finished"
+												format:      "date-time"
+												type:        "string"
+											}
+											hydratedSHA: {
+												description: "HydratedSHA holds the resolved revision (sha) of the hydrated source as of the most recent reconciliation"
+												type:        "string"
+											}
+											message: {
+												description: "Message contains a message describing the current status of the hydrate operation"
+												type:        "string"
+											}
+											phase: {
+												description: "Phase indicates the status of the hydrate operation"
+												enum: [
+													"Hydrating",
+													"Failed",
+													"Hydrated",
+												]
+												type: "string"
+											}
+											sourceHydrator: {
+												description: "SourceHydrator holds the hydrator config used for the hydrate operation"
+												properties: {
+													drySource: {
+														description: "DrySource specifies where the dry \"don't repeat yourself\" manifest source lives."
+														properties: {
+															path: {
+																description: "Path is a directory path within the Git repository where the manifests are located"
+																type:        "string"
+															}
+															repoURL: {
+																description: "RepoURL is the URL to the git repository that contains the application manifests"
+																type:        "string"
+															}
+															targetRevision: {
+																description: "TargetRevision defines the revision of the source to hydrate"
+																type:        "string"
+															}
+														}
+														required: [
+															"path",
+															"repoURL",
+															"targetRevision",
+														]
+														type: "object"
+													}
+													hydrateTo: {
+														description: """
+	HydrateTo specifies an optional "staging" location to push hydrated manifests to. An external system would then
+	have to move manifests to the SyncSource, e.g. by pull request.
+	"""
+														properties: targetBranch: {
+															description: "TargetBranch is the branch to which hydrated manifests should be committed"
+															type:        "string"
+														}
+														required: ["targetBranch"]
+														type: "object"
+													}
+													syncSource: {
+														description: "SyncSource specifies where to sync hydrated manifests from."
+														properties: {
+															path: {
+																description: """
+	Path is a directory path within the git repository where hydrated manifests should be committed to and synced
+	from. The Path should never point to the root of the repo. If hydrateTo is set, this is just the path from which
+	hydrated manifests will be synced.
+	"""
+																minLength: 1
+																pattern:   "^.{2,}|[^./]$"
+																type:      "string"
+															}
+															targetBranch: {
+																description: """
+	TargetBranch is the branch from which hydrated manifests will be synced.
+	If HydrateTo is not set, this is also the branch to which hydrated manifests are committed.
+	"""
+																type: "string"
+															}
+														}
+														required: [
+															"path",
+															"targetBranch",
+														]
+														type: "object"
+													}
+												}
+												required: [
+													"drySource",
+													"syncSource",
+												]
+												type: "object"
+											}
+											startedAt: {
+												description: "StartedAt indicates when the hydrate operation started"
+												format:      "date-time"
+												type:        "string"
+											}
+										}
+										required: [
+											"message",
+											"phase",
+										]
+										type: "object"
+									}
+									lastSuccessfulOperation: {
+										description: "LastSuccessfulOperation holds info about the most recent successful hydration"
+										properties: {
+											drySHA: {
+												description: "DrySHA holds the resolved revision (sha) of the dry source as of the most recent reconciliation"
+												type:        "string"
+											}
+											hydratedSHA: {
+												description: "HydratedSHA holds the resolved revision (sha) of the hydrated source as of the most recent reconciliation"
+												type:        "string"
+											}
+											sourceHydrator: {
+												description: "SourceHydrator holds the hydrator config used for the hydrate operation"
+												properties: {
+													drySource: {
+														description: "DrySource specifies where the dry \"don't repeat yourself\" manifest source lives."
+														properties: {
+															path: {
+																description: "Path is a directory path within the Git repository where the manifests are located"
+																type:        "string"
+															}
+															repoURL: {
+																description: "RepoURL is the URL to the git repository that contains the application manifests"
+																type:        "string"
+															}
+															targetRevision: {
+																description: "TargetRevision defines the revision of the source to hydrate"
+																type:        "string"
+															}
+														}
+														required: [
+															"path",
+															"repoURL",
+															"targetRevision",
+														]
+														type: "object"
+													}
+													hydrateTo: {
+														description: """
+	HydrateTo specifies an optional "staging" location to push hydrated manifests to. An external system would then
+	have to move manifests to the SyncSource, e.g. by pull request.
+	"""
+														properties: targetBranch: {
+															description: "TargetBranch is the branch to which hydrated manifests should be committed"
+															type:        "string"
+														}
+														required: ["targetBranch"]
+														type: "object"
+													}
+													syncSource: {
+														description: "SyncSource specifies where to sync hydrated manifests from."
+														properties: {
+															path: {
+																description: """
+	Path is a directory path within the git repository where hydrated manifests should be committed to and synced
+	from. The Path should never point to the root of the repo. If hydrateTo is set, this is just the path from which
+	hydrated manifests will be synced.
+	"""
+																minLength: 1
+																pattern:   "^.{2,}|[^./]$"
+																type:      "string"
+															}
+															targetBranch: {
+																description: """
+	TargetBranch is the branch from which hydrated manifests will be synced.
+	If HydrateTo is not set, this is also the branch to which hydrated manifests are committed.
+	"""
+																type: "string"
+															}
+														}
+														required: [
+															"path",
+															"targetBranch",
+														]
+														type: "object"
+													}
+												}
+												required: [
+													"drySource",
+													"syncSource",
+												]
+												type: "object"
+											}
+										}
+										type: "object"
+									}
+								}
+								type: "object"
 							}
 							sourceType: {
 								description: "SourceType specifies the type of this application"
@@ -4443,6 +5335,14 @@ customresourcedefinition: "applications.argoproj.io": {
 													helm: {
 														description: "Helm holds helm specific options"
 														properties: {
+															apiVersions: {
+																description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+																items: type: "string"
+																type: "array"
+															}
 															fileParameters: {
 																description: "FileParameters are file parameters to the helm template"
 																items: {
@@ -4464,6 +5364,17 @@ customresourcedefinition: "applications.argoproj.io": {
 															ignoreMissingValueFiles: {
 																description: "IgnoreMissingValueFiles prevents helm template from failing when valueFiles do not exist locally by not appending them to helm template --values"
 																type:        "boolean"
+															}
+															kubeVersion: {
+																description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+																type: "string"
+															}
+															namespace: {
+																description: "Namespace is an optional namespace to template with. If left empty, defaults to the app's destination namespace."
+																type:        "string"
 															}
 															parameters: {
 																description: "Parameters is a list of Helm parameters which are passed to the helm template command upon manifest generation"
@@ -4499,6 +5410,14 @@ customresourcedefinition: "applications.argoproj.io": {
 																description: "SkipCrds skips custom resource definition installation step (Helm's --skip-crds)"
 																type:        "boolean"
 															}
+															skipSchemaValidation: {
+																description: "SkipSchemaValidation skips JSON schema validation (Helm's --skip-schema-validation)"
+																type:        "boolean"
+															}
+															skipTests: {
+																description: "SkipTests skips test manifest installation step (Helm's --skip-tests)."
+																type:        "boolean"
+															}
 															valueFiles: {
 																description: "ValuesFiles is a list of Helm value files to use when generating a template"
 																items: type: "string"
@@ -4523,6 +5442,14 @@ customresourcedefinition: "applications.argoproj.io": {
 													kustomize: {
 														description: "Kustomize holds kustomize specific options"
 														properties: {
+															apiVersions: {
+																description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+																items: type: "string"
+																type: "array"
+															}
 															commonAnnotations: {
 																additionalProperties: type: "string"
 																description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
@@ -4550,6 +5477,10 @@ customresourcedefinition: "applications.argoproj.io": {
 																description: "ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps"
 																type:        "boolean"
 															}
+															ignoreMissingComponents: {
+																description: "IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file"
+																type:        "boolean"
+															}
 															images: {
 																description: "Images is a list of Kustomize image override specifications"
 																items: {
@@ -4557,6 +5488,17 @@ customresourcedefinition: "applications.argoproj.io": {
 																	type:        "string"
 																}
 																type: "array"
+															}
+															kubeVersion: {
+																description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+																type: "string"
+															}
+															labelIncludeTemplates: {
+																description: "LabelIncludeTemplates specifies whether to apply common labels to resource templates or not"
+																type:        "boolean"
 															}
 															labelWithoutSelector: {
 																description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
@@ -4633,6 +5575,10 @@ customresourcedefinition: "applications.argoproj.io": {
 															}
 														}
 														type: "object"
+													}
+													name: {
+														description: "Name is used to refer to a source and is displayed in the UI. It is used in multi-source Applications."
+														type:        "string"
 													}
 													path: {
 														description: "Path is a directory path within the Git repository, and is only valid for applications sourced from Git."
@@ -4788,6 +5734,14 @@ customresourcedefinition: "applications.argoproj.io": {
 														helm: {
 															description: "Helm holds helm specific options"
 															properties: {
+																apiVersions: {
+																	description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+																	items: type: "string"
+																	type: "array"
+																}
 																fileParameters: {
 																	description: "FileParameters are file parameters to the helm template"
 																	items: {
@@ -4809,6 +5763,17 @@ customresourcedefinition: "applications.argoproj.io": {
 																ignoreMissingValueFiles: {
 																	description: "IgnoreMissingValueFiles prevents helm template from failing when valueFiles do not exist locally by not appending them to helm template --values"
 																	type:        "boolean"
+																}
+																kubeVersion: {
+																	description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+																	type: "string"
+																}
+																namespace: {
+																	description: "Namespace is an optional namespace to template with. If left empty, defaults to the app's destination namespace."
+																	type:        "string"
 																}
 																parameters: {
 																	description: "Parameters is a list of Helm parameters which are passed to the helm template command upon manifest generation"
@@ -4844,6 +5809,14 @@ customresourcedefinition: "applications.argoproj.io": {
 																	description: "SkipCrds skips custom resource definition installation step (Helm's --skip-crds)"
 																	type:        "boolean"
 																}
+																skipSchemaValidation: {
+																	description: "SkipSchemaValidation skips JSON schema validation (Helm's --skip-schema-validation)"
+																	type:        "boolean"
+																}
+																skipTests: {
+																	description: "SkipTests skips test manifest installation step (Helm's --skip-tests)."
+																	type:        "boolean"
+																}
 																valueFiles: {
 																	description: "ValuesFiles is a list of Helm value files to use when generating a template"
 																	items: type: "string"
@@ -4868,6 +5841,14 @@ customresourcedefinition: "applications.argoproj.io": {
 														kustomize: {
 															description: "Kustomize holds kustomize specific options"
 															properties: {
+																apiVersions: {
+																	description: """
+	APIVersions specifies the Kubernetes resource API versions to pass to Helm when templating manifests. By default,
+	Argo CD uses the API versions of the target cluster. The format is [group/]version/kind.
+	"""
+																	items: type: "string"
+																	type: "array"
+																}
 																commonAnnotations: {
 																	additionalProperties: type: "string"
 																	description: "CommonAnnotations is a list of additional annotations to add to rendered manifests"
@@ -4895,6 +5876,10 @@ customresourcedefinition: "applications.argoproj.io": {
 																	description: "ForceCommonLabels specifies whether to force applying common labels to resources for Kustomize apps"
 																	type:        "boolean"
 																}
+																ignoreMissingComponents: {
+																	description: "IgnoreMissingComponents prevents kustomize from failing when components do not exist locally by not appending them to kustomization file"
+																	type:        "boolean"
+																}
 																images: {
 																	description: "Images is a list of Kustomize image override specifications"
 																	items: {
@@ -4902,6 +5887,17 @@ customresourcedefinition: "applications.argoproj.io": {
 																		type:        "string"
 																	}
 																	type: "array"
+																}
+																kubeVersion: {
+																	description: """
+	KubeVersion specifies the Kubernetes API version to pass to Helm when templating manifests. By default, Argo CD
+	uses the Kubernetes version of the target cluster.
+	"""
+																	type: "string"
+																}
+																labelIncludeTemplates: {
+																	description: "LabelIncludeTemplates specifies whether to apply common labels to resource templates or not"
+																	type:        "boolean"
 																}
 																labelWithoutSelector: {
 																	description: "LabelWithoutSelector specifies whether to apply common labels to resource selectors or not"
@@ -4978,6 +5974,10 @@ customresourcedefinition: "applications.argoproj.io": {
 																}
 															}
 															type: "object"
+														}
+														name: {
+															description: "Name is used to refer to a source and is displayed in the UI. It is used in multi-source Applications."
+															type:        "string"
 														}
 														path: {
 															description: "Path is a directory path within the Git repository, and is only valid for applications sourced from Git."

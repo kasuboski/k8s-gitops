@@ -30,6 +30,27 @@ deployment: "argocd-dex-server": {
 						"rundex",
 					]
 					env: [{
+						name: "ARGOCD_DEX_SERVER_LOGFORMAT"
+						valueFrom: configMapKeyRef: {
+							key:      "dexserver.log.format"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_DEX_SERVER_LOGLEVEL"
+						valueFrom: configMapKeyRef: {
+							key:      "dexserver.log.level"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_LOG_FORMAT_TIMESTAMP"
+						valueFrom: configMapKeyRef: {
+							key:      "log.format.timestamp"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
 						name: "ARGOCD_DEX_SERVER_DISABLE_TLS"
 						valueFrom: configMapKeyRef: {
 							key:      "dexserver.disable.tls"
@@ -37,7 +58,7 @@ deployment: "argocd-dex-server": {
 							optional: true
 						}
 					}]
-					image:           "ghcr.io/dexidp/dex:v2.38.0"
+					image:           "ghcr.io/dexidp/dex:v2.43.0"
 					imagePullPolicy: "Always"
 					name:            "dex"
 					ports: [{
@@ -72,7 +93,7 @@ deployment: "argocd-dex-server": {
 						"/usr/local/bin/argocd",
 						"/shared/argocd-dex",
 					]
-					image:           "quay.io/argoproj/argocd:v2.12.4"
+					image:           "quay.io/argoproj/argocd:v3.2.1"
 					imagePullPolicy: "Always"
 					name:            "copyutil"
 					securityContext: {
@@ -90,6 +111,7 @@ deployment: "argocd-dex-server": {
 						name:      "dexconfig"
 					}]
 				}]
+				nodeSelector: "kubernetes.io/os": "linux"
 				serviceAccountName: "argocd-dex-server"
 				volumes: [{
 					emptyDir: {}

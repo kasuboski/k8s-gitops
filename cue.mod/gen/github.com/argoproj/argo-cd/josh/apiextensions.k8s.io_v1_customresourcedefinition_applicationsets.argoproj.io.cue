@@ -48,7 +48,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																	operator: type: "string"
 																	values: {
 																		items: type: "string"
-																		type: "array"
+																		type:                     "array"
+																		"x-kubernetes-list-type": "atomic"
 																	}
 																}
 																required: [
@@ -57,7 +58,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																]
 																type: "object"
 															}
-															type: "array"
+															type:                     "array"
+															"x-kubernetes-list-type": "atomic"
 														}
 														matchLabels: {
 															additionalProperties: type: "string"
@@ -199,6 +201,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		}
 																		helm: {
 																			properties: {
+																				apiVersions: {
+																					items: type: "string"
+																					type: "array"
+																				}
 																				fileParameters: {
 																					items: {
 																						properties: {
@@ -210,6 +216,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					type: "array"
 																				}
 																				ignoreMissingValueFiles: type: "boolean"
+																				kubeVersion: type: "string"
+																				namespace: type: "string"
 																				parameters: {
 																					items: {
 																						properties: {
@@ -224,6 +232,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				passCredentials: type: "boolean"
 																				releaseName: type: "string"
 																				skipCrds: type: "boolean"
+																				skipSchemaValidation: type: "boolean"
+																				skipTests: type: "boolean"
 																				valueFiles: {
 																					items: type: "string"
 																					type: "array"
@@ -239,6 +249,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		}
 																		kustomize: {
 																			properties: {
+																				apiVersions: {
+																					items: type: "string"
+																					type: "array"
+																				}
 																				commonAnnotations: {
 																					additionalProperties: type: "string"
 																					type: "object"
@@ -254,10 +268,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				}
 																				forceCommonAnnotations: type: "boolean"
 																				forceCommonLabels: type: "boolean"
+																				ignoreMissingComponents: type: "boolean"
 																				images: {
 																					items: type: "string"
 																					type: "array"
 																				}
+																				kubeVersion: type: "string"
+																				labelIncludeTemplates: type: "boolean"
 																				labelWithoutSelector: type: "boolean"
 																				namePrefix: type: "string"
 																				nameSuffix: type: "string"
@@ -313,6 +330,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			type: "object"
 																		}
+																		name: type: "string"
 																		path: type: "string"
 																		plugin: {
 																			properties: {
@@ -357,6 +375,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		targetRevision: type: "string"
 																	}
 																	required: ["repoURL"]
+																	type: "object"
+																}
+																sourceHydrator: {
+																	properties: {
+																		drySource: {
+																			properties: {
+																				path: type: "string"
+																				repoURL: type: "string"
+																				targetRevision: type: "string"
+																			}
+																			required: [
+																				"path",
+																				"repoURL",
+																				"targetRevision",
+																			]
+																			type: "object"
+																		}
+																		hydrateTo: {
+																			properties: targetBranch: type: "string"
+																			required: ["targetBranch"]
+																			type: "object"
+																		}
+																		syncSource: {
+																			properties: {
+																				path: {
+																					minLength: 1
+																					pattern:   "^.{2,}|[^./]$"
+																					type:      "string"
+																				}
+																				targetBranch: type: "string"
+																			}
+																			required: [
+																				"path",
+																				"targetBranch",
+																			]
+																			type: "object"
+																		}
+																	}
+																	required: [
+																		"drySource",
+																		"syncSource",
+																	]
 																	type: "object"
 																}
 																sources: {
@@ -412,6 +472,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			helm: {
 																				properties: {
+																					apiVersions: {
+																						items: type: "string"
+																						type: "array"
+																					}
 																					fileParameters: {
 																						items: {
 																							properties: {
@@ -423,6 +487,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																						type: "array"
 																					}
 																					ignoreMissingValueFiles: type: "boolean"
+																					kubeVersion: type: "string"
+																					namespace: type: "string"
 																					parameters: {
 																						items: {
 																							properties: {
@@ -437,6 +503,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					passCredentials: type: "boolean"
 																					releaseName: type: "string"
 																					skipCrds: type: "boolean"
+																					skipSchemaValidation: type: "boolean"
+																					skipTests: type: "boolean"
 																					valueFiles: {
 																						items: type: "string"
 																						type: "array"
@@ -452,6 +520,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			kustomize: {
 																				properties: {
+																					apiVersions: {
+																						items: type: "string"
+																						type: "array"
+																					}
 																					commonAnnotations: {
 																						additionalProperties: type: "string"
 																						type: "object"
@@ -467,10 +539,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					}
 																					forceCommonAnnotations: type: "boolean"
 																					forceCommonLabels: type: "boolean"
+																					ignoreMissingComponents: type: "boolean"
 																					images: {
 																						items: type: "string"
 																						type: "array"
 																					}
+																					kubeVersion: type: "string"
+																					labelIncludeTemplates: type: "boolean"
 																					labelWithoutSelector: type: "boolean"
 																					namePrefix: type: "string"
 																					nameSuffix: type: "string"
@@ -526,6 +601,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				}
 																				type: "object"
 																			}
+																			name: type: "string"
 																			path: type: "string"
 																			plugin: {
 																				properties: {
@@ -579,6 +655,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		automated: {
 																			properties: {
 																				allowEmpty: type: "boolean"
+																				enabled: type: "boolean"
 																				prune: type: "boolean"
 																				selfHeal: type: "boolean"
 																			}
@@ -614,6 +691,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					format: "int64"
 																					type:   "integer"
 																				}
+																				refresh: type: "boolean"
 																			}
 																			type: "object"
 																		}
@@ -648,6 +726,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 										}
 										clusters: {
 											properties: {
+												flatList: type: "boolean"
 												selector: {
 													properties: {
 														matchExpressions: {
@@ -657,7 +736,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																	operator: type: "string"
 																	values: {
 																		items: type: "string"
-																		type: "array"
+																		type:                     "array"
+																		"x-kubernetes-list-type": "atomic"
 																	}
 																}
 																required: [
@@ -666,7 +746,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																]
 																type: "object"
 															}
-															type: "array"
+															type:                     "array"
+															"x-kubernetes-list-type": "atomic"
 														}
 														matchLabels: {
 															additionalProperties: type: "string"
@@ -803,6 +884,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		}
 																		helm: {
 																			properties: {
+																				apiVersions: {
+																					items: type: "string"
+																					type: "array"
+																				}
 																				fileParameters: {
 																					items: {
 																						properties: {
@@ -814,6 +899,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					type: "array"
 																				}
 																				ignoreMissingValueFiles: type: "boolean"
+																				kubeVersion: type: "string"
+																				namespace: type: "string"
 																				parameters: {
 																					items: {
 																						properties: {
@@ -828,6 +915,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				passCredentials: type: "boolean"
 																				releaseName: type: "string"
 																				skipCrds: type: "boolean"
+																				skipSchemaValidation: type: "boolean"
+																				skipTests: type: "boolean"
 																				valueFiles: {
 																					items: type: "string"
 																					type: "array"
@@ -843,6 +932,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		}
 																		kustomize: {
 																			properties: {
+																				apiVersions: {
+																					items: type: "string"
+																					type: "array"
+																				}
 																				commonAnnotations: {
 																					additionalProperties: type: "string"
 																					type: "object"
@@ -858,10 +951,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				}
 																				forceCommonAnnotations: type: "boolean"
 																				forceCommonLabels: type: "boolean"
+																				ignoreMissingComponents: type: "boolean"
 																				images: {
 																					items: type: "string"
 																					type: "array"
 																				}
+																				kubeVersion: type: "string"
+																				labelIncludeTemplates: type: "boolean"
 																				labelWithoutSelector: type: "boolean"
 																				namePrefix: type: "string"
 																				nameSuffix: type: "string"
@@ -917,6 +1013,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			type: "object"
 																		}
+																		name: type: "string"
 																		path: type: "string"
 																		plugin: {
 																			properties: {
@@ -961,6 +1058,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		targetRevision: type: "string"
 																	}
 																	required: ["repoURL"]
+																	type: "object"
+																}
+																sourceHydrator: {
+																	properties: {
+																		drySource: {
+																			properties: {
+																				path: type: "string"
+																				repoURL: type: "string"
+																				targetRevision: type: "string"
+																			}
+																			required: [
+																				"path",
+																				"repoURL",
+																				"targetRevision",
+																			]
+																			type: "object"
+																		}
+																		hydrateTo: {
+																			properties: targetBranch: type: "string"
+																			required: ["targetBranch"]
+																			type: "object"
+																		}
+																		syncSource: {
+																			properties: {
+																				path: {
+																					minLength: 1
+																					pattern:   "^.{2,}|[^./]$"
+																					type:      "string"
+																				}
+																				targetBranch: type: "string"
+																			}
+																			required: [
+																				"path",
+																				"targetBranch",
+																			]
+																			type: "object"
+																		}
+																	}
+																	required: [
+																		"drySource",
+																		"syncSource",
+																	]
 																	type: "object"
 																}
 																sources: {
@@ -1016,6 +1155,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			helm: {
 																				properties: {
+																					apiVersions: {
+																						items: type: "string"
+																						type: "array"
+																					}
 																					fileParameters: {
 																						items: {
 																							properties: {
@@ -1027,6 +1170,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																						type: "array"
 																					}
 																					ignoreMissingValueFiles: type: "boolean"
+																					kubeVersion: type: "string"
+																					namespace: type: "string"
 																					parameters: {
 																						items: {
 																							properties: {
@@ -1041,6 +1186,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					passCredentials: type: "boolean"
 																					releaseName: type: "string"
 																					skipCrds: type: "boolean"
+																					skipSchemaValidation: type: "boolean"
+																					skipTests: type: "boolean"
 																					valueFiles: {
 																						items: type: "string"
 																						type: "array"
@@ -1056,6 +1203,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			kustomize: {
 																				properties: {
+																					apiVersions: {
+																						items: type: "string"
+																						type: "array"
+																					}
 																					commonAnnotations: {
 																						additionalProperties: type: "string"
 																						type: "object"
@@ -1071,10 +1222,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					}
 																					forceCommonAnnotations: type: "boolean"
 																					forceCommonLabels: type: "boolean"
+																					ignoreMissingComponents: type: "boolean"
 																					images: {
 																						items: type: "string"
 																						type: "array"
 																					}
+																					kubeVersion: type: "string"
+																					labelIncludeTemplates: type: "boolean"
 																					labelWithoutSelector: type: "boolean"
 																					namePrefix: type: "string"
 																					nameSuffix: type: "string"
@@ -1130,6 +1284,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				}
 																				type: "object"
 																			}
+																			name: type: "string"
 																			path: type: "string"
 																			plugin: {
 																				properties: {
@@ -1183,6 +1338,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		automated: {
 																			properties: {
 																				allowEmpty: type: "boolean"
+																				enabled: type: "boolean"
 																				prune: type: "boolean"
 																				selfHeal: type: "boolean"
 																			}
@@ -1218,6 +1374,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					format: "int64"
 																					type:   "integer"
 																				}
+																				refresh: type: "boolean"
 																			}
 																			type: "object"
 																		}
@@ -1264,7 +1421,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 												}
 												files: {
 													items: {
-														properties: path: type: "string"
+														properties: {
+															exclude: type: "boolean"
+															path: type: "string"
+														}
 														required: ["path"]
 														type: "object"
 													}
@@ -1404,6 +1564,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		}
 																		helm: {
 																			properties: {
+																				apiVersions: {
+																					items: type: "string"
+																					type: "array"
+																				}
 																				fileParameters: {
 																					items: {
 																						properties: {
@@ -1415,6 +1579,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					type: "array"
 																				}
 																				ignoreMissingValueFiles: type: "boolean"
+																				kubeVersion: type: "string"
+																				namespace: type: "string"
 																				parameters: {
 																					items: {
 																						properties: {
@@ -1429,6 +1595,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				passCredentials: type: "boolean"
 																				releaseName: type: "string"
 																				skipCrds: type: "boolean"
+																				skipSchemaValidation: type: "boolean"
+																				skipTests: type: "boolean"
 																				valueFiles: {
 																					items: type: "string"
 																					type: "array"
@@ -1444,6 +1612,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		}
 																		kustomize: {
 																			properties: {
+																				apiVersions: {
+																					items: type: "string"
+																					type: "array"
+																				}
 																				commonAnnotations: {
 																					additionalProperties: type: "string"
 																					type: "object"
@@ -1459,10 +1631,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				}
 																				forceCommonAnnotations: type: "boolean"
 																				forceCommonLabels: type: "boolean"
+																				ignoreMissingComponents: type: "boolean"
 																				images: {
 																					items: type: "string"
 																					type: "array"
 																				}
+																				kubeVersion: type: "string"
+																				labelIncludeTemplates: type: "boolean"
 																				labelWithoutSelector: type: "boolean"
 																				namePrefix: type: "string"
 																				nameSuffix: type: "string"
@@ -1518,6 +1693,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			type: "object"
 																		}
+																		name: type: "string"
 																		path: type: "string"
 																		plugin: {
 																			properties: {
@@ -1562,6 +1738,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		targetRevision: type: "string"
 																	}
 																	required: ["repoURL"]
+																	type: "object"
+																}
+																sourceHydrator: {
+																	properties: {
+																		drySource: {
+																			properties: {
+																				path: type: "string"
+																				repoURL: type: "string"
+																				targetRevision: type: "string"
+																			}
+																			required: [
+																				"path",
+																				"repoURL",
+																				"targetRevision",
+																			]
+																			type: "object"
+																		}
+																		hydrateTo: {
+																			properties: targetBranch: type: "string"
+																			required: ["targetBranch"]
+																			type: "object"
+																		}
+																		syncSource: {
+																			properties: {
+																				path: {
+																					minLength: 1
+																					pattern:   "^.{2,}|[^./]$"
+																					type:      "string"
+																				}
+																				targetBranch: type: "string"
+																			}
+																			required: [
+																				"path",
+																				"targetBranch",
+																			]
+																			type: "object"
+																		}
+																	}
+																	required: [
+																		"drySource",
+																		"syncSource",
+																	]
 																	type: "object"
 																}
 																sources: {
@@ -1617,6 +1835,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			helm: {
 																				properties: {
+																					apiVersions: {
+																						items: type: "string"
+																						type: "array"
+																					}
 																					fileParameters: {
 																						items: {
 																							properties: {
@@ -1628,6 +1850,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																						type: "array"
 																					}
 																					ignoreMissingValueFiles: type: "boolean"
+																					kubeVersion: type: "string"
+																					namespace: type: "string"
 																					parameters: {
 																						items: {
 																							properties: {
@@ -1642,6 +1866,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					passCredentials: type: "boolean"
 																					releaseName: type: "string"
 																					skipCrds: type: "boolean"
+																					skipSchemaValidation: type: "boolean"
+																					skipTests: type: "boolean"
 																					valueFiles: {
 																						items: type: "string"
 																						type: "array"
@@ -1657,6 +1883,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			kustomize: {
 																				properties: {
+																					apiVersions: {
+																						items: type: "string"
+																						type: "array"
+																					}
 																					commonAnnotations: {
 																						additionalProperties: type: "string"
 																						type: "object"
@@ -1672,10 +1902,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					}
 																					forceCommonAnnotations: type: "boolean"
 																					forceCommonLabels: type: "boolean"
+																					ignoreMissingComponents: type: "boolean"
 																					images: {
 																						items: type: "string"
 																						type: "array"
 																					}
+																					kubeVersion: type: "string"
+																					labelIncludeTemplates: type: "boolean"
 																					labelWithoutSelector: type: "boolean"
 																					namePrefix: type: "string"
 																					nameSuffix: type: "string"
@@ -1731,6 +1964,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				}
 																				type: "object"
 																			}
+																			name: type: "string"
 																			path: type: "string"
 																			plugin: {
 																				properties: {
@@ -1784,6 +2018,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		automated: {
 																			properties: {
 																				allowEmpty: type: "boolean"
+																				enabled: type: "boolean"
 																				prune: type: "boolean"
 																				selfHeal: type: "boolean"
 																			}
@@ -1819,6 +2054,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					format: "int64"
 																					type:   "integer"
 																				}
+																				refresh: type: "boolean"
 																			}
 																			type: "object"
 																		}
@@ -1988,6 +2224,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		}
 																		helm: {
 																			properties: {
+																				apiVersions: {
+																					items: type: "string"
+																					type: "array"
+																				}
 																				fileParameters: {
 																					items: {
 																						properties: {
@@ -1999,6 +2239,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					type: "array"
 																				}
 																				ignoreMissingValueFiles: type: "boolean"
+																				kubeVersion: type: "string"
+																				namespace: type: "string"
 																				parameters: {
 																					items: {
 																						properties: {
@@ -2013,6 +2255,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				passCredentials: type: "boolean"
 																				releaseName: type: "string"
 																				skipCrds: type: "boolean"
+																				skipSchemaValidation: type: "boolean"
+																				skipTests: type: "boolean"
 																				valueFiles: {
 																					items: type: "string"
 																					type: "array"
@@ -2028,6 +2272,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		}
 																		kustomize: {
 																			properties: {
+																				apiVersions: {
+																					items: type: "string"
+																					type: "array"
+																				}
 																				commonAnnotations: {
 																					additionalProperties: type: "string"
 																					type: "object"
@@ -2043,10 +2291,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				}
 																				forceCommonAnnotations: type: "boolean"
 																				forceCommonLabels: type: "boolean"
+																				ignoreMissingComponents: type: "boolean"
 																				images: {
 																					items: type: "string"
 																					type: "array"
 																				}
+																				kubeVersion: type: "string"
+																				labelIncludeTemplates: type: "boolean"
 																				labelWithoutSelector: type: "boolean"
 																				namePrefix: type: "string"
 																				nameSuffix: type: "string"
@@ -2102,6 +2353,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			type: "object"
 																		}
+																		name: type: "string"
 																		path: type: "string"
 																		plugin: {
 																			properties: {
@@ -2146,6 +2398,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		targetRevision: type: "string"
 																	}
 																	required: ["repoURL"]
+																	type: "object"
+																}
+																sourceHydrator: {
+																	properties: {
+																		drySource: {
+																			properties: {
+																				path: type: "string"
+																				repoURL: type: "string"
+																				targetRevision: type: "string"
+																			}
+																			required: [
+																				"path",
+																				"repoURL",
+																				"targetRevision",
+																			]
+																			type: "object"
+																		}
+																		hydrateTo: {
+																			properties: targetBranch: type: "string"
+																			required: ["targetBranch"]
+																			type: "object"
+																		}
+																		syncSource: {
+																			properties: {
+																				path: {
+																					minLength: 1
+																					pattern:   "^.{2,}|[^./]$"
+																					type:      "string"
+																				}
+																				targetBranch: type: "string"
+																			}
+																			required: [
+																				"path",
+																				"targetBranch",
+																			]
+																			type: "object"
+																		}
+																	}
+																	required: [
+																		"drySource",
+																		"syncSource",
+																	]
 																	type: "object"
 																}
 																sources: {
@@ -2201,6 +2495,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			helm: {
 																				properties: {
+																					apiVersions: {
+																						items: type: "string"
+																						type: "array"
+																					}
 																					fileParameters: {
 																						items: {
 																							properties: {
@@ -2212,6 +2510,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																						type: "array"
 																					}
 																					ignoreMissingValueFiles: type: "boolean"
+																					kubeVersion: type: "string"
+																					namespace: type: "string"
 																					parameters: {
 																						items: {
 																							properties: {
@@ -2226,6 +2526,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					passCredentials: type: "boolean"
 																					releaseName: type: "string"
 																					skipCrds: type: "boolean"
+																					skipSchemaValidation: type: "boolean"
+																					skipTests: type: "boolean"
 																					valueFiles: {
 																						items: type: "string"
 																						type: "array"
@@ -2241,6 +2543,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			kustomize: {
 																				properties: {
+																					apiVersions: {
+																						items: type: "string"
+																						type: "array"
+																					}
 																					commonAnnotations: {
 																						additionalProperties: type: "string"
 																						type: "object"
@@ -2256,10 +2562,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					}
 																					forceCommonAnnotations: type: "boolean"
 																					forceCommonLabels: type: "boolean"
+																					ignoreMissingComponents: type: "boolean"
 																					images: {
 																						items: type: "string"
 																						type: "array"
 																					}
+																					kubeVersion: type: "string"
+																					labelIncludeTemplates: type: "boolean"
 																					labelWithoutSelector: type: "boolean"
 																					namePrefix: type: "string"
 																					nameSuffix: type: "string"
@@ -2315,6 +2624,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				}
 																				type: "object"
 																			}
+																			name: type: "string"
 																			path: type: "string"
 																			plugin: {
 																				properties: {
@@ -2368,6 +2678,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		automated: {
 																			properties: {
 																				allowEmpty: type: "boolean"
+																				enabled: type: "boolean"
 																				prune: type: "boolean"
 																				selfHeal: type: "boolean"
 																			}
@@ -2403,6 +2714,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					format: "int64"
 																					type:   "integer"
 																				}
+																				refresh: type: "boolean"
 																			}
 																			type: "object"
 																		}
@@ -2447,7 +2759,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																						operator: type: "string"
 																						values: {
 																							items: type: "string"
-																							type: "array"
+																							type:                     "array"
+																							"x-kubernetes-list-type": "atomic"
 																						}
 																					}
 																					required: [
@@ -2456,7 +2769,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					]
 																					type: "object"
 																				}
-																				type: "array"
+																				type:                     "array"
+																				"x-kubernetes-list-type": "atomic"
 																			}
 																			matchLabels: {
 																				additionalProperties: type: "string"
@@ -2598,6 +2912,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							helm: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									fileParameters: {
 																										items: {
 																											properties: {
@@ -2609,6 +2927,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										type: "array"
 																									}
 																									ignoreMissingValueFiles: type: "boolean"
+																									kubeVersion: type: "string"
+																									namespace: type: "string"
 																									parameters: {
 																										items: {
 																											properties: {
@@ -2623,6 +2943,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									passCredentials: type: "boolean"
 																									releaseName: type: "string"
 																									skipCrds: type: "boolean"
+																									skipSchemaValidation: type: "boolean"
+																									skipTests: type: "boolean"
 																									valueFiles: {
 																										items: type: "string"
 																										type: "array"
@@ -2638,6 +2960,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							kustomize: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									commonAnnotations: {
 																										additionalProperties: type: "string"
 																										type: "object"
@@ -2653,10 +2979,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									forceCommonAnnotations: type: "boolean"
 																									forceCommonLabels: type: "boolean"
+																									ignoreMissingComponents: type: "boolean"
 																									images: {
 																										items: type: "string"
 																										type: "array"
 																									}
+																									kubeVersion: type: "string"
+																									labelIncludeTemplates: type: "boolean"
 																									labelWithoutSelector: type: "boolean"
 																									namePrefix: type: "string"
 																									nameSuffix: type: "string"
@@ -2712,6 +3041,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								type: "object"
 																							}
+																							name: type: "string"
 																							path: type: "string"
 																							plugin: {
 																								properties: {
@@ -2756,6 +3086,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							targetRevision: type: "string"
 																						}
 																						required: ["repoURL"]
+																						type: "object"
+																					}
+																					sourceHydrator: {
+																						properties: {
+																							drySource: {
+																								properties: {
+																									path: type: "string"
+																									repoURL: type: "string"
+																									targetRevision: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"repoURL",
+																									"targetRevision",
+																								]
+																								type: "object"
+																							}
+																							hydrateTo: {
+																								properties: targetBranch: type: "string"
+																								required: ["targetBranch"]
+																								type: "object"
+																							}
+																							syncSource: {
+																								properties: {
+																									path: {
+																										minLength: 1
+																										pattern:   "^.{2,}|[^./]$"
+																										type:      "string"
+																									}
+																									targetBranch: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"targetBranch",
+																								]
+																								type: "object"
+																							}
+																						}
+																						required: [
+																							"drySource",
+																							"syncSource",
+																						]
 																						type: "object"
 																					}
 																					sources: {
@@ -2811,6 +3183,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								helm: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										fileParameters: {
 																											items: {
 																												properties: {
@@ -2822,6 +3198,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																											type: "array"
 																										}
 																										ignoreMissingValueFiles: type: "boolean"
+																										kubeVersion: type: "string"
+																										namespace: type: "string"
 																										parameters: {
 																											items: {
 																												properties: {
@@ -2836,6 +3214,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										passCredentials: type: "boolean"
 																										releaseName: type: "string"
 																										skipCrds: type: "boolean"
+																										skipSchemaValidation: type: "boolean"
+																										skipTests: type: "boolean"
 																										valueFiles: {
 																											items: type: "string"
 																											type: "array"
@@ -2851,6 +3231,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								kustomize: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										commonAnnotations: {
 																											additionalProperties: type: "string"
 																											type: "object"
@@ -2866,10 +3250,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										}
 																										forceCommonAnnotations: type: "boolean"
 																										forceCommonLabels: type: "boolean"
+																										ignoreMissingComponents: type: "boolean"
 																										images: {
 																											items: type: "string"
 																											type: "array"
 																										}
+																										kubeVersion: type: "string"
+																										labelIncludeTemplates: type: "boolean"
 																										labelWithoutSelector: type: "boolean"
 																										namePrefix: type: "string"
 																										nameSuffix: type: "string"
@@ -2925,6 +3312,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									type: "object"
 																								}
+																								name: type: "string"
 																								path: type: "string"
 																								plugin: {
 																									properties: {
@@ -2978,6 +3366,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							automated: {
 																								properties: {
 																									allowEmpty: type: "boolean"
+																									enabled: type: "boolean"
 																									prune: type: "boolean"
 																									selfHeal: type: "boolean"
 																								}
@@ -3013,6 +3402,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										format: "int64"
 																										type:   "integer"
 																									}
+																									refresh: type: "boolean"
 																								}
 																								type: "object"
 																							}
@@ -3047,6 +3437,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 															}
 															clusters: {
 																properties: {
+																	flatList: type: "boolean"
 																	selector: {
 																		properties: {
 																			matchExpressions: {
@@ -3056,7 +3447,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																						operator: type: "string"
 																						values: {
 																							items: type: "string"
-																							type: "array"
+																							type:                     "array"
+																							"x-kubernetes-list-type": "atomic"
 																						}
 																					}
 																					required: [
@@ -3065,7 +3457,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					]
 																					type: "object"
 																				}
-																				type: "array"
+																				type:                     "array"
+																				"x-kubernetes-list-type": "atomic"
 																			}
 																			matchLabels: {
 																				additionalProperties: type: "string"
@@ -3202,6 +3595,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							helm: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									fileParameters: {
 																										items: {
 																											properties: {
@@ -3213,6 +3610,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										type: "array"
 																									}
 																									ignoreMissingValueFiles: type: "boolean"
+																									kubeVersion: type: "string"
+																									namespace: type: "string"
 																									parameters: {
 																										items: {
 																											properties: {
@@ -3227,6 +3626,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									passCredentials: type: "boolean"
 																									releaseName: type: "string"
 																									skipCrds: type: "boolean"
+																									skipSchemaValidation: type: "boolean"
+																									skipTests: type: "boolean"
 																									valueFiles: {
 																										items: type: "string"
 																										type: "array"
@@ -3242,6 +3643,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							kustomize: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									commonAnnotations: {
 																										additionalProperties: type: "string"
 																										type: "object"
@@ -3257,10 +3662,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									forceCommonAnnotations: type: "boolean"
 																									forceCommonLabels: type: "boolean"
+																									ignoreMissingComponents: type: "boolean"
 																									images: {
 																										items: type: "string"
 																										type: "array"
 																									}
+																									kubeVersion: type: "string"
+																									labelIncludeTemplates: type: "boolean"
 																									labelWithoutSelector: type: "boolean"
 																									namePrefix: type: "string"
 																									nameSuffix: type: "string"
@@ -3316,6 +3724,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								type: "object"
 																							}
+																							name: type: "string"
 																							path: type: "string"
 																							plugin: {
 																								properties: {
@@ -3360,6 +3769,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							targetRevision: type: "string"
 																						}
 																						required: ["repoURL"]
+																						type: "object"
+																					}
+																					sourceHydrator: {
+																						properties: {
+																							drySource: {
+																								properties: {
+																									path: type: "string"
+																									repoURL: type: "string"
+																									targetRevision: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"repoURL",
+																									"targetRevision",
+																								]
+																								type: "object"
+																							}
+																							hydrateTo: {
+																								properties: targetBranch: type: "string"
+																								required: ["targetBranch"]
+																								type: "object"
+																							}
+																							syncSource: {
+																								properties: {
+																									path: {
+																										minLength: 1
+																										pattern:   "^.{2,}|[^./]$"
+																										type:      "string"
+																									}
+																									targetBranch: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"targetBranch",
+																								]
+																								type: "object"
+																							}
+																						}
+																						required: [
+																							"drySource",
+																							"syncSource",
+																						]
 																						type: "object"
 																					}
 																					sources: {
@@ -3415,6 +3866,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								helm: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										fileParameters: {
 																											items: {
 																												properties: {
@@ -3426,6 +3881,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																											type: "array"
 																										}
 																										ignoreMissingValueFiles: type: "boolean"
+																										kubeVersion: type: "string"
+																										namespace: type: "string"
 																										parameters: {
 																											items: {
 																												properties: {
@@ -3440,6 +3897,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										passCredentials: type: "boolean"
 																										releaseName: type: "string"
 																										skipCrds: type: "boolean"
+																										skipSchemaValidation: type: "boolean"
+																										skipTests: type: "boolean"
 																										valueFiles: {
 																											items: type: "string"
 																											type: "array"
@@ -3455,6 +3914,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								kustomize: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										commonAnnotations: {
 																											additionalProperties: type: "string"
 																											type: "object"
@@ -3470,10 +3933,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										}
 																										forceCommonAnnotations: type: "boolean"
 																										forceCommonLabels: type: "boolean"
+																										ignoreMissingComponents: type: "boolean"
 																										images: {
 																											items: type: "string"
 																											type: "array"
 																										}
+																										kubeVersion: type: "string"
+																										labelIncludeTemplates: type: "boolean"
 																										labelWithoutSelector: type: "boolean"
 																										namePrefix: type: "string"
 																										nameSuffix: type: "string"
@@ -3529,6 +3995,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									type: "object"
 																								}
+																								name: type: "string"
 																								path: type: "string"
 																								plugin: {
 																									properties: {
@@ -3582,6 +4049,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							automated: {
 																								properties: {
 																									allowEmpty: type: "boolean"
+																									enabled: type: "boolean"
 																									prune: type: "boolean"
 																									selfHeal: type: "boolean"
 																								}
@@ -3617,6 +4085,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										format: "int64"
 																										type:   "integer"
 																									}
+																									refresh: type: "boolean"
 																								}
 																								type: "object"
 																							}
@@ -3663,7 +4132,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																	}
 																	files: {
 																		items: {
-																			properties: path: type: "string"
+																			properties: {
+																				exclude: type: "boolean"
+																				path: type: "string"
+																			}
 																			required: ["path"]
 																			type: "object"
 																		}
@@ -3803,6 +4275,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							helm: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									fileParameters: {
 																										items: {
 																											properties: {
@@ -3814,6 +4290,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										type: "array"
 																									}
 																									ignoreMissingValueFiles: type: "boolean"
+																									kubeVersion: type: "string"
+																									namespace: type: "string"
 																									parameters: {
 																										items: {
 																											properties: {
@@ -3828,6 +4306,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									passCredentials: type: "boolean"
 																									releaseName: type: "string"
 																									skipCrds: type: "boolean"
+																									skipSchemaValidation: type: "boolean"
+																									skipTests: type: "boolean"
 																									valueFiles: {
 																										items: type: "string"
 																										type: "array"
@@ -3843,6 +4323,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							kustomize: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									commonAnnotations: {
 																										additionalProperties: type: "string"
 																										type: "object"
@@ -3858,10 +4342,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									forceCommonAnnotations: type: "boolean"
 																									forceCommonLabels: type: "boolean"
+																									ignoreMissingComponents: type: "boolean"
 																									images: {
 																										items: type: "string"
 																										type: "array"
 																									}
+																									kubeVersion: type: "string"
+																									labelIncludeTemplates: type: "boolean"
 																									labelWithoutSelector: type: "boolean"
 																									namePrefix: type: "string"
 																									nameSuffix: type: "string"
@@ -3917,6 +4404,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								type: "object"
 																							}
+																							name: type: "string"
 																							path: type: "string"
 																							plugin: {
 																								properties: {
@@ -3961,6 +4449,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							targetRevision: type: "string"
 																						}
 																						required: ["repoURL"]
+																						type: "object"
+																					}
+																					sourceHydrator: {
+																						properties: {
+																							drySource: {
+																								properties: {
+																									path: type: "string"
+																									repoURL: type: "string"
+																									targetRevision: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"repoURL",
+																									"targetRevision",
+																								]
+																								type: "object"
+																							}
+																							hydrateTo: {
+																								properties: targetBranch: type: "string"
+																								required: ["targetBranch"]
+																								type: "object"
+																							}
+																							syncSource: {
+																								properties: {
+																									path: {
+																										minLength: 1
+																										pattern:   "^.{2,}|[^./]$"
+																										type:      "string"
+																									}
+																									targetBranch: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"targetBranch",
+																								]
+																								type: "object"
+																							}
+																						}
+																						required: [
+																							"drySource",
+																							"syncSource",
+																						]
 																						type: "object"
 																					}
 																					sources: {
@@ -4016,6 +4546,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								helm: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										fileParameters: {
 																											items: {
 																												properties: {
@@ -4027,6 +4561,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																											type: "array"
 																										}
 																										ignoreMissingValueFiles: type: "boolean"
+																										kubeVersion: type: "string"
+																										namespace: type: "string"
 																										parameters: {
 																											items: {
 																												properties: {
@@ -4041,6 +4577,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										passCredentials: type: "boolean"
 																										releaseName: type: "string"
 																										skipCrds: type: "boolean"
+																										skipSchemaValidation: type: "boolean"
+																										skipTests: type: "boolean"
 																										valueFiles: {
 																											items: type: "string"
 																											type: "array"
@@ -4056,6 +4594,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								kustomize: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										commonAnnotations: {
 																											additionalProperties: type: "string"
 																											type: "object"
@@ -4071,10 +4613,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										}
 																										forceCommonAnnotations: type: "boolean"
 																										forceCommonLabels: type: "boolean"
+																										ignoreMissingComponents: type: "boolean"
 																										images: {
 																											items: type: "string"
 																											type: "array"
 																										}
+																										kubeVersion: type: "string"
+																										labelIncludeTemplates: type: "boolean"
 																										labelWithoutSelector: type: "boolean"
 																										namePrefix: type: "string"
 																										nameSuffix: type: "string"
@@ -4130,6 +4675,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									type: "object"
 																								}
+																								name: type: "string"
 																								path: type: "string"
 																								plugin: {
 																									properties: {
@@ -4183,6 +4729,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							automated: {
 																								properties: {
 																									allowEmpty: type: "boolean"
+																									enabled: type: "boolean"
 																									prune: type: "boolean"
 																									selfHeal: type: "boolean"
 																								}
@@ -4218,6 +4765,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										format: "int64"
 																										type:   "integer"
 																									}
+																									refresh: type: "boolean"
 																								}
 																								type: "object"
 																							}
@@ -4387,6 +4935,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							helm: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									fileParameters: {
 																										items: {
 																											properties: {
@@ -4398,6 +4950,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										type: "array"
 																									}
 																									ignoreMissingValueFiles: type: "boolean"
+																									kubeVersion: type: "string"
+																									namespace: type: "string"
 																									parameters: {
 																										items: {
 																											properties: {
@@ -4412,6 +4966,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									passCredentials: type: "boolean"
 																									releaseName: type: "string"
 																									skipCrds: type: "boolean"
+																									skipSchemaValidation: type: "boolean"
+																									skipTests: type: "boolean"
 																									valueFiles: {
 																										items: type: "string"
 																										type: "array"
@@ -4427,6 +4983,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							kustomize: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									commonAnnotations: {
 																										additionalProperties: type: "string"
 																										type: "object"
@@ -4442,10 +5002,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									forceCommonAnnotations: type: "boolean"
 																									forceCommonLabels: type: "boolean"
+																									ignoreMissingComponents: type: "boolean"
 																									images: {
 																										items: type: "string"
 																										type: "array"
 																									}
+																									kubeVersion: type: "string"
+																									labelIncludeTemplates: type: "boolean"
 																									labelWithoutSelector: type: "boolean"
 																									namePrefix: type: "string"
 																									nameSuffix: type: "string"
@@ -4501,6 +5064,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								type: "object"
 																							}
+																							name: type: "string"
 																							path: type: "string"
 																							plugin: {
 																								properties: {
@@ -4545,6 +5109,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							targetRevision: type: "string"
 																						}
 																						required: ["repoURL"]
+																						type: "object"
+																					}
+																					sourceHydrator: {
+																						properties: {
+																							drySource: {
+																								properties: {
+																									path: type: "string"
+																									repoURL: type: "string"
+																									targetRevision: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"repoURL",
+																									"targetRevision",
+																								]
+																								type: "object"
+																							}
+																							hydrateTo: {
+																								properties: targetBranch: type: "string"
+																								required: ["targetBranch"]
+																								type: "object"
+																							}
+																							syncSource: {
+																								properties: {
+																									path: {
+																										minLength: 1
+																										pattern:   "^.{2,}|[^./]$"
+																										type:      "string"
+																									}
+																									targetBranch: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"targetBranch",
+																								]
+																								type: "object"
+																							}
+																						}
+																						required: [
+																							"drySource",
+																							"syncSource",
+																						]
 																						type: "object"
 																					}
 																					sources: {
@@ -4600,6 +5206,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								helm: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										fileParameters: {
 																											items: {
 																												properties: {
@@ -4611,6 +5221,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																											type: "array"
 																										}
 																										ignoreMissingValueFiles: type: "boolean"
+																										kubeVersion: type: "string"
+																										namespace: type: "string"
 																										parameters: {
 																											items: {
 																												properties: {
@@ -4625,6 +5237,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										passCredentials: type: "boolean"
 																										releaseName: type: "string"
 																										skipCrds: type: "boolean"
+																										skipSchemaValidation: type: "boolean"
+																										skipTests: type: "boolean"
 																										valueFiles: {
 																											items: type: "string"
 																											type: "array"
@@ -4640,6 +5254,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								kustomize: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										commonAnnotations: {
 																											additionalProperties: type: "string"
 																											type: "object"
@@ -4655,10 +5273,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										}
 																										forceCommonAnnotations: type: "boolean"
 																										forceCommonLabels: type: "boolean"
+																										ignoreMissingComponents: type: "boolean"
 																										images: {
 																											items: type: "string"
 																											type: "array"
 																										}
+																										kubeVersion: type: "string"
+																										labelIncludeTemplates: type: "boolean"
 																										labelWithoutSelector: type: "boolean"
 																										namePrefix: type: "string"
 																										nameSuffix: type: "string"
@@ -4714,6 +5335,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									type: "object"
 																								}
+																								name: type: "string"
 																								path: type: "string"
 																								plugin: {
 																									properties: {
@@ -4767,6 +5389,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							automated: {
 																								properties: {
 																									allowEmpty: type: "boolean"
+																									enabled: type: "boolean"
 																									prune: type: "boolean"
 																									selfHeal: type: "boolean"
 																								}
@@ -4802,6 +5425,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										format: "int64"
 																										type:   "integer"
 																									}
+																									refresh: type: "boolean"
 																								}
 																								type: "object"
 																							}
@@ -4976,6 +5600,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							helm: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									fileParameters: {
 																										items: {
 																											properties: {
@@ -4987,6 +5615,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										type: "array"
 																									}
 																									ignoreMissingValueFiles: type: "boolean"
+																									kubeVersion: type: "string"
+																									namespace: type: "string"
 																									parameters: {
 																										items: {
 																											properties: {
@@ -5001,6 +5631,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									passCredentials: type: "boolean"
 																									releaseName: type: "string"
 																									skipCrds: type: "boolean"
+																									skipSchemaValidation: type: "boolean"
+																									skipTests: type: "boolean"
 																									valueFiles: {
 																										items: type: "string"
 																										type: "array"
@@ -5016,6 +5648,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							kustomize: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									commonAnnotations: {
 																										additionalProperties: type: "string"
 																										type: "object"
@@ -5031,10 +5667,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									forceCommonAnnotations: type: "boolean"
 																									forceCommonLabels: type: "boolean"
+																									ignoreMissingComponents: type: "boolean"
 																									images: {
 																										items: type: "string"
 																										type: "array"
 																									}
+																									kubeVersion: type: "string"
+																									labelIncludeTemplates: type: "boolean"
 																									labelWithoutSelector: type: "boolean"
 																									namePrefix: type: "string"
 																									nameSuffix: type: "string"
@@ -5090,6 +5729,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								type: "object"
 																							}
+																							name: type: "string"
 																							path: type: "string"
 																							plugin: {
 																								properties: {
@@ -5134,6 +5774,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							targetRevision: type: "string"
 																						}
 																						required: ["repoURL"]
+																						type: "object"
+																					}
+																					sourceHydrator: {
+																						properties: {
+																							drySource: {
+																								properties: {
+																									path: type: "string"
+																									repoURL: type: "string"
+																									targetRevision: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"repoURL",
+																									"targetRevision",
+																								]
+																								type: "object"
+																							}
+																							hydrateTo: {
+																								properties: targetBranch: type: "string"
+																								required: ["targetBranch"]
+																								type: "object"
+																							}
+																							syncSource: {
+																								properties: {
+																									path: {
+																										minLength: 1
+																										pattern:   "^.{2,}|[^./]$"
+																										type:      "string"
+																									}
+																									targetBranch: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"targetBranch",
+																								]
+																								type: "object"
+																							}
+																						}
+																						required: [
+																							"drySource",
+																							"syncSource",
+																						]
 																						type: "object"
 																					}
 																					sources: {
@@ -5189,6 +5871,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								helm: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										fileParameters: {
 																											items: {
 																												properties: {
@@ -5200,6 +5886,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																											type: "array"
 																										}
 																										ignoreMissingValueFiles: type: "boolean"
+																										kubeVersion: type: "string"
+																										namespace: type: "string"
 																										parameters: {
 																											items: {
 																												properties: {
@@ -5214,6 +5902,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										passCredentials: type: "boolean"
 																										releaseName: type: "string"
 																										skipCrds: type: "boolean"
+																										skipSchemaValidation: type: "boolean"
+																										skipTests: type: "boolean"
 																										valueFiles: {
 																											items: type: "string"
 																											type: "array"
@@ -5229,6 +5919,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								kustomize: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										commonAnnotations: {
 																											additionalProperties: type: "string"
 																											type: "object"
@@ -5244,10 +5938,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										}
 																										forceCommonAnnotations: type: "boolean"
 																										forceCommonLabels: type: "boolean"
+																										ignoreMissingComponents: type: "boolean"
 																										images: {
 																											items: type: "string"
 																											type: "array"
 																										}
+																										kubeVersion: type: "string"
+																										labelIncludeTemplates: type: "boolean"
 																										labelWithoutSelector: type: "boolean"
 																										namePrefix: type: "string"
 																										nameSuffix: type: "string"
@@ -5303,6 +6000,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									type: "object"
 																								}
+																								name: type: "string"
 																								path: type: "string"
 																								plugin: {
 																									properties: {
@@ -5356,6 +6054,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							automated: {
 																								properties: {
 																									allowEmpty: type: "boolean"
+																									enabled: type: "boolean"
 																									prune: type: "boolean"
 																									selfHeal: type: "boolean"
 																								}
@@ -5391,6 +6090,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										format: "int64"
 																										type:   "integer"
 																									}
+																									refresh: type: "boolean"
 																								}
 																								type: "object"
 																							}
@@ -5526,6 +6226,33 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				]
 																				type: "object"
 																			}
+																			bearerToken: {
+																				properties: tokenRef: {
+																					properties: {
+																						key: type: "string"
+																						secretName: type: "string"
+																					}
+																					required: [
+																						"key",
+																						"secretName",
+																					]
+																					type: "object"
+																				}
+																				required: ["tokenRef"]
+																				type: "object"
+																			}
+																			caRef: {
+																				properties: {
+																					configMapName: type: "string"
+																					key: type: "string"
+																				}
+																				required: [
+																					"configMapName",
+																					"key",
+																				]
+																				type: "object"
+																			}
+																			insecure: type: "boolean"
 																			project: type: "string"
 																			repo: type: "string"
 																		}
@@ -5536,11 +6263,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		]
 																		type: "object"
 																	}
+																	continueOnRepoNotFoundError: type: "boolean"
 																	filters: {
 																		items: {
 																			properties: {
 																				branchMatch: type: "string"
 																				targetBranchMatch: type: "string"
+																				titleMatch: type: "string"
 																			}
 																			type: "object"
 																		}
@@ -5550,6 +6279,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		properties: {
 																			api: type: "string"
 																			insecure: type: "boolean"
+																			labels: {
+																				items: type: "string"
+																				type: "array"
+																			}
 																			owner: type: "string"
 																			repo: type: "string"
 																			tokenRef: {
@@ -5602,6 +6335,17 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																	gitlab: {
 																		properties: {
 																			api: type: "string"
+																			caRef: {
+																				properties: {
+																					configMapName: type: "string"
+																					key: type: "string"
+																				}
+																				required: [
+																					"configMapName",
+																					"key",
+																				]
+																				type: "object"
+																			}
 																			insecure: type: "boolean"
 																			labels: {
 																				items: type: "string"
@@ -5755,6 +6499,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							helm: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									fileParameters: {
 																										items: {
 																											properties: {
@@ -5766,6 +6514,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										type: "array"
 																									}
 																									ignoreMissingValueFiles: type: "boolean"
+																									kubeVersion: type: "string"
+																									namespace: type: "string"
 																									parameters: {
 																										items: {
 																											properties: {
@@ -5780,6 +6530,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									passCredentials: type: "boolean"
 																									releaseName: type: "string"
 																									skipCrds: type: "boolean"
+																									skipSchemaValidation: type: "boolean"
+																									skipTests: type: "boolean"
 																									valueFiles: {
 																										items: type: "string"
 																										type: "array"
@@ -5795,6 +6547,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							kustomize: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									commonAnnotations: {
 																										additionalProperties: type: "string"
 																										type: "object"
@@ -5810,10 +6566,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									forceCommonAnnotations: type: "boolean"
 																									forceCommonLabels: type: "boolean"
+																									ignoreMissingComponents: type: "boolean"
 																									images: {
 																										items: type: "string"
 																										type: "array"
 																									}
+																									kubeVersion: type: "string"
+																									labelIncludeTemplates: type: "boolean"
 																									labelWithoutSelector: type: "boolean"
 																									namePrefix: type: "string"
 																									nameSuffix: type: "string"
@@ -5869,6 +6628,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								type: "object"
 																							}
+																							name: type: "string"
 																							path: type: "string"
 																							plugin: {
 																								properties: {
@@ -5913,6 +6673,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							targetRevision: type: "string"
 																						}
 																						required: ["repoURL"]
+																						type: "object"
+																					}
+																					sourceHydrator: {
+																						properties: {
+																							drySource: {
+																								properties: {
+																									path: type: "string"
+																									repoURL: type: "string"
+																									targetRevision: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"repoURL",
+																									"targetRevision",
+																								]
+																								type: "object"
+																							}
+																							hydrateTo: {
+																								properties: targetBranch: type: "string"
+																								required: ["targetBranch"]
+																								type: "object"
+																							}
+																							syncSource: {
+																								properties: {
+																									path: {
+																										minLength: 1
+																										pattern:   "^.{2,}|[^./]$"
+																										type:      "string"
+																									}
+																									targetBranch: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"targetBranch",
+																								]
+																								type: "object"
+																							}
+																						}
+																						required: [
+																							"drySource",
+																							"syncSource",
+																						]
 																						type: "object"
 																					}
 																					sources: {
@@ -5968,6 +6770,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								helm: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										fileParameters: {
 																											items: {
 																												properties: {
@@ -5979,6 +6785,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																											type: "array"
 																										}
 																										ignoreMissingValueFiles: type: "boolean"
+																										kubeVersion: type: "string"
+																										namespace: type: "string"
 																										parameters: {
 																											items: {
 																												properties: {
@@ -5993,6 +6801,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										passCredentials: type: "boolean"
 																										releaseName: type: "string"
 																										skipCrds: type: "boolean"
+																										skipSchemaValidation: type: "boolean"
+																										skipTests: type: "boolean"
 																										valueFiles: {
 																											items: type: "string"
 																											type: "array"
@@ -6008,6 +6818,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								kustomize: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										commonAnnotations: {
 																											additionalProperties: type: "string"
 																											type: "object"
@@ -6023,10 +6837,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										}
 																										forceCommonAnnotations: type: "boolean"
 																										forceCommonLabels: type: "boolean"
+																										ignoreMissingComponents: type: "boolean"
 																										images: {
 																											items: type: "string"
 																											type: "array"
 																										}
+																										kubeVersion: type: "string"
+																										labelIncludeTemplates: type: "boolean"
 																										labelWithoutSelector: type: "boolean"
 																										namePrefix: type: "string"
 																										nameSuffix: type: "string"
@@ -6082,6 +6899,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									type: "object"
 																								}
+																								name: type: "string"
 																								path: type: "string"
 																								plugin: {
 																									properties: {
@@ -6135,6 +6953,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							automated: {
 																								properties: {
 																									allowEmpty: type: "boolean"
+																									enabled: type: "boolean"
 																									prune: type: "boolean"
 																									selfHeal: type: "boolean"
 																								}
@@ -6170,6 +6989,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										format: "int64"
 																										type:   "integer"
 																									}
+																									refresh: type: "boolean"
 																								}
 																								type: "object"
 																							}
@@ -6192,6 +7012,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			"metadata",
 																			"spec",
 																		]
+																		type: "object"
+																	}
+																	values: {
+																		additionalProperties: type: "string"
 																		type: "object"
 																	}
 																}
@@ -6292,6 +7116,33 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				]
 																				type: "object"
 																			}
+																			bearerToken: {
+																				properties: tokenRef: {
+																					properties: {
+																						key: type: "string"
+																						secretName: type: "string"
+																					}
+																					required: [
+																						"key",
+																						"secretName",
+																					]
+																					type: "object"
+																				}
+																				required: ["tokenRef"]
+																				type: "object"
+																			}
+																			caRef: {
+																				properties: {
+																					configMapName: type: "string"
+																					key: type: "string"
+																				}
+																				required: [
+																					"configMapName",
+																					"key",
+																				]
+																				type: "object"
+																			}
+																			insecure: type: "boolean"
 																			project: type: "string"
 																		}
 																		required: [
@@ -6369,6 +7220,17 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		properties: {
 																			allBranches: type: "boolean"
 																			api: type: "string"
+																			caRef: {
+																				properties: {
+																					configMapName: type: "string"
+																					key: type: "string"
+																				}
+																				required: [
+																					"configMapName",
+																					"key",
+																				]
+																				type: "object"
+																			}
 																			group: type: "string"
 																			includeSharedProjects: type: "boolean"
 																			includeSubgroups: type: "boolean"
@@ -6520,6 +7382,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							helm: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									fileParameters: {
 																										items: {
 																											properties: {
@@ -6531,6 +7397,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										type: "array"
 																									}
 																									ignoreMissingValueFiles: type: "boolean"
+																									kubeVersion: type: "string"
+																									namespace: type: "string"
 																									parameters: {
 																										items: {
 																											properties: {
@@ -6545,6 +7413,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									passCredentials: type: "boolean"
 																									releaseName: type: "string"
 																									skipCrds: type: "boolean"
+																									skipSchemaValidation: type: "boolean"
+																									skipTests: type: "boolean"
 																									valueFiles: {
 																										items: type: "string"
 																										type: "array"
@@ -6560,6 +7430,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							kustomize: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									commonAnnotations: {
 																										additionalProperties: type: "string"
 																										type: "object"
@@ -6575,10 +7449,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									forceCommonAnnotations: type: "boolean"
 																									forceCommonLabels: type: "boolean"
+																									ignoreMissingComponents: type: "boolean"
 																									images: {
 																										items: type: "string"
 																										type: "array"
 																									}
+																									kubeVersion: type: "string"
+																									labelIncludeTemplates: type: "boolean"
 																									labelWithoutSelector: type: "boolean"
 																									namePrefix: type: "string"
 																									nameSuffix: type: "string"
@@ -6634,6 +7511,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								type: "object"
 																							}
+																							name: type: "string"
 																							path: type: "string"
 																							plugin: {
 																								properties: {
@@ -6678,6 +7556,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							targetRevision: type: "string"
 																						}
 																						required: ["repoURL"]
+																						type: "object"
+																					}
+																					sourceHydrator: {
+																						properties: {
+																							drySource: {
+																								properties: {
+																									path: type: "string"
+																									repoURL: type: "string"
+																									targetRevision: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"repoURL",
+																									"targetRevision",
+																								]
+																								type: "object"
+																							}
+																							hydrateTo: {
+																								properties: targetBranch: type: "string"
+																								required: ["targetBranch"]
+																								type: "object"
+																							}
+																							syncSource: {
+																								properties: {
+																									path: {
+																										minLength: 1
+																										pattern:   "^.{2,}|[^./]$"
+																										type:      "string"
+																									}
+																									targetBranch: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"targetBranch",
+																								]
+																								type: "object"
+																							}
+																						}
+																						required: [
+																							"drySource",
+																							"syncSource",
+																						]
 																						type: "object"
 																					}
 																					sources: {
@@ -6733,6 +7653,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								helm: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										fileParameters: {
 																											items: {
 																												properties: {
@@ -6744,6 +7668,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																											type: "array"
 																										}
 																										ignoreMissingValueFiles: type: "boolean"
+																										kubeVersion: type: "string"
+																										namespace: type: "string"
 																										parameters: {
 																											items: {
 																												properties: {
@@ -6758,6 +7684,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										passCredentials: type: "boolean"
 																										releaseName: type: "string"
 																										skipCrds: type: "boolean"
+																										skipSchemaValidation: type: "boolean"
+																										skipTests: type: "boolean"
 																										valueFiles: {
 																											items: type: "string"
 																											type: "array"
@@ -6773,6 +7701,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								kustomize: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										commonAnnotations: {
 																											additionalProperties: type: "string"
 																											type: "object"
@@ -6788,10 +7720,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										}
 																										forceCommonAnnotations: type: "boolean"
 																										forceCommonLabels: type: "boolean"
+																										ignoreMissingComponents: type: "boolean"
 																										images: {
 																											items: type: "string"
 																											type: "array"
 																										}
+																										kubeVersion: type: "string"
+																										labelIncludeTemplates: type: "boolean"
 																										labelWithoutSelector: type: "boolean"
 																										namePrefix: type: "string"
 																										nameSuffix: type: "string"
@@ -6847,6 +7782,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									type: "object"
 																								}
+																								name: type: "string"
 																								path: type: "string"
 																								plugin: {
 																									properties: {
@@ -6900,6 +7836,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							automated: {
 																								properties: {
 																									allowEmpty: type: "boolean"
+																									enabled: type: "boolean"
 																									prune: type: "boolean"
 																									selfHeal: type: "boolean"
 																								}
@@ -6935,6 +7872,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										format: "int64"
 																										type:   "integer"
 																									}
+																									refresh: type: "boolean"
 																								}
 																								type: "object"
 																							}
@@ -6975,7 +7913,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				operator: type: "string"
 																				values: {
 																					items: type: "string"
-																					type: "array"
+																					type:                     "array"
+																					"x-kubernetes-list-type": "atomic"
 																				}
 																			}
 																			required: [
@@ -6984,7 +7923,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			]
 																			type: "object"
 																		}
-																		type: "array"
+																		type:                     "array"
+																		"x-kubernetes-list-type": "atomic"
 																	}
 																	matchLabels: {
 																		additionalProperties: type: "string"
@@ -7126,6 +8066,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		}
 																		helm: {
 																			properties: {
+																				apiVersions: {
+																					items: type: "string"
+																					type: "array"
+																				}
 																				fileParameters: {
 																					items: {
 																						properties: {
@@ -7137,6 +8081,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					type: "array"
 																				}
 																				ignoreMissingValueFiles: type: "boolean"
+																				kubeVersion: type: "string"
+																				namespace: type: "string"
 																				parameters: {
 																					items: {
 																						properties: {
@@ -7151,6 +8097,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				passCredentials: type: "boolean"
 																				releaseName: type: "string"
 																				skipCrds: type: "boolean"
+																				skipSchemaValidation: type: "boolean"
+																				skipTests: type: "boolean"
 																				valueFiles: {
 																					items: type: "string"
 																					type: "array"
@@ -7166,6 +8114,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		}
 																		kustomize: {
 																			properties: {
+																				apiVersions: {
+																					items: type: "string"
+																					type: "array"
+																				}
 																				commonAnnotations: {
 																					additionalProperties: type: "string"
 																					type: "object"
@@ -7181,10 +8133,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				}
 																				forceCommonAnnotations: type: "boolean"
 																				forceCommonLabels: type: "boolean"
+																				ignoreMissingComponents: type: "boolean"
 																				images: {
 																					items: type: "string"
 																					type: "array"
 																				}
+																				kubeVersion: type: "string"
+																				labelIncludeTemplates: type: "boolean"
 																				labelWithoutSelector: type: "boolean"
 																				namePrefix: type: "string"
 																				nameSuffix: type: "string"
@@ -7240,6 +8195,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			type: "object"
 																		}
+																		name: type: "string"
 																		path: type: "string"
 																		plugin: {
 																			properties: {
@@ -7284,6 +8240,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		targetRevision: type: "string"
 																	}
 																	required: ["repoURL"]
+																	type: "object"
+																}
+																sourceHydrator: {
+																	properties: {
+																		drySource: {
+																			properties: {
+																				path: type: "string"
+																				repoURL: type: "string"
+																				targetRevision: type: "string"
+																			}
+																			required: [
+																				"path",
+																				"repoURL",
+																				"targetRevision",
+																			]
+																			type: "object"
+																		}
+																		hydrateTo: {
+																			properties: targetBranch: type: "string"
+																			required: ["targetBranch"]
+																			type: "object"
+																		}
+																		syncSource: {
+																			properties: {
+																				path: {
+																					minLength: 1
+																					pattern:   "^.{2,}|[^./]$"
+																					type:      "string"
+																				}
+																				targetBranch: type: "string"
+																			}
+																			required: [
+																				"path",
+																				"targetBranch",
+																			]
+																			type: "object"
+																		}
+																	}
+																	required: [
+																		"drySource",
+																		"syncSource",
+																	]
 																	type: "object"
 																}
 																sources: {
@@ -7339,6 +8337,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			helm: {
 																				properties: {
+																					apiVersions: {
+																						items: type: "string"
+																						type: "array"
+																					}
 																					fileParameters: {
 																						items: {
 																							properties: {
@@ -7350,6 +8352,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																						type: "array"
 																					}
 																					ignoreMissingValueFiles: type: "boolean"
+																					kubeVersion: type: "string"
+																					namespace: type: "string"
 																					parameters: {
 																						items: {
 																							properties: {
@@ -7364,6 +8368,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					passCredentials: type: "boolean"
 																					releaseName: type: "string"
 																					skipCrds: type: "boolean"
+																					skipSchemaValidation: type: "boolean"
+																					skipTests: type: "boolean"
 																					valueFiles: {
 																						items: type: "string"
 																						type: "array"
@@ -7379,6 +8385,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			kustomize: {
 																				properties: {
+																					apiVersions: {
+																						items: type: "string"
+																						type: "array"
+																					}
 																					commonAnnotations: {
 																						additionalProperties: type: "string"
 																						type: "object"
@@ -7394,10 +8404,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					}
 																					forceCommonAnnotations: type: "boolean"
 																					forceCommonLabels: type: "boolean"
+																					ignoreMissingComponents: type: "boolean"
 																					images: {
 																						items: type: "string"
 																						type: "array"
 																					}
+																					kubeVersion: type: "string"
+																					labelIncludeTemplates: type: "boolean"
 																					labelWithoutSelector: type: "boolean"
 																					namePrefix: type: "string"
 																					nameSuffix: type: "string"
@@ -7453,6 +8466,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				}
 																				type: "object"
 																			}
+																			name: type: "string"
 																			path: type: "string"
 																			plugin: {
 																				properties: {
@@ -7506,6 +8520,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		automated: {
 																			properties: {
 																				allowEmpty: type: "boolean"
+																				enabled: type: "boolean"
 																				prune: type: "boolean"
 																				selfHeal: type: "boolean"
 																			}
@@ -7541,6 +8556,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					format: "int64"
 																					type:   "integer"
 																				}
+																				refresh: type: "boolean"
 																			}
 																			type: "object"
 																		}
@@ -7586,7 +8602,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																						operator: type: "string"
 																						values: {
 																							items: type: "string"
-																							type: "array"
+																							type:                     "array"
+																							"x-kubernetes-list-type": "atomic"
 																						}
 																					}
 																					required: [
@@ -7595,7 +8612,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					]
 																					type: "object"
 																				}
-																				type: "array"
+																				type:                     "array"
+																				"x-kubernetes-list-type": "atomic"
 																			}
 																			matchLabels: {
 																				additionalProperties: type: "string"
@@ -7737,6 +8755,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							helm: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									fileParameters: {
 																										items: {
 																											properties: {
@@ -7748,6 +8770,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										type: "array"
 																									}
 																									ignoreMissingValueFiles: type: "boolean"
+																									kubeVersion: type: "string"
+																									namespace: type: "string"
 																									parameters: {
 																										items: {
 																											properties: {
@@ -7762,6 +8786,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									passCredentials: type: "boolean"
 																									releaseName: type: "string"
 																									skipCrds: type: "boolean"
+																									skipSchemaValidation: type: "boolean"
+																									skipTests: type: "boolean"
 																									valueFiles: {
 																										items: type: "string"
 																										type: "array"
@@ -7777,6 +8803,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							kustomize: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									commonAnnotations: {
 																										additionalProperties: type: "string"
 																										type: "object"
@@ -7792,10 +8822,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									forceCommonAnnotations: type: "boolean"
 																									forceCommonLabels: type: "boolean"
+																									ignoreMissingComponents: type: "boolean"
 																									images: {
 																										items: type: "string"
 																										type: "array"
 																									}
+																									kubeVersion: type: "string"
+																									labelIncludeTemplates: type: "boolean"
 																									labelWithoutSelector: type: "boolean"
 																									namePrefix: type: "string"
 																									nameSuffix: type: "string"
@@ -7851,6 +8884,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								type: "object"
 																							}
+																							name: type: "string"
 																							path: type: "string"
 																							plugin: {
 																								properties: {
@@ -7895,6 +8929,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							targetRevision: type: "string"
 																						}
 																						required: ["repoURL"]
+																						type: "object"
+																					}
+																					sourceHydrator: {
+																						properties: {
+																							drySource: {
+																								properties: {
+																									path: type: "string"
+																									repoURL: type: "string"
+																									targetRevision: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"repoURL",
+																									"targetRevision",
+																								]
+																								type: "object"
+																							}
+																							hydrateTo: {
+																								properties: targetBranch: type: "string"
+																								required: ["targetBranch"]
+																								type: "object"
+																							}
+																							syncSource: {
+																								properties: {
+																									path: {
+																										minLength: 1
+																										pattern:   "^.{2,}|[^./]$"
+																										type:      "string"
+																									}
+																									targetBranch: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"targetBranch",
+																								]
+																								type: "object"
+																							}
+																						}
+																						required: [
+																							"drySource",
+																							"syncSource",
+																						]
 																						type: "object"
 																					}
 																					sources: {
@@ -7950,6 +9026,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								helm: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										fileParameters: {
 																											items: {
 																												properties: {
@@ -7961,6 +9041,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																											type: "array"
 																										}
 																										ignoreMissingValueFiles: type: "boolean"
+																										kubeVersion: type: "string"
+																										namespace: type: "string"
 																										parameters: {
 																											items: {
 																												properties: {
@@ -7975,6 +9057,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										passCredentials: type: "boolean"
 																										releaseName: type: "string"
 																										skipCrds: type: "boolean"
+																										skipSchemaValidation: type: "boolean"
+																										skipTests: type: "boolean"
 																										valueFiles: {
 																											items: type: "string"
 																											type: "array"
@@ -7990,6 +9074,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								kustomize: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										commonAnnotations: {
 																											additionalProperties: type: "string"
 																											type: "object"
@@ -8005,10 +9093,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										}
 																										forceCommonAnnotations: type: "boolean"
 																										forceCommonLabels: type: "boolean"
+																										ignoreMissingComponents: type: "boolean"
 																										images: {
 																											items: type: "string"
 																											type: "array"
 																										}
+																										kubeVersion: type: "string"
+																										labelIncludeTemplates: type: "boolean"
 																										labelWithoutSelector: type: "boolean"
 																										namePrefix: type: "string"
 																										nameSuffix: type: "string"
@@ -8064,6 +9155,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									type: "object"
 																								}
+																								name: type: "string"
 																								path: type: "string"
 																								plugin: {
 																									properties: {
@@ -8117,6 +9209,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							automated: {
 																								properties: {
 																									allowEmpty: type: "boolean"
+																									enabled: type: "boolean"
 																									prune: type: "boolean"
 																									selfHeal: type: "boolean"
 																								}
@@ -8152,6 +9245,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										format: "int64"
 																										type:   "integer"
 																									}
+																									refresh: type: "boolean"
 																								}
 																								type: "object"
 																							}
@@ -8186,6 +9280,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 															}
 															clusters: {
 																properties: {
+																	flatList: type: "boolean"
 																	selector: {
 																		properties: {
 																			matchExpressions: {
@@ -8195,7 +9290,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																						operator: type: "string"
 																						values: {
 																							items: type: "string"
-																							type: "array"
+																							type:                     "array"
+																							"x-kubernetes-list-type": "atomic"
 																						}
 																					}
 																					required: [
@@ -8204,7 +9300,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					]
 																					type: "object"
 																				}
-																				type: "array"
+																				type:                     "array"
+																				"x-kubernetes-list-type": "atomic"
 																			}
 																			matchLabels: {
 																				additionalProperties: type: "string"
@@ -8341,6 +9438,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							helm: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									fileParameters: {
 																										items: {
 																											properties: {
@@ -8352,6 +9453,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										type: "array"
 																									}
 																									ignoreMissingValueFiles: type: "boolean"
+																									kubeVersion: type: "string"
+																									namespace: type: "string"
 																									parameters: {
 																										items: {
 																											properties: {
@@ -8366,6 +9469,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									passCredentials: type: "boolean"
 																									releaseName: type: "string"
 																									skipCrds: type: "boolean"
+																									skipSchemaValidation: type: "boolean"
+																									skipTests: type: "boolean"
 																									valueFiles: {
 																										items: type: "string"
 																										type: "array"
@@ -8381,6 +9486,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							kustomize: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									commonAnnotations: {
 																										additionalProperties: type: "string"
 																										type: "object"
@@ -8396,10 +9505,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									forceCommonAnnotations: type: "boolean"
 																									forceCommonLabels: type: "boolean"
+																									ignoreMissingComponents: type: "boolean"
 																									images: {
 																										items: type: "string"
 																										type: "array"
 																									}
+																									kubeVersion: type: "string"
+																									labelIncludeTemplates: type: "boolean"
 																									labelWithoutSelector: type: "boolean"
 																									namePrefix: type: "string"
 																									nameSuffix: type: "string"
@@ -8455,6 +9567,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								type: "object"
 																							}
+																							name: type: "string"
 																							path: type: "string"
 																							plugin: {
 																								properties: {
@@ -8499,6 +9612,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							targetRevision: type: "string"
 																						}
 																						required: ["repoURL"]
+																						type: "object"
+																					}
+																					sourceHydrator: {
+																						properties: {
+																							drySource: {
+																								properties: {
+																									path: type: "string"
+																									repoURL: type: "string"
+																									targetRevision: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"repoURL",
+																									"targetRevision",
+																								]
+																								type: "object"
+																							}
+																							hydrateTo: {
+																								properties: targetBranch: type: "string"
+																								required: ["targetBranch"]
+																								type: "object"
+																							}
+																							syncSource: {
+																								properties: {
+																									path: {
+																										minLength: 1
+																										pattern:   "^.{2,}|[^./]$"
+																										type:      "string"
+																									}
+																									targetBranch: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"targetBranch",
+																								]
+																								type: "object"
+																							}
+																						}
+																						required: [
+																							"drySource",
+																							"syncSource",
+																						]
 																						type: "object"
 																					}
 																					sources: {
@@ -8554,6 +9709,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								helm: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										fileParameters: {
 																											items: {
 																												properties: {
@@ -8565,6 +9724,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																											type: "array"
 																										}
 																										ignoreMissingValueFiles: type: "boolean"
+																										kubeVersion: type: "string"
+																										namespace: type: "string"
 																										parameters: {
 																											items: {
 																												properties: {
@@ -8579,6 +9740,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										passCredentials: type: "boolean"
 																										releaseName: type: "string"
 																										skipCrds: type: "boolean"
+																										skipSchemaValidation: type: "boolean"
+																										skipTests: type: "boolean"
 																										valueFiles: {
 																											items: type: "string"
 																											type: "array"
@@ -8594,6 +9757,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								kustomize: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										commonAnnotations: {
 																											additionalProperties: type: "string"
 																											type: "object"
@@ -8609,10 +9776,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										}
 																										forceCommonAnnotations: type: "boolean"
 																										forceCommonLabels: type: "boolean"
+																										ignoreMissingComponents: type: "boolean"
 																										images: {
 																											items: type: "string"
 																											type: "array"
 																										}
+																										kubeVersion: type: "string"
+																										labelIncludeTemplates: type: "boolean"
 																										labelWithoutSelector: type: "boolean"
 																										namePrefix: type: "string"
 																										nameSuffix: type: "string"
@@ -8668,6 +9838,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									type: "object"
 																								}
+																								name: type: "string"
 																								path: type: "string"
 																								plugin: {
 																									properties: {
@@ -8721,6 +9892,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							automated: {
 																								properties: {
 																									allowEmpty: type: "boolean"
+																									enabled: type: "boolean"
 																									prune: type: "boolean"
 																									selfHeal: type: "boolean"
 																								}
@@ -8756,6 +9928,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										format: "int64"
 																										type:   "integer"
 																									}
+																									refresh: type: "boolean"
 																								}
 																								type: "object"
 																							}
@@ -8802,7 +9975,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																	}
 																	files: {
 																		items: {
-																			properties: path: type: "string"
+																			properties: {
+																				exclude: type: "boolean"
+																				path: type: "string"
+																			}
 																			required: ["path"]
 																			type: "object"
 																		}
@@ -8942,6 +10118,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							helm: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									fileParameters: {
 																										items: {
 																											properties: {
@@ -8953,6 +10133,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										type: "array"
 																									}
 																									ignoreMissingValueFiles: type: "boolean"
+																									kubeVersion: type: "string"
+																									namespace: type: "string"
 																									parameters: {
 																										items: {
 																											properties: {
@@ -8967,6 +10149,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									passCredentials: type: "boolean"
 																									releaseName: type: "string"
 																									skipCrds: type: "boolean"
+																									skipSchemaValidation: type: "boolean"
+																									skipTests: type: "boolean"
 																									valueFiles: {
 																										items: type: "string"
 																										type: "array"
@@ -8982,6 +10166,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							kustomize: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									commonAnnotations: {
 																										additionalProperties: type: "string"
 																										type: "object"
@@ -8997,10 +10185,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									forceCommonAnnotations: type: "boolean"
 																									forceCommonLabels: type: "boolean"
+																									ignoreMissingComponents: type: "boolean"
 																									images: {
 																										items: type: "string"
 																										type: "array"
 																									}
+																									kubeVersion: type: "string"
+																									labelIncludeTemplates: type: "boolean"
 																									labelWithoutSelector: type: "boolean"
 																									namePrefix: type: "string"
 																									nameSuffix: type: "string"
@@ -9056,6 +10247,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								type: "object"
 																							}
+																							name: type: "string"
 																							path: type: "string"
 																							plugin: {
 																								properties: {
@@ -9100,6 +10292,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							targetRevision: type: "string"
 																						}
 																						required: ["repoURL"]
+																						type: "object"
+																					}
+																					sourceHydrator: {
+																						properties: {
+																							drySource: {
+																								properties: {
+																									path: type: "string"
+																									repoURL: type: "string"
+																									targetRevision: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"repoURL",
+																									"targetRevision",
+																								]
+																								type: "object"
+																							}
+																							hydrateTo: {
+																								properties: targetBranch: type: "string"
+																								required: ["targetBranch"]
+																								type: "object"
+																							}
+																							syncSource: {
+																								properties: {
+																									path: {
+																										minLength: 1
+																										pattern:   "^.{2,}|[^./]$"
+																										type:      "string"
+																									}
+																									targetBranch: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"targetBranch",
+																								]
+																								type: "object"
+																							}
+																						}
+																						required: [
+																							"drySource",
+																							"syncSource",
+																						]
 																						type: "object"
 																					}
 																					sources: {
@@ -9155,6 +10389,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								helm: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										fileParameters: {
 																											items: {
 																												properties: {
@@ -9166,6 +10404,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																											type: "array"
 																										}
 																										ignoreMissingValueFiles: type: "boolean"
+																										kubeVersion: type: "string"
+																										namespace: type: "string"
 																										parameters: {
 																											items: {
 																												properties: {
@@ -9180,6 +10420,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										passCredentials: type: "boolean"
 																										releaseName: type: "string"
 																										skipCrds: type: "boolean"
+																										skipSchemaValidation: type: "boolean"
+																										skipTests: type: "boolean"
 																										valueFiles: {
 																											items: type: "string"
 																											type: "array"
@@ -9195,6 +10437,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								kustomize: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										commonAnnotations: {
 																											additionalProperties: type: "string"
 																											type: "object"
@@ -9210,10 +10456,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										}
 																										forceCommonAnnotations: type: "boolean"
 																										forceCommonLabels: type: "boolean"
+																										ignoreMissingComponents: type: "boolean"
 																										images: {
 																											items: type: "string"
 																											type: "array"
 																										}
+																										kubeVersion: type: "string"
+																										labelIncludeTemplates: type: "boolean"
 																										labelWithoutSelector: type: "boolean"
 																										namePrefix: type: "string"
 																										nameSuffix: type: "string"
@@ -9269,6 +10518,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									type: "object"
 																								}
+																								name: type: "string"
 																								path: type: "string"
 																								plugin: {
 																									properties: {
@@ -9322,6 +10572,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							automated: {
 																								properties: {
 																									allowEmpty: type: "boolean"
+																									enabled: type: "boolean"
 																									prune: type: "boolean"
 																									selfHeal: type: "boolean"
 																								}
@@ -9357,6 +10608,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										format: "int64"
 																										type:   "integer"
 																									}
+																									refresh: type: "boolean"
 																								}
 																								type: "object"
 																							}
@@ -9526,6 +10778,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							helm: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									fileParameters: {
 																										items: {
 																											properties: {
@@ -9537,6 +10793,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										type: "array"
 																									}
 																									ignoreMissingValueFiles: type: "boolean"
+																									kubeVersion: type: "string"
+																									namespace: type: "string"
 																									parameters: {
 																										items: {
 																											properties: {
@@ -9551,6 +10809,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									passCredentials: type: "boolean"
 																									releaseName: type: "string"
 																									skipCrds: type: "boolean"
+																									skipSchemaValidation: type: "boolean"
+																									skipTests: type: "boolean"
 																									valueFiles: {
 																										items: type: "string"
 																										type: "array"
@@ -9566,6 +10826,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							kustomize: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									commonAnnotations: {
 																										additionalProperties: type: "string"
 																										type: "object"
@@ -9581,10 +10845,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									forceCommonAnnotations: type: "boolean"
 																									forceCommonLabels: type: "boolean"
+																									ignoreMissingComponents: type: "boolean"
 																									images: {
 																										items: type: "string"
 																										type: "array"
 																									}
+																									kubeVersion: type: "string"
+																									labelIncludeTemplates: type: "boolean"
 																									labelWithoutSelector: type: "boolean"
 																									namePrefix: type: "string"
 																									nameSuffix: type: "string"
@@ -9640,6 +10907,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								type: "object"
 																							}
+																							name: type: "string"
 																							path: type: "string"
 																							plugin: {
 																								properties: {
@@ -9684,6 +10952,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							targetRevision: type: "string"
 																						}
 																						required: ["repoURL"]
+																						type: "object"
+																					}
+																					sourceHydrator: {
+																						properties: {
+																							drySource: {
+																								properties: {
+																									path: type: "string"
+																									repoURL: type: "string"
+																									targetRevision: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"repoURL",
+																									"targetRevision",
+																								]
+																								type: "object"
+																							}
+																							hydrateTo: {
+																								properties: targetBranch: type: "string"
+																								required: ["targetBranch"]
+																								type: "object"
+																							}
+																							syncSource: {
+																								properties: {
+																									path: {
+																										minLength: 1
+																										pattern:   "^.{2,}|[^./]$"
+																										type:      "string"
+																									}
+																									targetBranch: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"targetBranch",
+																								]
+																								type: "object"
+																							}
+																						}
+																						required: [
+																							"drySource",
+																							"syncSource",
+																						]
 																						type: "object"
 																					}
 																					sources: {
@@ -9739,6 +11049,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								helm: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										fileParameters: {
 																											items: {
 																												properties: {
@@ -9750,6 +11064,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																											type: "array"
 																										}
 																										ignoreMissingValueFiles: type: "boolean"
+																										kubeVersion: type: "string"
+																										namespace: type: "string"
 																										parameters: {
 																											items: {
 																												properties: {
@@ -9764,6 +11080,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										passCredentials: type: "boolean"
 																										releaseName: type: "string"
 																										skipCrds: type: "boolean"
+																										skipSchemaValidation: type: "boolean"
+																										skipTests: type: "boolean"
 																										valueFiles: {
 																											items: type: "string"
 																											type: "array"
@@ -9779,6 +11097,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								kustomize: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										commonAnnotations: {
 																											additionalProperties: type: "string"
 																											type: "object"
@@ -9794,10 +11116,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										}
 																										forceCommonAnnotations: type: "boolean"
 																										forceCommonLabels: type: "boolean"
+																										ignoreMissingComponents: type: "boolean"
 																										images: {
 																											items: type: "string"
 																											type: "array"
 																										}
+																										kubeVersion: type: "string"
+																										labelIncludeTemplates: type: "boolean"
 																										labelWithoutSelector: type: "boolean"
 																										namePrefix: type: "string"
 																										nameSuffix: type: "string"
@@ -9853,6 +11178,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									type: "object"
 																								}
+																								name: type: "string"
 																								path: type: "string"
 																								plugin: {
 																									properties: {
@@ -9906,6 +11232,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							automated: {
 																								properties: {
 																									allowEmpty: type: "boolean"
+																									enabled: type: "boolean"
 																									prune: type: "boolean"
 																									selfHeal: type: "boolean"
 																								}
@@ -9941,6 +11268,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										format: "int64"
 																										type:   "integer"
 																									}
+																									refresh: type: "boolean"
 																								}
 																								type: "object"
 																							}
@@ -10115,6 +11443,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							helm: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									fileParameters: {
 																										items: {
 																											properties: {
@@ -10126,6 +11458,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										type: "array"
 																									}
 																									ignoreMissingValueFiles: type: "boolean"
+																									kubeVersion: type: "string"
+																									namespace: type: "string"
 																									parameters: {
 																										items: {
 																											properties: {
@@ -10140,6 +11474,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									passCredentials: type: "boolean"
 																									releaseName: type: "string"
 																									skipCrds: type: "boolean"
+																									skipSchemaValidation: type: "boolean"
+																									skipTests: type: "boolean"
 																									valueFiles: {
 																										items: type: "string"
 																										type: "array"
@@ -10155,6 +11491,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							kustomize: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									commonAnnotations: {
 																										additionalProperties: type: "string"
 																										type: "object"
@@ -10170,10 +11510,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									forceCommonAnnotations: type: "boolean"
 																									forceCommonLabels: type: "boolean"
+																									ignoreMissingComponents: type: "boolean"
 																									images: {
 																										items: type: "string"
 																										type: "array"
 																									}
+																									kubeVersion: type: "string"
+																									labelIncludeTemplates: type: "boolean"
 																									labelWithoutSelector: type: "boolean"
 																									namePrefix: type: "string"
 																									nameSuffix: type: "string"
@@ -10229,6 +11572,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								type: "object"
 																							}
+																							name: type: "string"
 																							path: type: "string"
 																							plugin: {
 																								properties: {
@@ -10273,6 +11617,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							targetRevision: type: "string"
 																						}
 																						required: ["repoURL"]
+																						type: "object"
+																					}
+																					sourceHydrator: {
+																						properties: {
+																							drySource: {
+																								properties: {
+																									path: type: "string"
+																									repoURL: type: "string"
+																									targetRevision: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"repoURL",
+																									"targetRevision",
+																								]
+																								type: "object"
+																							}
+																							hydrateTo: {
+																								properties: targetBranch: type: "string"
+																								required: ["targetBranch"]
+																								type: "object"
+																							}
+																							syncSource: {
+																								properties: {
+																									path: {
+																										minLength: 1
+																										pattern:   "^.{2,}|[^./]$"
+																										type:      "string"
+																									}
+																									targetBranch: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"targetBranch",
+																								]
+																								type: "object"
+																							}
+																						}
+																						required: [
+																							"drySource",
+																							"syncSource",
+																						]
 																						type: "object"
 																					}
 																					sources: {
@@ -10328,6 +11714,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								helm: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										fileParameters: {
 																											items: {
 																												properties: {
@@ -10339,6 +11729,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																											type: "array"
 																										}
 																										ignoreMissingValueFiles: type: "boolean"
+																										kubeVersion: type: "string"
+																										namespace: type: "string"
 																										parameters: {
 																											items: {
 																												properties: {
@@ -10353,6 +11745,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										passCredentials: type: "boolean"
 																										releaseName: type: "string"
 																										skipCrds: type: "boolean"
+																										skipSchemaValidation: type: "boolean"
+																										skipTests: type: "boolean"
 																										valueFiles: {
 																											items: type: "string"
 																											type: "array"
@@ -10368,6 +11762,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								kustomize: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										commonAnnotations: {
 																											additionalProperties: type: "string"
 																											type: "object"
@@ -10383,10 +11781,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										}
 																										forceCommonAnnotations: type: "boolean"
 																										forceCommonLabels: type: "boolean"
+																										ignoreMissingComponents: type: "boolean"
 																										images: {
 																											items: type: "string"
 																											type: "array"
 																										}
+																										kubeVersion: type: "string"
+																										labelIncludeTemplates: type: "boolean"
 																										labelWithoutSelector: type: "boolean"
 																										namePrefix: type: "string"
 																										nameSuffix: type: "string"
@@ -10442,6 +11843,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									type: "object"
 																								}
+																								name: type: "string"
 																								path: type: "string"
 																								plugin: {
 																									properties: {
@@ -10495,6 +11897,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							automated: {
 																								properties: {
 																									allowEmpty: type: "boolean"
+																									enabled: type: "boolean"
 																									prune: type: "boolean"
 																									selfHeal: type: "boolean"
 																								}
@@ -10530,6 +11933,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										format: "int64"
 																										type:   "integer"
 																									}
+																									refresh: type: "boolean"
 																								}
 																								type: "object"
 																							}
@@ -10665,6 +12069,33 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				]
 																				type: "object"
 																			}
+																			bearerToken: {
+																				properties: tokenRef: {
+																					properties: {
+																						key: type: "string"
+																						secretName: type: "string"
+																					}
+																					required: [
+																						"key",
+																						"secretName",
+																					]
+																					type: "object"
+																				}
+																				required: ["tokenRef"]
+																				type: "object"
+																			}
+																			caRef: {
+																				properties: {
+																					configMapName: type: "string"
+																					key: type: "string"
+																				}
+																				required: [
+																					"configMapName",
+																					"key",
+																				]
+																				type: "object"
+																			}
+																			insecure: type: "boolean"
 																			project: type: "string"
 																			repo: type: "string"
 																		}
@@ -10675,11 +12106,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		]
 																		type: "object"
 																	}
+																	continueOnRepoNotFoundError: type: "boolean"
 																	filters: {
 																		items: {
 																			properties: {
 																				branchMatch: type: "string"
 																				targetBranchMatch: type: "string"
+																				titleMatch: type: "string"
 																			}
 																			type: "object"
 																		}
@@ -10689,6 +12122,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		properties: {
 																			api: type: "string"
 																			insecure: type: "boolean"
+																			labels: {
+																				items: type: "string"
+																				type: "array"
+																			}
 																			owner: type: "string"
 																			repo: type: "string"
 																			tokenRef: {
@@ -10741,6 +12178,17 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																	gitlab: {
 																		properties: {
 																			api: type: "string"
+																			caRef: {
+																				properties: {
+																					configMapName: type: "string"
+																					key: type: "string"
+																				}
+																				required: [
+																					"configMapName",
+																					"key",
+																				]
+																				type: "object"
+																			}
 																			insecure: type: "boolean"
 																			labels: {
 																				items: type: "string"
@@ -10894,6 +12342,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							helm: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									fileParameters: {
 																										items: {
 																											properties: {
@@ -10905,6 +12357,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										type: "array"
 																									}
 																									ignoreMissingValueFiles: type: "boolean"
+																									kubeVersion: type: "string"
+																									namespace: type: "string"
 																									parameters: {
 																										items: {
 																											properties: {
@@ -10919,6 +12373,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									passCredentials: type: "boolean"
 																									releaseName: type: "string"
 																									skipCrds: type: "boolean"
+																									skipSchemaValidation: type: "boolean"
+																									skipTests: type: "boolean"
 																									valueFiles: {
 																										items: type: "string"
 																										type: "array"
@@ -10934,6 +12390,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							kustomize: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									commonAnnotations: {
 																										additionalProperties: type: "string"
 																										type: "object"
@@ -10949,10 +12409,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									forceCommonAnnotations: type: "boolean"
 																									forceCommonLabels: type: "boolean"
+																									ignoreMissingComponents: type: "boolean"
 																									images: {
 																										items: type: "string"
 																										type: "array"
 																									}
+																									kubeVersion: type: "string"
+																									labelIncludeTemplates: type: "boolean"
 																									labelWithoutSelector: type: "boolean"
 																									namePrefix: type: "string"
 																									nameSuffix: type: "string"
@@ -11008,6 +12471,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								type: "object"
 																							}
+																							name: type: "string"
 																							path: type: "string"
 																							plugin: {
 																								properties: {
@@ -11052,6 +12516,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							targetRevision: type: "string"
 																						}
 																						required: ["repoURL"]
+																						type: "object"
+																					}
+																					sourceHydrator: {
+																						properties: {
+																							drySource: {
+																								properties: {
+																									path: type: "string"
+																									repoURL: type: "string"
+																									targetRevision: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"repoURL",
+																									"targetRevision",
+																								]
+																								type: "object"
+																							}
+																							hydrateTo: {
+																								properties: targetBranch: type: "string"
+																								required: ["targetBranch"]
+																								type: "object"
+																							}
+																							syncSource: {
+																								properties: {
+																									path: {
+																										minLength: 1
+																										pattern:   "^.{2,}|[^./]$"
+																										type:      "string"
+																									}
+																									targetBranch: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"targetBranch",
+																								]
+																								type: "object"
+																							}
+																						}
+																						required: [
+																							"drySource",
+																							"syncSource",
+																						]
 																						type: "object"
 																					}
 																					sources: {
@@ -11107,6 +12613,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								helm: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										fileParameters: {
 																											items: {
 																												properties: {
@@ -11118,6 +12628,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																											type: "array"
 																										}
 																										ignoreMissingValueFiles: type: "boolean"
+																										kubeVersion: type: "string"
+																										namespace: type: "string"
 																										parameters: {
 																											items: {
 																												properties: {
@@ -11132,6 +12644,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										passCredentials: type: "boolean"
 																										releaseName: type: "string"
 																										skipCrds: type: "boolean"
+																										skipSchemaValidation: type: "boolean"
+																										skipTests: type: "boolean"
 																										valueFiles: {
 																											items: type: "string"
 																											type: "array"
@@ -11147,6 +12661,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								kustomize: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										commonAnnotations: {
 																											additionalProperties: type: "string"
 																											type: "object"
@@ -11162,10 +12680,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										}
 																										forceCommonAnnotations: type: "boolean"
 																										forceCommonLabels: type: "boolean"
+																										ignoreMissingComponents: type: "boolean"
 																										images: {
 																											items: type: "string"
 																											type: "array"
 																										}
+																										kubeVersion: type: "string"
+																										labelIncludeTemplates: type: "boolean"
 																										labelWithoutSelector: type: "boolean"
 																										namePrefix: type: "string"
 																										nameSuffix: type: "string"
@@ -11221,6 +12742,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									type: "object"
 																								}
+																								name: type: "string"
 																								path: type: "string"
 																								plugin: {
 																									properties: {
@@ -11274,6 +12796,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							automated: {
 																								properties: {
 																									allowEmpty: type: "boolean"
+																									enabled: type: "boolean"
 																									prune: type: "boolean"
 																									selfHeal: type: "boolean"
 																								}
@@ -11309,6 +12832,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										format: "int64"
 																										type:   "integer"
 																									}
+																									refresh: type: "boolean"
 																								}
 																								type: "object"
 																							}
@@ -11331,6 +12855,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			"metadata",
 																			"spec",
 																		]
+																		type: "object"
+																	}
+																	values: {
+																		additionalProperties: type: "string"
 																		type: "object"
 																	}
 																}
@@ -11431,6 +12959,33 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				]
 																				type: "object"
 																			}
+																			bearerToken: {
+																				properties: tokenRef: {
+																					properties: {
+																						key: type: "string"
+																						secretName: type: "string"
+																					}
+																					required: [
+																						"key",
+																						"secretName",
+																					]
+																					type: "object"
+																				}
+																				required: ["tokenRef"]
+																				type: "object"
+																			}
+																			caRef: {
+																				properties: {
+																					configMapName: type: "string"
+																					key: type: "string"
+																				}
+																				required: [
+																					"configMapName",
+																					"key",
+																				]
+																				type: "object"
+																			}
+																			insecure: type: "boolean"
 																			project: type: "string"
 																		}
 																		required: [
@@ -11508,6 +13063,17 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		properties: {
 																			allBranches: type: "boolean"
 																			api: type: "string"
+																			caRef: {
+																				properties: {
+																					configMapName: type: "string"
+																					key: type: "string"
+																				}
+																				required: [
+																					"configMapName",
+																					"key",
+																				]
+																				type: "object"
+																			}
 																			group: type: "string"
 																			includeSharedProjects: type: "boolean"
 																			includeSubgroups: type: "boolean"
@@ -11659,6 +13225,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							helm: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									fileParameters: {
 																										items: {
 																											properties: {
@@ -11670,6 +13240,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										type: "array"
 																									}
 																									ignoreMissingValueFiles: type: "boolean"
+																									kubeVersion: type: "string"
+																									namespace: type: "string"
 																									parameters: {
 																										items: {
 																											properties: {
@@ -11684,6 +13256,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									passCredentials: type: "boolean"
 																									releaseName: type: "string"
 																									skipCrds: type: "boolean"
+																									skipSchemaValidation: type: "boolean"
+																									skipTests: type: "boolean"
 																									valueFiles: {
 																										items: type: "string"
 																										type: "array"
@@ -11699,6 +13273,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							}
 																							kustomize: {
 																								properties: {
+																									apiVersions: {
+																										items: type: "string"
+																										type: "array"
+																									}
 																									commonAnnotations: {
 																										additionalProperties: type: "string"
 																										type: "object"
@@ -11714,10 +13292,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									forceCommonAnnotations: type: "boolean"
 																									forceCommonLabels: type: "boolean"
+																									ignoreMissingComponents: type: "boolean"
 																									images: {
 																										items: type: "string"
 																										type: "array"
 																									}
+																									kubeVersion: type: "string"
+																									labelIncludeTemplates: type: "boolean"
 																									labelWithoutSelector: type: "boolean"
 																									namePrefix: type: "string"
 																									nameSuffix: type: "string"
@@ -11773,6 +13354,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								type: "object"
 																							}
+																							name: type: "string"
 																							path: type: "string"
 																							plugin: {
 																								properties: {
@@ -11817,6 +13399,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							targetRevision: type: "string"
 																						}
 																						required: ["repoURL"]
+																						type: "object"
+																					}
+																					sourceHydrator: {
+																						properties: {
+																							drySource: {
+																								properties: {
+																									path: type: "string"
+																									repoURL: type: "string"
+																									targetRevision: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"repoURL",
+																									"targetRevision",
+																								]
+																								type: "object"
+																							}
+																							hydrateTo: {
+																								properties: targetBranch: type: "string"
+																								required: ["targetBranch"]
+																								type: "object"
+																							}
+																							syncSource: {
+																								properties: {
+																									path: {
+																										minLength: 1
+																										pattern:   "^.{2,}|[^./]$"
+																										type:      "string"
+																									}
+																									targetBranch: type: "string"
+																								}
+																								required: [
+																									"path",
+																									"targetBranch",
+																								]
+																								type: "object"
+																							}
+																						}
+																						required: [
+																							"drySource",
+																							"syncSource",
+																						]
 																						type: "object"
 																					}
 																					sources: {
@@ -11872,6 +13496,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								helm: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										fileParameters: {
 																											items: {
 																												properties: {
@@ -11883,6 +13511,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																											type: "array"
 																										}
 																										ignoreMissingValueFiles: type: "boolean"
+																										kubeVersion: type: "string"
+																										namespace: type: "string"
 																										parameters: {
 																											items: {
 																												properties: {
@@ -11897,6 +13527,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										passCredentials: type: "boolean"
 																										releaseName: type: "string"
 																										skipCrds: type: "boolean"
+																										skipSchemaValidation: type: "boolean"
+																										skipTests: type: "boolean"
 																										valueFiles: {
 																											items: type: "string"
 																											type: "array"
@@ -11912,6 +13544,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																								}
 																								kustomize: {
 																									properties: {
+																										apiVersions: {
+																											items: type: "string"
+																											type: "array"
+																										}
 																										commonAnnotations: {
 																											additionalProperties: type: "string"
 																											type: "object"
@@ -11927,10 +13563,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										}
 																										forceCommonAnnotations: type: "boolean"
 																										forceCommonLabels: type: "boolean"
+																										ignoreMissingComponents: type: "boolean"
 																										images: {
 																											items: type: "string"
 																											type: "array"
 																										}
+																										kubeVersion: type: "string"
+																										labelIncludeTemplates: type: "boolean"
 																										labelWithoutSelector: type: "boolean"
 																										namePrefix: type: "string"
 																										nameSuffix: type: "string"
@@ -11986,6 +13625,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																									}
 																									type: "object"
 																								}
+																								name: type: "string"
 																								path: type: "string"
 																								plugin: {
 																									properties: {
@@ -12039,6 +13679,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																							automated: {
 																								properties: {
 																									allowEmpty: type: "boolean"
+																									enabled: type: "boolean"
 																									prune: type: "boolean"
 																									selfHeal: type: "boolean"
 																								}
@@ -12074,6 +13715,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																										format: "int64"
 																										type:   "integer"
 																									}
+																									refresh: type: "boolean"
 																								}
 																								type: "object"
 																							}
@@ -12114,7 +13756,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				operator: type: "string"
 																				values: {
 																					items: type: "string"
-																					type: "array"
+																					type:                     "array"
+																					"x-kubernetes-list-type": "atomic"
 																				}
 																			}
 																			required: [
@@ -12123,7 +13766,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			]
 																			type: "object"
 																		}
-																		type: "array"
+																		type:                     "array"
+																		"x-kubernetes-list-type": "atomic"
 																	}
 																	matchLabels: {
 																		additionalProperties: type: "string"
@@ -12269,6 +13913,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		}
 																		helm: {
 																			properties: {
+																				apiVersions: {
+																					items: type: "string"
+																					type: "array"
+																				}
 																				fileParameters: {
 																					items: {
 																						properties: {
@@ -12280,6 +13928,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					type: "array"
 																				}
 																				ignoreMissingValueFiles: type: "boolean"
+																				kubeVersion: type: "string"
+																				namespace: type: "string"
 																				parameters: {
 																					items: {
 																						properties: {
@@ -12294,6 +13944,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				passCredentials: type: "boolean"
 																				releaseName: type: "string"
 																				skipCrds: type: "boolean"
+																				skipSchemaValidation: type: "boolean"
+																				skipTests: type: "boolean"
 																				valueFiles: {
 																					items: type: "string"
 																					type: "array"
@@ -12309,6 +13961,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		}
 																		kustomize: {
 																			properties: {
+																				apiVersions: {
+																					items: type: "string"
+																					type: "array"
+																				}
 																				commonAnnotations: {
 																					additionalProperties: type: "string"
 																					type: "object"
@@ -12324,10 +13980,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				}
 																				forceCommonAnnotations: type: "boolean"
 																				forceCommonLabels: type: "boolean"
+																				ignoreMissingComponents: type: "boolean"
 																				images: {
 																					items: type: "string"
 																					type: "array"
 																				}
+																				kubeVersion: type: "string"
+																				labelIncludeTemplates: type: "boolean"
 																				labelWithoutSelector: type: "boolean"
 																				namePrefix: type: "string"
 																				nameSuffix: type: "string"
@@ -12383,6 +14042,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			type: "object"
 																		}
+																		name: type: "string"
 																		path: type: "string"
 																		plugin: {
 																			properties: {
@@ -12427,6 +14087,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		targetRevision: type: "string"
 																	}
 																	required: ["repoURL"]
+																	type: "object"
+																}
+																sourceHydrator: {
+																	properties: {
+																		drySource: {
+																			properties: {
+																				path: type: "string"
+																				repoURL: type: "string"
+																				targetRevision: type: "string"
+																			}
+																			required: [
+																				"path",
+																				"repoURL",
+																				"targetRevision",
+																			]
+																			type: "object"
+																		}
+																		hydrateTo: {
+																			properties: targetBranch: type: "string"
+																			required: ["targetBranch"]
+																			type: "object"
+																		}
+																		syncSource: {
+																			properties: {
+																				path: {
+																					minLength: 1
+																					pattern:   "^.{2,}|[^./]$"
+																					type:      "string"
+																				}
+																				targetBranch: type: "string"
+																			}
+																			required: [
+																				"path",
+																				"targetBranch",
+																			]
+																			type: "object"
+																		}
+																	}
+																	required: [
+																		"drySource",
+																		"syncSource",
+																	]
 																	type: "object"
 																}
 																sources: {
@@ -12482,6 +14184,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			helm: {
 																				properties: {
+																					apiVersions: {
+																						items: type: "string"
+																						type: "array"
+																					}
 																					fileParameters: {
 																						items: {
 																							properties: {
@@ -12493,6 +14199,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																						type: "array"
 																					}
 																					ignoreMissingValueFiles: type: "boolean"
+																					kubeVersion: type: "string"
+																					namespace: type: "string"
 																					parameters: {
 																						items: {
 																							properties: {
@@ -12507,6 +14215,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					passCredentials: type: "boolean"
 																					releaseName: type: "string"
 																					skipCrds: type: "boolean"
+																					skipSchemaValidation: type: "boolean"
+																					skipTests: type: "boolean"
 																					valueFiles: {
 																						items: type: "string"
 																						type: "array"
@@ -12522,6 +14232,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			kustomize: {
 																				properties: {
+																					apiVersions: {
+																						items: type: "string"
+																						type: "array"
+																					}
 																					commonAnnotations: {
 																						additionalProperties: type: "string"
 																						type: "object"
@@ -12537,10 +14251,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					}
 																					forceCommonAnnotations: type: "boolean"
 																					forceCommonLabels: type: "boolean"
+																					ignoreMissingComponents: type: "boolean"
 																					images: {
 																						items: type: "string"
 																						type: "array"
 																					}
+																					kubeVersion: type: "string"
+																					labelIncludeTemplates: type: "boolean"
 																					labelWithoutSelector: type: "boolean"
 																					namePrefix: type: "string"
 																					nameSuffix: type: "string"
@@ -12596,6 +14313,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				}
 																				type: "object"
 																			}
+																			name: type: "string"
 																			path: type: "string"
 																			plugin: {
 																				properties: {
@@ -12649,6 +14367,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		automated: {
 																			properties: {
 																				allowEmpty: type: "boolean"
+																				enabled: type: "boolean"
 																				prune: type: "boolean"
 																				selfHeal: type: "boolean"
 																			}
@@ -12684,6 +14403,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					format: "int64"
 																					type:   "integer"
 																				}
+																				refresh: type: "boolean"
 																			}
 																			type: "object"
 																		}
@@ -12860,6 +14580,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		}
 																		helm: {
 																			properties: {
+																				apiVersions: {
+																					items: type: "string"
+																					type: "array"
+																				}
 																				fileParameters: {
 																					items: {
 																						properties: {
@@ -12871,6 +14595,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					type: "array"
 																				}
 																				ignoreMissingValueFiles: type: "boolean"
+																				kubeVersion: type: "string"
+																				namespace: type: "string"
 																				parameters: {
 																					items: {
 																						properties: {
@@ -12885,6 +14611,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				passCredentials: type: "boolean"
 																				releaseName: type: "string"
 																				skipCrds: type: "boolean"
+																				skipSchemaValidation: type: "boolean"
+																				skipTests: type: "boolean"
 																				valueFiles: {
 																					items: type: "string"
 																					type: "array"
@@ -12900,6 +14628,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		}
 																		kustomize: {
 																			properties: {
+																				apiVersions: {
+																					items: type: "string"
+																					type: "array"
+																				}
 																				commonAnnotations: {
 																					additionalProperties: type: "string"
 																					type: "object"
@@ -12915,10 +14647,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				}
 																				forceCommonAnnotations: type: "boolean"
 																				forceCommonLabels: type: "boolean"
+																				ignoreMissingComponents: type: "boolean"
 																				images: {
 																					items: type: "string"
 																					type: "array"
 																				}
+																				kubeVersion: type: "string"
+																				labelIncludeTemplates: type: "boolean"
 																				labelWithoutSelector: type: "boolean"
 																				namePrefix: type: "string"
 																				nameSuffix: type: "string"
@@ -12974,6 +14709,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			type: "object"
 																		}
+																		name: type: "string"
 																		path: type: "string"
 																		plugin: {
 																			properties: {
@@ -13018,6 +14754,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		targetRevision: type: "string"
 																	}
 																	required: ["repoURL"]
+																	type: "object"
+																}
+																sourceHydrator: {
+																	properties: {
+																		drySource: {
+																			properties: {
+																				path: type: "string"
+																				repoURL: type: "string"
+																				targetRevision: type: "string"
+																			}
+																			required: [
+																				"path",
+																				"repoURL",
+																				"targetRevision",
+																			]
+																			type: "object"
+																		}
+																		hydrateTo: {
+																			properties: targetBranch: type: "string"
+																			required: ["targetBranch"]
+																			type: "object"
+																		}
+																		syncSource: {
+																			properties: {
+																				path: {
+																					minLength: 1
+																					pattern:   "^.{2,}|[^./]$"
+																					type:      "string"
+																				}
+																				targetBranch: type: "string"
+																			}
+																			required: [
+																				"path",
+																				"targetBranch",
+																			]
+																			type: "object"
+																		}
+																	}
+																	required: [
+																		"drySource",
+																		"syncSource",
+																	]
 																	type: "object"
 																}
 																sources: {
@@ -13073,6 +14851,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			helm: {
 																				properties: {
+																					apiVersions: {
+																						items: type: "string"
+																						type: "array"
+																					}
 																					fileParameters: {
 																						items: {
 																							properties: {
@@ -13084,6 +14866,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																						type: "array"
 																					}
 																					ignoreMissingValueFiles: type: "boolean"
+																					kubeVersion: type: "string"
+																					namespace: type: "string"
 																					parameters: {
 																						items: {
 																							properties: {
@@ -13098,6 +14882,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					passCredentials: type: "boolean"
 																					releaseName: type: "string"
 																					skipCrds: type: "boolean"
+																					skipSchemaValidation: type: "boolean"
+																					skipTests: type: "boolean"
 																					valueFiles: {
 																						items: type: "string"
 																						type: "array"
@@ -13113,6 +14899,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			kustomize: {
 																				properties: {
+																					apiVersions: {
+																						items: type: "string"
+																						type: "array"
+																					}
 																					commonAnnotations: {
 																						additionalProperties: type: "string"
 																						type: "object"
@@ -13128,10 +14918,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					}
 																					forceCommonAnnotations: type: "boolean"
 																					forceCommonLabels: type: "boolean"
+																					ignoreMissingComponents: type: "boolean"
 																					images: {
 																						items: type: "string"
 																						type: "array"
 																					}
+																					kubeVersion: type: "string"
+																					labelIncludeTemplates: type: "boolean"
 																					labelWithoutSelector: type: "boolean"
 																					namePrefix: type: "string"
 																					nameSuffix: type: "string"
@@ -13187,6 +14980,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				}
 																				type: "object"
 																			}
+																			name: type: "string"
 																			path: type: "string"
 																			plugin: {
 																				properties: {
@@ -13240,6 +15034,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		automated: {
 																			properties: {
 																				allowEmpty: type: "boolean"
+																				enabled: type: "boolean"
 																				prune: type: "boolean"
 																				selfHeal: type: "boolean"
 																			}
@@ -13275,6 +15070,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					format: "int64"
 																					type:   "integer"
 																				}
+																				refresh: type: "boolean"
 																			}
 																			type: "object"
 																		}
@@ -13410,6 +15206,33 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 															]
 															type: "object"
 														}
+														bearerToken: {
+															properties: tokenRef: {
+																properties: {
+																	key: type: "string"
+																	secretName: type: "string"
+																}
+																required: [
+																	"key",
+																	"secretName",
+																]
+																type: "object"
+															}
+															required: ["tokenRef"]
+															type: "object"
+														}
+														caRef: {
+															properties: {
+																configMapName: type: "string"
+																key: type: "string"
+															}
+															required: [
+																"configMapName",
+																"key",
+															]
+															type: "object"
+														}
+														insecure: type: "boolean"
 														project: type: "string"
 														repo: type: "string"
 													}
@@ -13420,11 +15243,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 													]
 													type: "object"
 												}
+												continueOnRepoNotFoundError: type: "boolean"
 												filters: {
 													items: {
 														properties: {
 															branchMatch: type: "string"
 															targetBranchMatch: type: "string"
+															titleMatch: type: "string"
 														}
 														type: "object"
 													}
@@ -13434,6 +15259,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 													properties: {
 														api: type: "string"
 														insecure: type: "boolean"
+														labels: {
+															items: type: "string"
+															type: "array"
+														}
 														owner: type: "string"
 														repo: type: "string"
 														tokenRef: {
@@ -13486,6 +15315,17 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 												gitlab: {
 													properties: {
 														api: type: "string"
+														caRef: {
+															properties: {
+																configMapName: type: "string"
+																key: type: "string"
+															}
+															required: [
+																"configMapName",
+																"key",
+															]
+															type: "object"
+														}
 														insecure: type: "boolean"
 														labels: {
 															items: type: "string"
@@ -13639,6 +15479,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		}
 																		helm: {
 																			properties: {
+																				apiVersions: {
+																					items: type: "string"
+																					type: "array"
+																				}
 																				fileParameters: {
 																					items: {
 																						properties: {
@@ -13650,6 +15494,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					type: "array"
 																				}
 																				ignoreMissingValueFiles: type: "boolean"
+																				kubeVersion: type: "string"
+																				namespace: type: "string"
 																				parameters: {
 																					items: {
 																						properties: {
@@ -13664,6 +15510,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				passCredentials: type: "boolean"
 																				releaseName: type: "string"
 																				skipCrds: type: "boolean"
+																				skipSchemaValidation: type: "boolean"
+																				skipTests: type: "boolean"
 																				valueFiles: {
 																					items: type: "string"
 																					type: "array"
@@ -13679,6 +15527,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		}
 																		kustomize: {
 																			properties: {
+																				apiVersions: {
+																					items: type: "string"
+																					type: "array"
+																				}
 																				commonAnnotations: {
 																					additionalProperties: type: "string"
 																					type: "object"
@@ -13694,10 +15546,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				}
 																				forceCommonAnnotations: type: "boolean"
 																				forceCommonLabels: type: "boolean"
+																				ignoreMissingComponents: type: "boolean"
 																				images: {
 																					items: type: "string"
 																					type: "array"
 																				}
+																				kubeVersion: type: "string"
+																				labelIncludeTemplates: type: "boolean"
 																				labelWithoutSelector: type: "boolean"
 																				namePrefix: type: "string"
 																				nameSuffix: type: "string"
@@ -13753,6 +15608,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			type: "object"
 																		}
+																		name: type: "string"
 																		path: type: "string"
 																		plugin: {
 																			properties: {
@@ -13797,6 +15653,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		targetRevision: type: "string"
 																	}
 																	required: ["repoURL"]
+																	type: "object"
+																}
+																sourceHydrator: {
+																	properties: {
+																		drySource: {
+																			properties: {
+																				path: type: "string"
+																				repoURL: type: "string"
+																				targetRevision: type: "string"
+																			}
+																			required: [
+																				"path",
+																				"repoURL",
+																				"targetRevision",
+																			]
+																			type: "object"
+																		}
+																		hydrateTo: {
+																			properties: targetBranch: type: "string"
+																			required: ["targetBranch"]
+																			type: "object"
+																		}
+																		syncSource: {
+																			properties: {
+																				path: {
+																					minLength: 1
+																					pattern:   "^.{2,}|[^./]$"
+																					type:      "string"
+																				}
+																				targetBranch: type: "string"
+																			}
+																			required: [
+																				"path",
+																				"targetBranch",
+																			]
+																			type: "object"
+																		}
+																	}
+																	required: [
+																		"drySource",
+																		"syncSource",
+																	]
 																	type: "object"
 																}
 																sources: {
@@ -13852,6 +15750,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			helm: {
 																				properties: {
+																					apiVersions: {
+																						items: type: "string"
+																						type: "array"
+																					}
 																					fileParameters: {
 																						items: {
 																							properties: {
@@ -13863,6 +15765,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																						type: "array"
 																					}
 																					ignoreMissingValueFiles: type: "boolean"
+																					kubeVersion: type: "string"
+																					namespace: type: "string"
 																					parameters: {
 																						items: {
 																							properties: {
@@ -13877,6 +15781,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					passCredentials: type: "boolean"
 																					releaseName: type: "string"
 																					skipCrds: type: "boolean"
+																					skipSchemaValidation: type: "boolean"
+																					skipTests: type: "boolean"
 																					valueFiles: {
 																						items: type: "string"
 																						type: "array"
@@ -13892,6 +15798,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			kustomize: {
 																				properties: {
+																					apiVersions: {
+																						items: type: "string"
+																						type: "array"
+																					}
 																					commonAnnotations: {
 																						additionalProperties: type: "string"
 																						type: "object"
@@ -13907,10 +15817,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					}
 																					forceCommonAnnotations: type: "boolean"
 																					forceCommonLabels: type: "boolean"
+																					ignoreMissingComponents: type: "boolean"
 																					images: {
 																						items: type: "string"
 																						type: "array"
 																					}
+																					kubeVersion: type: "string"
+																					labelIncludeTemplates: type: "boolean"
 																					labelWithoutSelector: type: "boolean"
 																					namePrefix: type: "string"
 																					nameSuffix: type: "string"
@@ -13966,6 +15879,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				}
 																				type: "object"
 																			}
+																			name: type: "string"
 																			path: type: "string"
 																			plugin: {
 																				properties: {
@@ -14019,6 +15933,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		automated: {
 																			properties: {
 																				allowEmpty: type: "boolean"
+																				enabled: type: "boolean"
 																				prune: type: "boolean"
 																				selfHeal: type: "boolean"
 																			}
@@ -14054,6 +15969,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					format: "int64"
 																					type:   "integer"
 																				}
+																				refresh: type: "boolean"
 																			}
 																			type: "object"
 																		}
@@ -14076,6 +15992,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 														"metadata",
 														"spec",
 													]
+													type: "object"
+												}
+												values: {
+													additionalProperties: type: "string"
 													type: "object"
 												}
 											}
@@ -14176,6 +16096,33 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 															]
 															type: "object"
 														}
+														bearerToken: {
+															properties: tokenRef: {
+																properties: {
+																	key: type: "string"
+																	secretName: type: "string"
+																}
+																required: [
+																	"key",
+																	"secretName",
+																]
+																type: "object"
+															}
+															required: ["tokenRef"]
+															type: "object"
+														}
+														caRef: {
+															properties: {
+																configMapName: type: "string"
+																key: type: "string"
+															}
+															required: [
+																"configMapName",
+																"key",
+															]
+															type: "object"
+														}
+														insecure: type: "boolean"
 														project: type: "string"
 													}
 													required: [
@@ -14253,6 +16200,17 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 													properties: {
 														allBranches: type: "boolean"
 														api: type: "string"
+														caRef: {
+															properties: {
+																configMapName: type: "string"
+																key: type: "string"
+															}
+															required: [
+																"configMapName",
+																"key",
+															]
+															type: "object"
+														}
 														group: type: "string"
 														includeSharedProjects: type: "boolean"
 														includeSubgroups: type: "boolean"
@@ -14404,6 +16362,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		}
 																		helm: {
 																			properties: {
+																				apiVersions: {
+																					items: type: "string"
+																					type: "array"
+																				}
 																				fileParameters: {
 																					items: {
 																						properties: {
@@ -14415,6 +16377,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					type: "array"
 																				}
 																				ignoreMissingValueFiles: type: "boolean"
+																				kubeVersion: type: "string"
+																				namespace: type: "string"
 																				parameters: {
 																					items: {
 																						properties: {
@@ -14429,6 +16393,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				passCredentials: type: "boolean"
 																				releaseName: type: "string"
 																				skipCrds: type: "boolean"
+																				skipSchemaValidation: type: "boolean"
+																				skipTests: type: "boolean"
 																				valueFiles: {
 																					items: type: "string"
 																					type: "array"
@@ -14444,6 +16410,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		}
 																		kustomize: {
 																			properties: {
+																				apiVersions: {
+																					items: type: "string"
+																					type: "array"
+																				}
 																				commonAnnotations: {
 																					additionalProperties: type: "string"
 																					type: "object"
@@ -14459,10 +16429,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				}
 																				forceCommonAnnotations: type: "boolean"
 																				forceCommonLabels: type: "boolean"
+																				ignoreMissingComponents: type: "boolean"
 																				images: {
 																					items: type: "string"
 																					type: "array"
 																				}
+																				kubeVersion: type: "string"
+																				labelIncludeTemplates: type: "boolean"
 																				labelWithoutSelector: type: "boolean"
 																				namePrefix: type: "string"
 																				nameSuffix: type: "string"
@@ -14518,6 +16491,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			type: "object"
 																		}
+																		name: type: "string"
 																		path: type: "string"
 																		plugin: {
 																			properties: {
@@ -14562,6 +16536,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		targetRevision: type: "string"
 																	}
 																	required: ["repoURL"]
+																	type: "object"
+																}
+																sourceHydrator: {
+																	properties: {
+																		drySource: {
+																			properties: {
+																				path: type: "string"
+																				repoURL: type: "string"
+																				targetRevision: type: "string"
+																			}
+																			required: [
+																				"path",
+																				"repoURL",
+																				"targetRevision",
+																			]
+																			type: "object"
+																		}
+																		hydrateTo: {
+																			properties: targetBranch: type: "string"
+																			required: ["targetBranch"]
+																			type: "object"
+																		}
+																		syncSource: {
+																			properties: {
+																				path: {
+																					minLength: 1
+																					pattern:   "^.{2,}|[^./]$"
+																					type:      "string"
+																				}
+																				targetBranch: type: "string"
+																			}
+																			required: [
+																				"path",
+																				"targetBranch",
+																			]
+																			type: "object"
+																		}
+																	}
+																	required: [
+																		"drySource",
+																		"syncSource",
+																	]
 																	type: "object"
 																}
 																sources: {
@@ -14617,6 +16633,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			helm: {
 																				properties: {
+																					apiVersions: {
+																						items: type: "string"
+																						type: "array"
+																					}
 																					fileParameters: {
 																						items: {
 																							properties: {
@@ -14628,6 +16648,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																						type: "array"
 																					}
 																					ignoreMissingValueFiles: type: "boolean"
+																					kubeVersion: type: "string"
+																					namespace: type: "string"
 																					parameters: {
 																						items: {
 																							properties: {
@@ -14642,6 +16664,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					passCredentials: type: "boolean"
 																					releaseName: type: "string"
 																					skipCrds: type: "boolean"
+																					skipSchemaValidation: type: "boolean"
+																					skipTests: type: "boolean"
 																					valueFiles: {
 																						items: type: "string"
 																						type: "array"
@@ -14657,6 +16681,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																			}
 																			kustomize: {
 																				properties: {
+																					apiVersions: {
+																						items: type: "string"
+																						type: "array"
+																					}
 																					commonAnnotations: {
 																						additionalProperties: type: "string"
 																						type: "object"
@@ -14672,10 +16700,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					}
 																					forceCommonAnnotations: type: "boolean"
 																					forceCommonLabels: type: "boolean"
+																					ignoreMissingComponents: type: "boolean"
 																					images: {
 																						items: type: "string"
 																						type: "array"
 																					}
+																					kubeVersion: type: "string"
+																					labelIncludeTemplates: type: "boolean"
 																					labelWithoutSelector: type: "boolean"
 																					namePrefix: type: "string"
 																					nameSuffix: type: "string"
@@ -14731,6 +16762,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																				}
 																				type: "object"
 																			}
+																			name: type: "string"
 																			path: type: "string"
 																			plugin: {
 																				properties: {
@@ -14784,6 +16816,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																		automated: {
 																			properties: {
 																				allowEmpty: type: "boolean"
+																				enabled: type: "boolean"
 																				prune: type: "boolean"
 																				selfHeal: type: "boolean"
 																			}
@@ -14819,6 +16852,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																					format: "int64"
 																					type:   "integer"
 																				}
+																				refresh: type: "boolean"
 																			}
 																			type: "object"
 																		}
@@ -14859,7 +16893,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 															operator: type: "string"
 															values: {
 																items: type: "string"
-																type: "array"
+																type:                     "array"
+																"x-kubernetes-list-type": "atomic"
 															}
 														}
 														required: [
@@ -14868,7 +16903,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 														]
 														type: "object"
 													}
-													type: "array"
+													type:                     "array"
+													"x-kubernetes-list-type": "atomic"
 												}
 												matchLabels: {
 													additionalProperties: type: "string"
@@ -14920,6 +16956,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 							}
 							strategy: {
 								properties: {
+									deletionOrder: type: "string"
 									rollingSync: {
 										properties: steps: {
 											items: {
@@ -15099,6 +17136,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 													}
 													helm: {
 														properties: {
+															apiVersions: {
+																items: type: "string"
+																type: "array"
+															}
 															fileParameters: {
 																items: {
 																	properties: {
@@ -15110,6 +17151,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																type: "array"
 															}
 															ignoreMissingValueFiles: type: "boolean"
+															kubeVersion: type: "string"
+															namespace: type: "string"
 															parameters: {
 																items: {
 																	properties: {
@@ -15124,6 +17167,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 															passCredentials: type: "boolean"
 															releaseName: type: "string"
 															skipCrds: type: "boolean"
+															skipSchemaValidation: type: "boolean"
+															skipTests: type: "boolean"
 															valueFiles: {
 																items: type: "string"
 																type: "array"
@@ -15139,6 +17184,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 													}
 													kustomize: {
 														properties: {
+															apiVersions: {
+																items: type: "string"
+																type: "array"
+															}
 															commonAnnotations: {
 																additionalProperties: type: "string"
 																type: "object"
@@ -15154,10 +17203,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 															}
 															forceCommonAnnotations: type: "boolean"
 															forceCommonLabels: type: "boolean"
+															ignoreMissingComponents: type: "boolean"
 															images: {
 																items: type: "string"
 																type: "array"
 															}
+															kubeVersion: type: "string"
+															labelIncludeTemplates: type: "boolean"
 															labelWithoutSelector: type: "boolean"
 															namePrefix: type: "string"
 															nameSuffix: type: "string"
@@ -15213,6 +17265,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 														}
 														type: "object"
 													}
+													name: type: "string"
 													path: type: "string"
 													plugin: {
 														properties: {
@@ -15257,6 +17310,48 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 													targetRevision: type: "string"
 												}
 												required: ["repoURL"]
+												type: "object"
+											}
+											sourceHydrator: {
+												properties: {
+													drySource: {
+														properties: {
+															path: type: "string"
+															repoURL: type: "string"
+															targetRevision: type: "string"
+														}
+														required: [
+															"path",
+															"repoURL",
+															"targetRevision",
+														]
+														type: "object"
+													}
+													hydrateTo: {
+														properties: targetBranch: type: "string"
+														required: ["targetBranch"]
+														type: "object"
+													}
+													syncSource: {
+														properties: {
+															path: {
+																minLength: 1
+																pattern:   "^.{2,}|[^./]$"
+																type:      "string"
+															}
+															targetBranch: type: "string"
+														}
+														required: [
+															"path",
+															"targetBranch",
+														]
+														type: "object"
+													}
+												}
+												required: [
+													"drySource",
+													"syncSource",
+												]
 												type: "object"
 											}
 											sources: {
@@ -15312,6 +17407,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 														}
 														helm: {
 															properties: {
+																apiVersions: {
+																	items: type: "string"
+																	type: "array"
+																}
 																fileParameters: {
 																	items: {
 																		properties: {
@@ -15323,6 +17422,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																	type: "array"
 																}
 																ignoreMissingValueFiles: type: "boolean"
+																kubeVersion: type: "string"
+																namespace: type: "string"
 																parameters: {
 																	items: {
 																		properties: {
@@ -15337,6 +17438,8 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																passCredentials: type: "boolean"
 																releaseName: type: "string"
 																skipCrds: type: "boolean"
+																skipSchemaValidation: type: "boolean"
+																skipTests: type: "boolean"
 																valueFiles: {
 																	items: type: "string"
 																	type: "array"
@@ -15352,6 +17455,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 														}
 														kustomize: {
 															properties: {
+																apiVersions: {
+																	items: type: "string"
+																	type: "array"
+																}
 																commonAnnotations: {
 																	additionalProperties: type: "string"
 																	type: "object"
@@ -15367,10 +17474,13 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																}
 																forceCommonAnnotations: type: "boolean"
 																forceCommonLabels: type: "boolean"
+																ignoreMissingComponents: type: "boolean"
 																images: {
 																	items: type: "string"
 																	type: "array"
 																}
+																kubeVersion: type: "string"
+																labelIncludeTemplates: type: "boolean"
 																labelWithoutSelector: type: "boolean"
 																namePrefix: type: "string"
 																nameSuffix: type: "string"
@@ -15426,6 +17536,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 															}
 															type: "object"
 														}
+														name: type: "string"
 														path: type: "string"
 														plugin: {
 															properties: {
@@ -15479,6 +17590,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 													automated: {
 														properties: {
 															allowEmpty: type: "boolean"
+															enabled: type: "boolean"
 															prune: type: "boolean"
 															selfHeal: type: "boolean"
 														}
@@ -15514,6 +17626,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 																format: "int64"
 																type:   "integer"
 															}
+															refresh: type: "boolean"
 														}
 														type: "object"
 													}
@@ -15603,6 +17716,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 										group: type: "string"
 										health: {
 											properties: {
+												lastTransitionTime: {
+													format: "date-time"
+													type:   "string"
+												}
 												message: type: "string"
 												status: type: "string"
 											}
@@ -15612,6 +17729,7 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 										kind: type: "string"
 										name: type: "string"
 										namespace: type: "string"
+										requiresDeletionConfirmation: type: "boolean"
 										requiresPruning: type: "boolean"
 										status: type: "string"
 										syncWave: {
@@ -15623,6 +17741,10 @@ customresourcedefinition: "applicationsets.argoproj.io": {
 									type: "object"
 								}
 								type: "array"
+							}
+							resourcesCount: {
+								format: "int64"
+								type:   "integer"
 							}
 						}
 						type: "object"

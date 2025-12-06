@@ -72,7 +72,7 @@
                 }
               }
             ],
-            "image": "redis:7.0.15-alpine",
+            "image": "public.ecr.aws/docker/library/redis:8.2.2-alpine",
             "imagePullPolicy": "Always",
             "name": "redis",
             "ports": [
@@ -98,7 +98,7 @@
               "admin",
               "redis-initial-password"
             ],
-            "image": "quay.io/argoproj/argocd:v2.12.4",
+            "image": "quay.io/argoproj/argocd:v3.2.1",
             "imagePullPolicy": "IfNotPresent",
             "name": "secret-init",
             "securityContext": {
@@ -116,6 +116,9 @@
             }
           }
         ],
+        "nodeSelector": {
+          "kubernetes.io/os": "linux"
+        },
         "securityContext": {
           "runAsNonRoot": true,
           "runAsUser": 999,

@@ -66,15 +66,17 @@ role: "argocd-applicationset-controller": {
 			"watch",
 		]
 	}, {
-		apiGroups: [
-			"apps",
-			"extensions",
-		]
-		resources: ["deployments"]
+		apiGroups: ["coordination.k8s.io"]
+		resources: ["leases"]
+		verbs: ["create"]
+	}, {
+		apiGroups: ["coordination.k8s.io"]
+		resourceNames: ["58ac56fa.applicationsets.argoproj.io"]
+		resources: ["leases"]
 		verbs: [
 			"get",
-			"list",
-			"watch",
+			"update",
+			"create",
 		]
 	}]
 }

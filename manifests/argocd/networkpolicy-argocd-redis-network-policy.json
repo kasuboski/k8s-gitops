@@ -3,6 +3,9 @@
   "kind": "NetworkPolicy",
   "metadata": {
     "labels": {
+      "app.kubernetes.io/component": "redis",
+      "app.kubernetes.io/name": "argocd-redis",
+      "app.kubernetes.io/part-of": "argocd",
       "k8s.joshcorp.co/app": "argocd"
     },
     "name": "argocd-redis-network-policy",
