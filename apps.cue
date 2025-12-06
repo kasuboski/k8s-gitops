@@ -73,7 +73,7 @@ appsApp: {
 	spec: {
 		source: {
 			path:           "manifests/apps"
-			targetRevision: "feature/talos"
+			targetRevision: "main"
 		}
 		destination: namespace: "argocd"
 	}
