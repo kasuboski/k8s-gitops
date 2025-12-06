@@ -39,6 +39,47 @@ apps: longhorn: {
 	}
 	// Merge our custom overrides (this works for most fields)
 	resources: _override
+
+	resources: httproute: longhornui: {
+		apiVersion: "gateway.networking.k8s.io/v1"
+		kind:       "HTTPRoute"
+		metadata: name:      "longhorn-ui"
+		metadata: namespace: "longhorn-system"
+		spec: {
+			parentRefs: [
+				{
+					group:     "gateway.networking.k8s.io"
+					kind:      "Gateway"
+					name:      "http"
+					namespace: "envoy-gateway-system"
+				},
+			]
+			hostnames: [
+				"longhorn.joshcorp.co",
+			]
+			rules: [
+				{
+					backendRefs: [
+						{
+							group:  ""
+							kind:   "Service"
+							name:   "longhorn-frontend"
+							port:   80
+							weight: 1
+						},
+					]
+					matches: [
+						{
+							path: {
+								type:  "PathPrefix"
+								value: "/"
+							}
+						},
+					]
+				},
+			]
+		}
+	}
 }
 
 _override: namespace: "longhorn-system": {
