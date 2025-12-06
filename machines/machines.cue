@@ -76,6 +76,11 @@ controlPlaneScheduling: #Patch & {
 	}
 }
 
+// Image Factory installer image for x86 nodes with extensions
+x86InstallerImage: #Patch & {
+	machine: install: image: "factory.talos.dev/installer/\(cluster.talos.schematics.x86):\(cluster.talos.version)"
+}
+
 // Hardware-specific patches
 hardwarePatches: {
 	// SD card install for Raspberry Pi nodes
@@ -142,6 +147,7 @@ nodes: {
 			kubespanEnabled,
 			apiServerCertSANs,
 			controlPlaneScheduling,
+			x86InstallerImage,
 			longhornPatches.ephemeralVolume,
 			longhornPatches.kubeletMounts,
 			longhornPatches.v2DataEngine,
