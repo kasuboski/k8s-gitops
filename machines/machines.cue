@@ -8,10 +8,11 @@ import (
 // We reference Talos types for validation but all fields are optional
 #Patch: {
 	machine?: {
-		kubelet?:     talos.#KubeletConfig
-		network?:     talos.#NetworkConfig
-		install?:     talos.#InstallConfig
-		nodeLabels?:  {[string]: string}
+		kubelet?: talos.#KubeletConfig
+		network?: talos.#NetworkConfig
+		install?: talos.#InstallConfig
+		// nodeLabels can be string values or patch directives like {$patch: "delete"}
+		nodeLabels?: {[string]: string | {$patch: string}}
 		...
 	}
 	cluster?: {
@@ -51,7 +52,7 @@ kubespanEnabled: #Patch & {
 		enabled: true
 		registries: {
 			kubernetes: disabled: true // Recommended with KubeSpan
-			service: {}                // Use Sidero Labs discovery service
+			service: {} // Use Sidero Labs discovery service
 		}
 	}
 }
@@ -63,6 +64,16 @@ apiServerCertSANs: #Patch & {
 		"adel",
 		"adel.lan",
 	]
+}
+
+// Control plane scheduling - for single control plane clusters
+// Allows workloads to run on control plane and enables load balancer integration
+controlPlaneScheduling: #Patch & {
+	cluster: allowSchedulingOnControlPlanes: true
+	// Remove the load balancer exclusion label so MetalLB can use control plane
+	machine: nodeLabels: "node.kubernetes.io/exclude-from-external-load-balancers": {
+		$patch: "delete"
+	}
 }
 
 // Hardware-specific patches
@@ -105,7 +116,7 @@ nodePatches: {
 	adel: #Patch & {
 		machine: {
 			install: {
-				disk: "/dev/sdb"
+				disk: "/dev/sda"
 				wipe: true
 			}
 			network: hostname: "adel"
@@ -130,7 +141,12 @@ nodes: {
 			commonPatches.austinLabels,
 			kubespanEnabled,
 			apiServerCertSANs,
-			nodePatches.adel, // Contains /dev/sdb disk config
+			controlPlaneScheduling,
+			longhornPatches.ephemeralVolume,
+			longhornPatches.kubeletMounts,
+			longhornPatches.v2DataEngine,
+			longhornPatches.x86Volume,
+			nodePatches.adel, // Contains /dev/sda disk config
 		]
 	}
 

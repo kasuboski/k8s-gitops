@@ -25,16 +25,15 @@ Example:
 	Run: func(cmd *cobra.Command, args []string) {
 		ctx := context.Background()
 
-		clusterName := "pi"
-		endpoint := "https://192.168.86.19:6443"
 		secretsFile := "talos/result/secrets.yaml"
 		outputDir := "talos/result"
 
-		if err := machine.GenerateConfigsFromCUE(ctx, clusterName, endpoint, secretsFile, outputDir); err != nil {
+		if err := machine.GenerateConfigsFromCUE(ctx, secretsFile, outputDir); err != nil {
 			log.Fatalf("Failed to generate configs: %v", err)
 		}
 
 		fmt.Println("\nMachine configs generated successfully!")
+		fmt.Println("Cluster configuration loaded from machines/cluster.cue")
 		fmt.Println("Apply with: talosctl apply-config -n <node> -f talos/result/<node>.yaml")
 	},
 }
