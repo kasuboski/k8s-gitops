@@ -39,7 +39,7 @@
                 }
               }
             ],
-            "image": "ghcr.io/open-webui/open-webui:v0.5.2",
+            "image": "ghcr.io/open-webui/open-webui:v0.6.41",
             "name": "openwebui",
             "ports": [
               {

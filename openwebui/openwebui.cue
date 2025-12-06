@@ -1,6 +1,6 @@
 package openwebui
 
-_imageTag: "v0.5.2"
+_imageTag: "v0.6.41"
 deployment: openwebui: spec: {
 	strategy: type: "Recreate"
 	selector: matchLabels: "app.kubernetes.io/name": "openwebui"
