@@ -57,6 +57,6 @@ deployment: radarr: spec: template: spec: {
 
 httproute: radarr: {}
 
-persistentvolumeclaim: radarr: {}
+persistentvolumeclaim: radarr: spec: resources: requests: storage: "8Gi"
 
 service: radarr: {}
