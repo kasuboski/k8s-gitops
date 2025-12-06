@@ -2,7 +2,7 @@
 
 set -ex
 
-APPS="grafana-agent media default builder openwebui"
+APPS="cloudflare-gateway media default openwebui"
 
 for a in $APPS
 do
