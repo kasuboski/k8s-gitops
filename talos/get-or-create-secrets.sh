@@ -4,6 +4,9 @@ if [ -z "$SECRET_FILE" ]; then
   exit 1
 fi
 
+# Create directory if it doesn't exist
+mkdir -p "$(dirname "$SECRET_FILE")"
+
 EXISTING=$(doppler secrets get SECRET_YAML -p talos -c boot --plain 2> /dev/null)
 if [ -z "$EXISTING" ]; then
   talosctl gen secrets -o "$SECRET_FILE"

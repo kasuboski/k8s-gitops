@@ -1,0 +1,14 @@
+{
+  "apiVersion": "v1",
+  "data": {
+    "default-setting.yaml": "priority-class: longhorn-critical\ndisable-revision-counter: '{\"v1\":\"true\"}'\ndefault-data-path: /var/mnt/longhorn\ndefault-replica-count: 1\n"
+  },
+  "kind": "ConfigMap",
+  "metadata": {
+    "labels": {
+      "k8s.joshcorp.co/app": "longhorn"
+    },
+    "name": "longhorn-default-setting",
+    "namespace": "longhorn-system"
+  }
+}

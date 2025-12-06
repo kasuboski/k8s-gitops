@@ -3,6 +3,9 @@
   "kind": "NetworkPolicy",
   "metadata": {
     "labels": {
+      "app.kubernetes.io/component": "server",
+      "app.kubernetes.io/name": "argocd-server",
+      "app.kubernetes.io/part-of": "argocd",
       "k8s.joshcorp.co/app": "argocd"
     },
     "name": "argocd-server-network-policy",

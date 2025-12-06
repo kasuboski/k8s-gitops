@@ -114,6 +114,13 @@ statefulset: "argocd-application-controller": {
 							optional: true
 						}
 					}, {
+						name: "ARGOCD_LOG_FORMAT_TIMESTAMP"
+						valueFrom: configMapKeyRef: {
+							key:      "log.format.timestamp"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
 						name: "ARGOCD_APPLICATION_CONTROLLER_METRICS_CACHE_EXPIRATION"
 						valueFrom: configMapKeyRef: {
 							key:      "controller.metrics.cache.expiration"
@@ -124,6 +131,48 @@ statefulset: "argocd-application-controller": {
 						name: "ARGOCD_APPLICATION_CONTROLLER_SELF_HEAL_TIMEOUT_SECONDS"
 						valueFrom: configMapKeyRef: {
 							key:      "controller.self.heal.timeout.seconds"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATION_CONTROLLER_SELF_HEAL_BACKOFF_TIMEOUT_SECONDS"
+						valueFrom: configMapKeyRef: {
+							key:      "controller.self.heal.backoff.timeout.seconds"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATION_CONTROLLER_SELF_HEAL_BACKOFF_FACTOR"
+						valueFrom: configMapKeyRef: {
+							key:      "controller.self.heal.backoff.factor"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATION_CONTROLLER_SELF_HEAL_BACKOFF_CAP_SECONDS"
+						valueFrom: configMapKeyRef: {
+							key:      "controller.self.heal.backoff.cap.seconds"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATION_CONTROLLER_SELF_HEAL_BACKOFF_COOLDOWN_SECONDS"
+						valueFrom: configMapKeyRef: {
+							key:      "controller.self.heal.backoff.cooldown.seconds"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_SYNC_WAVE_DELAY"
+						valueFrom: configMapKeyRef: {
+							key:      "controller.sync.wave.delay.seconds"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATION_CONTROLLER_SYNC_TIMEOUT"
+						valueFrom: configMapKeyRef: {
+							key:      "controller.sync.timeout.seconds"
 							name:     "argocd-cmd-params-cm"
 							optional: true
 						}
@@ -205,6 +254,13 @@ statefulset: "argocd-application-controller": {
 							optional: true
 						}
 					}, {
+						name: "ARGOCD_APPLICATION_CONTROLLER_OTLP_ATTRS"
+						valueFrom: configMapKeyRef: {
+							key:      "otlp.attrs"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
 						name: "ARGOCD_APPLICATION_NAMESPACES"
 						valueFrom: configMapKeyRef: {
 							key:      "application.namespaces"
@@ -253,8 +309,39 @@ statefulset: "argocd-application-controller": {
 							name:     "argocd-cmd-params-cm"
 							optional: true
 						}
+					}, {
+						name: "ARGOCD_HYDRATOR_ENABLED"
+						valueFrom: configMapKeyRef: {
+							key:      "hydrator.enabled"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_CLUSTER_CACHE_BATCH_EVENTS_PROCESSING"
+						valueFrom: configMapKeyRef: {
+							key:      "controller.cluster.cache.batch.events.processing"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_CLUSTER_CACHE_EVENTS_PROCESSING_INTERVAL"
+						valueFrom: configMapKeyRef: {
+							key:      "controller.cluster.cache.events.processing.interval"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATION_CONTROLLER_COMMIT_SERVER"
+						valueFrom: configMapKeyRef: {
+							key:      "commit.server"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name:  "KUBECACHEDIR"
+						value: "/tmp/kubecache"
 					}]
-					image:           "quay.io/argoproj/argocd:v2.12.4"
+					image:           "quay.io/argoproj/argocd:v3.2.1"
 					imagePullPolicy: "Always"
 					name:            "argocd-application-controller"
 					ports: [{containerPort: 8082}]
@@ -279,13 +366,23 @@ statefulset: "argocd-application-controller": {
 					}, {
 						mountPath: "/home/argocd"
 						name:      "argocd-home"
+					}, {
+						mountPath: "/home/argocd/params"
+						name:      "argocd-cmd-params-cm"
+					}, {
+						mountPath: "/tmp"
+						name:      "argocd-application-controller-tmp"
 					}]
 					workingDir: "/home/argocd"
 				}]
+				nodeSelector: "kubernetes.io/os": "linux"
 				serviceAccountName: "argocd-application-controller"
 				volumes: [{
 					emptyDir: {}
 					name: "argocd-home"
+				}, {
+					emptyDir: {}
+					name: "argocd-application-controller-tmp"
 				}, {
 					name: "argocd-repo-server-tls"
 					secret: {
@@ -302,6 +399,16 @@ statefulset: "argocd-application-controller": {
 						optional:   true
 						secretName: "argocd-repo-server-tls"
 					}
+				}, {
+					configMap: {
+						items: [{
+							key:  "controller.profile.enabled"
+							path: "profiler.enabled"
+						}]
+						name:     "argocd-cmd-params-cm"
+						optional: true
+					}
+					name: "argocd-cmd-params-cm"
 				}]
 			}
 		}

@@ -86,6 +86,13 @@ deployment: "argocd-applicationset-controller": {
 							optional: true
 						}
 					}, {
+						name: "ARGOCD_LOG_FORMAT_TIMESTAMP"
+						valueFrom: configMapKeyRef: {
+							key:      "log.format.timestamp"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
 						name: "ARGOCD_APPLICATIONSET_CONTROLLER_DRY_RUN"
 						valueFrom: configMapKeyRef: {
 							key:      "applicationsetcontroller.dryrun"
@@ -103,6 +110,13 @@ deployment: "argocd-applicationset-controller": {
 						name: "ARGOCD_APPLICATIONSET_CONTROLLER_ENABLE_PROGRESSIVE_SYNCS"
 						valueFrom: configMapKeyRef: {
 							key:      "applicationsetcontroller.enable.progressive.syncs"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_TOKENREF_STRICT_MODE"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.enable.tokenref.strict.mode"
 							name:     "argocd-cmd-params-cm"
 							optional: true
 						}
@@ -169,8 +183,36 @@ deployment: "argocd-applicationset-controller": {
 							name:     "argocd-cmd-params-cm"
 							optional: true
 						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_ENABLE_GITHUB_API_METRICS"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.enable.github.api.metrics"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_WEBHOOK_PARALLELISM_LIMIT"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.webhook.parallelism.limit"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_REQUEUE_AFTER"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.requeue.after"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
+					}, {
+						name: "ARGOCD_APPLICATIONSET_CONTROLLER_MAX_RESOURCES_STATUS_COUNT"
+						valueFrom: configMapKeyRef: {
+							key:      "applicationsetcontroller.status.max.resources.count"
+							name:     "argocd-cmd-params-cm"
+							optional: true
+						}
 					}]
-					image:           "quay.io/argoproj/argocd:v2.12.4"
+					image:           "quay.io/argoproj/argocd:v3.2.1"
 					imagePullPolicy: "Always"
 					name:            "argocd-applicationset-controller"
 					ports: [{
@@ -205,8 +247,12 @@ deployment: "argocd-applicationset-controller": {
 					}, {
 						mountPath: "/app/config/reposerver/tls"
 						name:      "argocd-repo-server-tls"
+					}, {
+						mountPath: "/home/argocd/params"
+						name:      "argocd-cmd-params-cm"
 					}]
 				}]
+				nodeSelector: "kubernetes.io/os": "linux"
 				serviceAccountName: "argocd-applicationset-controller"
 				volumes: [{
 					configMap: name: "argocd-ssh-known-hosts-cm"
@@ -239,6 +285,16 @@ deployment: "argocd-applicationset-controller": {
 						optional:   true
 						secretName: "argocd-repo-server-tls"
 					}
+				}, {
+					configMap: {
+						items: [{
+							key:  "applicationsetcontroller.profile.enabled"
+							path: "profiler.enabled"
+						}]
+						name:     "argocd-cmd-params-cm"
+						optional: true
+					}
+					name: "argocd-cmd-params-cm"
 				}]
 			}
 		}

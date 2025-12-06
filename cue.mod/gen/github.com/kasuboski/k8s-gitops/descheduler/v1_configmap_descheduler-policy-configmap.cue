@@ -1,11 +1,11 @@
 package descheduler
 
-import yaml656e63 "encoding/yaml"
+import "encoding/yaml"
 
 configmap: "descheduler-policy-configmap": {
 	apiVersion: "v1"
 	data: {
-		"policy.yaml": yaml656e63.Marshal(_cue_policy_yaml)
+		"policy.yaml": yaml.Marshal(_cue_policy_yaml)
 		let _cue_policy_yaml = {
 			apiVersion: "descheduler/v1alpha2"
 			kind:       "DeschedulerPolicy"

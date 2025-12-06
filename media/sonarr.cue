@@ -57,6 +57,6 @@ deployment: sonarr: spec: template: spec: {
 
 httproute: sonarr: {}
 
-persistentvolumeclaim: sonarr: {}
+persistentvolumeclaim: sonarr: spec: resources: requests: storage: "4Gi"
 
 service: sonarr: {}

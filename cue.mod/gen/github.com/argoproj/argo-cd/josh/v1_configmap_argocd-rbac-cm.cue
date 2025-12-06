@@ -8,6 +8,7 @@ configmap: "argocd-rbac-cm": {
 			p, role:syncer, applications, sync, */*, allow
 			p, role:syncer, projects, get, *, allow
 			p, role:syncer, repositories, get, *, allow
+			p, role:syncer, logs, get, */*, allow
 			"""
 		"policy.default": "role:syncer"
 	}

@@ -18,28 +18,40 @@ type CUENodeConfig struct {
 	Patches []map[string]interface{}
 }
 
+type CUEClusterConfig struct {
+	Name           string
+	Endpoint       string
+	NodeEndpoints  map[string]string
+	TalosEndpoints []string
+}
+
 // GenerateConfigsFromCUE generates Talos configs directly from CUE definitions
-func GenerateConfigsFromCUE(ctx context.Context, clusterName, endpoint, secretsFile, outputDir string) error {
-	// 1. Load nodes from CUE
+func GenerateConfigsFromCUE(ctx context.Context, secretsFile, outputDir string) error {
+	// 1. Load cluster config from CUE
+	cluster, err := loadClusterFromCUE()
+	if err != nil {
+		return fmt.Errorf("load cluster from CUE: %w", err)
+	}
+
+	// 2. Load nodes from CUE
 	nodes, err := loadNodesFromCUE()
 	if err != nil {
 		return fmt.Errorf("load nodes from CUE: %w", err)
 	}
 
-	// 2. Generate base configs with talosctl
+	// 3. Generate base configs with talosctl
 	secretsDir := filepath.Dir(secretsFile)
-	if err := generateBaseConfigs(ctx, clusterName, endpoint, secretsFile, secretsDir); err != nil {
+	if err := generateBaseConfigs(ctx, cluster.Name, cluster.Endpoint, secretsFile, secretsDir); err != nil {
 		return fmt.Errorf("generate base configs: %w", err)
 	}
 
-	// 3. Generate Tailscale extension config with Doppler substitution
-	tailscaleConfig := filepath.Join(secretsDir, "tailscale-extensionconfig.yaml")
-	if err := generateTailscaleConfig(ctx, tailscaleConfig); err != nil {
-		// Warning only - Tailscale is optional
-		fmt.Printf("Warning: Could not generate Tailscale config: %v\n", err)
+	// 4. Update talosconfig with proper endpoints
+	talosconfigPath := filepath.Join(outputDir, "talosconfig")
+	if err := updateTalosconfig(talosconfigPath, cluster); err != nil {
+		return fmt.Errorf("update talosconfig: %w", err)
 	}
 
-	// 4. For each node, write patches and apply them
+	// 5. For each node, write patches and apply them
 	for nodeName, nodeConfig := range nodes {
 		baseConfig := filepath.Join(secretsDir, nodeConfig.Role+".yaml")
 		outputFile := filepath.Join(outputDir, nodeName+".yaml")
@@ -60,11 +72,6 @@ func GenerateConfigsFromCUE(ctx context.Context, clusterName, endpoint, secretsF
 			patchArgs = append(patchArgs, "--patch", "@"+patchFile)
 		}
 
-		// Add Tailscale extension config if it exists
-		if _, err := os.Stat(tailscaleConfig); err == nil {
-			patchArgs = append(patchArgs, "--patch", "@"+tailscaleConfig)
-		}
-
 		// Run talosctl machineconfig patch
 		args := []string{"machineconfig", "patch", baseConfig}
 		args = append(args, patchArgs...)
@@ -80,6 +87,40 @@ func GenerateConfigsFromCUE(ctx context.Context, clusterName, endpoint, secretsF
 	}
 
 	return nil
+}
+
+func loadClusterFromCUE() (*CUEClusterConfig, error) {
+	return loadClusterFromCUEWithPath("./machines")
+}
+
+func loadClusterFromCUEWithPath(path string) (*CUEClusterConfig, error) {
+	ctx := cuecontext.New()
+
+	instances := load.Instances([]string{path}, nil)
+	if len(instances) == 0 {
+		return nil, fmt.Errorf("no CUE instances found")
+	}
+
+	if err := instances[0].Err; err != nil {
+		return nil, fmt.Errorf("load CUE: %w", err)
+	}
+
+	v := ctx.BuildInstance(instances[0])
+	if v.Err() != nil {
+		return nil, fmt.Errorf("build CUE: %w", v.Err())
+	}
+
+	clusterValue := v.LookupPath(cue.ParsePath("cluster"))
+	if clusterValue.Err() != nil {
+		return nil, fmt.Errorf("lookup cluster: %w", clusterValue.Err())
+	}
+
+	var cluster CUEClusterConfig
+	if err := clusterValue.Decode(&cluster); err != nil {
+		return nil, fmt.Errorf("decode cluster: %w", err)
+	}
+
+	return &cluster, nil
 }
 
 func loadNodesFromCUE() (map[string]CUENodeConfig, error) {
@@ -142,13 +183,35 @@ func generateBaseConfigs(ctx context.Context, clusterName, endpoint, secretsFile
 	return nil
 }
 
-func generateTailscaleConfig(ctx context.Context, outputFile string) error {
-	// Run the substitute script from talos/ directory
-	cmd := exec.CommandContext(ctx, "bash", "./substitute-tailscale.sh", outputFile)
-	cmd.Dir = "talos"
-	output, err := cmd.CombinedOutput()
+func updateTalosconfig(talosconfigPath string, cluster *CUEClusterConfig) error {
+	// Read the generated talosconfig
+	data, err := os.ReadFile(talosconfigPath)
 	if err != nil {
-		return fmt.Errorf("substitute tailscale config: %s: %w", string(output), err)
+		return fmt.Errorf("read talosconfig: %w", err)
 	}
+
+	// Parse as YAML
+	var config map[string]interface{}
+	if err := yaml.Unmarshal(data, &config); err != nil {
+		return fmt.Errorf("unmarshal talosconfig: %w", err)
+	}
+
+	// Update the context with endpoints
+	if contexts, ok := config["contexts"].(map[string]interface{}); ok {
+		if clusterContext, ok := contexts[cluster.Name].(map[string]interface{}); ok {
+			clusterContext["endpoints"] = cluster.TalosEndpoints
+		}
+	}
+
+	// Write back
+	updatedData, err := yaml.Marshal(config)
+	if err != nil {
+		return fmt.Errorf("marshal talosconfig: %w", err)
+	}
+
+	if err := os.WriteFile(talosconfigPath, updatedData, 0600); err != nil {
+		return fmt.Errorf("write talosconfig: %w", err)
+	}
+
 	return nil
 }

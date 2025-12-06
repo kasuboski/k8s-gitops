@@ -1,0 +1,205 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "DaemonSet",
+  "metadata": {
+    "labels": {
+      "app": "longhorn-manager",
+      "app.kubernetes.io/instance": "longhorn",
+      "app.kubernetes.io/name": "longhorn",
+      "app.kubernetes.io/version": "v1.10.1",
+      "k8s.joshcorp.co/app": "longhorn"
+    },
+    "name": "longhorn-manager",
+    "namespace": "longhorn-system"
+  },
+  "spec": {
+    "selector": {
+      "matchLabels": {
+        "app": "longhorn-manager"
+      }
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "longhorn-manager",
+          "app.kubernetes.io/instance": "longhorn",
+          "app.kubernetes.io/name": "longhorn",
+          "app.kubernetes.io/version": "v1.10.1"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "command": [
+              "longhorn-manager",
+              "-d",
+              "daemon",
+              "--engine-image",
+              "longhornio/longhorn-engine:v1.10.1",
+              "--instance-manager-image",
+              "longhornio/longhorn-instance-manager:v1.10.1",
+              "--share-manager-image",
+              "longhornio/longhorn-share-manager:v1.10.1",
+              "--backing-image-manager-image",
+              "longhornio/backing-image-manager:v1.10.1",
+              "--support-bundle-manager-image",
+              "longhornio/support-bundle-kit:v0.0.71",
+              "--manager-image",
+              "longhornio/longhorn-manager:v1.10.1",
+              "--service-account",
+              "longhorn-service-account",
+              "--upgrade-version-check"
+            ],
+            "env": [
+              {
+                "name": "POD_NAME",
+                "valueFrom": {
+                  "fieldRef": {
+                    "fieldPath": "metadata.name"
+                  }
+                }
+              },
+              {
+                "name": "POD_NAMESPACE",
+                "valueFrom": {
+                  "fieldRef": {
+                    "fieldPath": "metadata.namespace"
+                  }
+                }
+              },
+              {
+                "name": "POD_IP",
+                "valueFrom": {
+                  "fieldRef": {
+                    "fieldPath": "status.podIP"
+                  }
+                }
+              },
+              {
+                "name": "NODE_NAME",
+                "valueFrom": {
+                  "fieldRef": {
+                    "fieldPath": "spec.nodeName"
+                  }
+                }
+              }
+            ],
+            "image": "longhornio/longhorn-manager:v1.10.1",
+            "imagePullPolicy": "IfNotPresent",
+            "name": "longhorn-manager",
+            "ports": [
+              {
+                "containerPort": 9500,
+                "name": "manager"
+              },
+              {
+                "containerPort": 9502,
+                "name": "admission-wh"
+              },
+              {
+                "containerPort": 9503,
+                "name": "recov-backend"
+              }
+            ],
+            "readinessProbe": {
+              "httpGet": {
+                "path": "/v1/healthz",
+                "port": 9502,
+                "scheme": "HTTPS"
+              }
+            },
+            "securityContext": {
+              "privileged": true
+            },
+            "volumeMounts": [
+              {
+                "mountPath": "/host/boot/",
+                "name": "boot",
+                "readOnly": true
+              },
+              {
+                "mountPath": "/host/dev/",
+                "name": "dev"
+              },
+              {
+                "mountPath": "/host/proc/",
+                "name": "proc",
+                "readOnly": true
+              },
+              {
+                "mountPath": "/host/etc/",
+                "name": "etc",
+                "readOnly": true
+              },
+              {
+                "mountPath": "/var/lib/longhorn/",
+                "mountPropagation": "Bidirectional",
+                "name": "longhorn"
+              },
+              {
+                "mountPath": "/tls-files/",
+                "name": "longhorn-grpc-tls"
+              }
+            ]
+          },
+          {
+            "command": [
+              "sh",
+              "-c",
+              "echo share-manager image pulled \u0026\u0026 sleep infinity"
+            ],
+            "image": "longhornio/longhorn-share-manager:v1.10.1",
+            "imagePullPolicy": "IfNotPresent",
+            "name": "pre-pull-share-manager-image"
+          }
+        ],
+        "priorityClassName": "longhorn-critical",
+        "serviceAccountName": "longhorn-service-account",
+        "volumes": [
+          {
+            "hostPath": {
+              "path": "/boot/"
+            },
+            "name": "boot"
+          },
+          {
+            "hostPath": {
+              "path": "/dev/"
+            },
+            "name": "dev"
+          },
+          {
+            "hostPath": {
+              "path": "/proc/"
+            },
+            "name": "proc"
+          },
+          {
+            "hostPath": {
+              "path": "/etc/"
+            },
+            "name": "etc"
+          },
+          {
+            "hostPath": {
+              "path": "/var/lib/longhorn/"
+            },
+            "name": "longhorn"
+          },
+          {
+            "name": "longhorn-grpc-tls",
+            "secret": {
+              "optional": true,
+              "secretName": "longhorn-grpc-tls"
+            }
+          }
+        ]
+      }
+    },
+    "updateStrategy": {
+      "rollingUpdate": {
+        "maxUnavailable": "100%"
+      }
+    }
+  }
+}

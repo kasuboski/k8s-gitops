@@ -8,10 +8,11 @@ import (
 // We reference Talos types for validation but all fields are optional
 #Patch: {
 	machine?: {
-		kubelet?:     talos.#KubeletConfig
-		network?:     talos.#NetworkConfig
-		install?:     talos.#InstallConfig
-		nodeLabels?:  {[string]: string}
+		kubelet?: talos.#KubeletConfig
+		network?: talos.#NetworkConfig
+		install?: talos.#InstallConfig
+		// nodeLabels can be string values or patch directives like {$patch: "delete"}
+		nodeLabels?: {[string]: string | {$patch: string}}
 		...
 	}
 	cluster?: {
@@ -31,7 +32,6 @@ commonPatches: {
 	kubeletIP: #Patch & {
 		machine: kubelet: nodeIP: validSubnets: [
 			"0.0.0.0/0",
-			"!100.64.0.0/10", // ignore tailscale
 		]
 	}
 
@@ -43,23 +43,52 @@ commonPatches: {
 	}
 }
 
-// Control plane specific patches
-controlPlanePatches: {
-	vip: #Patch & {
-		machine: network: interfaces: [{
-			deviceSelector: physical: true
-			dhcp: true
-			vip: ip: "192.168.86.19"
-		}]
+// KubeSpan configuration - enables secure WireGuard mesh networking
+kubespanEnabled: #Patch & {
+	machine: network: kubespan: {
+		enabled: true
+	}
+	cluster: discovery: {
+		enabled: true
+		registries: {
+			kubernetes: disabled: true // Recommended with KubeSpan
+			service: {} // Use Sidero Labs discovery service
+		}
+	}
+}
+
+// Control plane certificate SANs - for DNS-based API access
+apiServerCertSANs: #Patch & {
+	machine: certSANs: [
+		"k8s-api.joshcorp.co",
+		"adel",
+		"adel.lan",
+	]
+}
+
+// Control plane scheduling - for single control plane clusters
+// Allows workloads to run on control plane and enables load balancer integration
+controlPlaneScheduling: #Patch & {
+	cluster: allowSchedulingOnControlPlanes: true
+	// Remove the load balancer exclusion label so MetalLB can use control plane
+	machine: nodeLabels: "node.kubernetes.io/exclude-from-external-load-balancers": {
+		$patch: "delete"
+	}
+}
+
+// Image Factory installer image for x86 nodes with extensions
+x86InstallerImage: #Patch & {
+	machine: install: image: "factory.talos.dev/installer/\(cluster.talos.schematics.x86):\(cluster.talos.version)"
+}
+
+// Hardware-specific patches
+hardwarePatches: {
+	// SD card install for Raspberry Pi nodes
+	sdcardInstall: #Patch & {
+		machine: install: disk: "/dev/mmcblk0"
 	}
 
-	etcdAdvertise: #Patch & {
-		cluster: etcd: advertisedSubnets: [
-			"0.0.0.0/0",
-			"!100.64.0.0/10", // ignore tailscale
-		]
-	}
-
+	// USB ephemeral storage (only for RPi nodes with USB drives)
 	ephemeralUSB: {
 		apiVersion: "v1alpha1"
 		kind:       "VolumeConfig"
@@ -68,17 +97,6 @@ controlPlanePatches: {
 			diskSelector: match: "disk.transport == 'usb'"
 			minSize: "2GB"
 		}
-	}
-
-	sdcardInstall: #Patch & {
-		machine: install: disk: "/dev/mmcblk0"
-	}
-}
-
-// Worker specific patches
-workerPatches: {
-	sdcardInstall: #Patch & {
-		machine: install: disk: "/dev/mmcblk0"
 	}
 }
 
@@ -103,7 +121,7 @@ nodePatches: {
 	adel: #Patch & {
 		machine: {
 			install: {
-				disk: "/dev/sdb"
+				disk: "/dev/sda"
 				wipe: true
 			}
 			network: hostname: "adel"
@@ -119,66 +137,77 @@ nodePatches: {
 
 // Node definitions with their patch lists
 nodes: {
-	cherry: #Node & {
+	// adel - x86 control plane node (single control plane, no HA)
+	adel: #Node & {
 		role: "controlplane"
 		patches: [
 			commonPatches.kubeletCert,
 			commonPatches.kubeletIP,
 			commonPatches.austinLabels,
-			controlPlanePatches.vip,
-			controlPlanePatches.etcdAdvertise,
-			controlPlanePatches.ephemeralUSB,
-			controlPlanePatches.sdcardInstall,
+			kubespanEnabled,
+			apiServerCertSANs,
+			controlPlaneScheduling,
+			x86InstallerImage,
+			longhornPatches.ephemeralVolume,
+			longhornPatches.kubeletMounts,
+			longhornPatches.v2DataEngine,
+			longhornPatches.x86Volume,
+			nodePatches.adel, // Contains /dev/sda disk config
+		]
+	}
+
+	// cherry - Raspberry Pi worker with USB ephemeral storage
+	cherry: #Node & {
+		role: "worker"
+		patches: [
+			commonPatches.kubeletCert,
+			commonPatches.kubeletIP,
+			commonPatches.austinLabels,
+			kubespanEnabled,
+			hardwarePatches.sdcardInstall,
+			hardwarePatches.ephemeralUSB,
 			nodePatches.cherry,
 		]
 	}
 
+	// blueberry - Raspberry Pi worker with USB ephemeral storage
 	blueberry: #Node & {
-		role: "controlplane"
+		role: "worker"
 		patches: [
 			commonPatches.kubeletCert,
 			commonPatches.kubeletIP,
 			commonPatches.austinLabels,
-			controlPlanePatches.vip,
-			controlPlanePatches.etcdAdvertise,
-			controlPlanePatches.ephemeralUSB,
-			controlPlanePatches.sdcardInstall,
+			kubespanEnabled,
+			hardwarePatches.sdcardInstall,
+			hardwarePatches.ephemeralUSB,
 			nodePatches.blueberry,
 		]
 	}
 
+	// pumpkin - Raspberry Pi worker with USB ephemeral storage
 	pumpkin: #Node & {
-		role: "controlplane"
+		role: "worker"
 		patches: [
 			commonPatches.kubeletCert,
 			commonPatches.kubeletIP,
 			commonPatches.austinLabels,
-			controlPlanePatches.vip,
-			controlPlanePatches.etcdAdvertise,
-			controlPlanePatches.ephemeralUSB,
-			controlPlanePatches.sdcardInstall,
+			kubespanEnabled,
+			hardwarePatches.sdcardInstall,
+			hardwarePatches.ephemeralUSB,
 			nodePatches.pumpkin,
 		]
 	}
 
+	// apple - Raspberry Pi worker (SD card only, no USB)
 	apple: #Node & {
 		role: "worker"
 		patches: [
 			commonPatches.kubeletCert,
 			commonPatches.kubeletIP,
 			commonPatches.austinLabels,
-			workerPatches.sdcardInstall,
+			kubespanEnabled,
+			hardwarePatches.sdcardInstall,
 			nodePatches.apple,
-		]
-	}
-
-	adel: #Node & {
-		role: "worker"
-		patches: [
-			commonPatches.kubeletCert,
-			commonPatches.kubeletIP,
-			commonPatches.austinLabels,
-			nodePatches.adel,
 		]
 	}
 }

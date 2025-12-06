@@ -1,0 +1,299 @@
+{
+  "apiVersion": "apiextensions.k8s.io/v1",
+  "kind": "CustomResourceDefinition",
+  "metadata": {
+    "annotations": {
+      "controller-gen.kubebuilder.io/version": "v0.17.1"
+    },
+    "labels": {
+      "app.kubernetes.io/instance": "longhorn",
+      "app.kubernetes.io/name": "longhorn",
+      "app.kubernetes.io/version": "v1.10.1",
+      "k8s.joshcorp.co/app": "longhorn",
+      "longhorn-manager": ""
+    },
+    "name": "nodes.longhorn.io"
+  },
+  "spec": {
+    "group": "longhorn.io",
+    "names": {
+      "kind": "Node",
+      "listKind": "NodeList",
+      "plural": "nodes",
+      "shortNames": [
+        "lhn"
+      ],
+      "singular": "node"
+    },
+    "scope": "Namespaced",
+    "versions": [
+      {
+        "additionalPrinterColumns": [
+          {
+            "description": "Indicate whether the node is ready",
+            "jsonPath": ".status.conditions[?(@.type=='Ready')].status",
+            "name": "Ready",
+            "type": "string"
+          },
+          {
+            "description": "Indicate whether the user disabled/enabled replica scheduling for the node",
+            "jsonPath": ".spec.allowScheduling",
+            "name": "AllowScheduling",
+            "type": "boolean"
+          },
+          {
+            "description": "Indicate whether Longhorn can schedule replicas on the node",
+            "jsonPath": ".status.conditions[?(@.type=='Schedulable')].status",
+            "name": "Schedulable",
+            "type": "string"
+          },
+          {
+            "jsonPath": ".metadata.creationTimestamp",
+            "name": "Age",
+            "type": "date"
+          }
+        ],
+        "name": "v1beta2",
+        "schema": {
+          "openAPIV3Schema": {
+            "description": "Node is where Longhorn stores Longhorn node object.",
+            "properties": {
+              "apiVersion": {
+                "description": "APIVersion defines the versioned schema of this representation of an object.\nServers should convert recognized schemas to the latest internal value, and\nmay reject unrecognized values.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+                "type": "string"
+              },
+              "kind": {
+                "description": "Kind is a string value representing the REST resource this object represents.\nServers may infer this from the endpoint the client submits requests to.\nCannot be updated.\nIn CamelCase.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+                "type": "string"
+              },
+              "metadata": {
+                "type": "object"
+              },
+              "spec": {
+                "description": "NodeSpec defines the desired state of the Longhorn node",
+                "properties": {
+                  "allowScheduling": {
+                    "type": "boolean"
+                  },
+                  "disks": {
+                    "additionalProperties": {
+                      "properties": {
+                        "allowScheduling": {
+                          "type": "boolean"
+                        },
+                        "diskDriver": {
+                          "enum": [
+                            "",
+                            "auto",
+                            "aio",
+                            "nvme"
+                          ],
+                          "type": "string"
+                        },
+                        "diskType": {
+                          "enum": [
+                            "filesystem",
+                            "block"
+                          ],
+                          "type": "string"
+                        },
+                        "evictionRequested": {
+                          "type": "boolean"
+                        },
+                        "path": {
+                          "type": "string"
+                        },
+                        "storageReserved": {
+                          "format": "int64",
+                          "type": "integer"
+                        },
+                        "tags": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "type": "object"
+                  },
+                  "evictionRequested": {
+                    "type": "boolean"
+                  },
+                  "instanceManagerCPURequest": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "tags": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              },
+              "status": {
+                "description": "NodeStatus defines the observed state of the Longhorn node",
+                "properties": {
+                  "autoEvicting": {
+                    "type": "boolean"
+                  },
+                  "conditions": {
+                    "items": {
+                      "properties": {
+                        "lastProbeTime": {
+                          "description": "Last time we probed the condition.",
+                          "type": "string"
+                        },
+                        "lastTransitionTime": {
+                          "description": "Last time the condition transitioned from one status to another.",
+                          "type": "string"
+                        },
+                        "message": {
+                          "description": "Human-readable message indicating details about last transition.",
+                          "type": "string"
+                        },
+                        "reason": {
+                          "description": "Unique, one-word, CamelCase reason for the condition's last transition.",
+                          "type": "string"
+                        },
+                        "status": {
+                          "description": "Status is the status of the condition.\nCan be True, False, Unknown.",
+                          "type": "string"
+                        },
+                        "type": {
+                          "description": "Type is the type of the condition.",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "nullable": true,
+                    "type": "array"
+                  },
+                  "diskStatus": {
+                    "additionalProperties": {
+                      "properties": {
+                        "conditions": {
+                          "items": {
+                            "properties": {
+                              "lastProbeTime": {
+                                "description": "Last time we probed the condition.",
+                                "type": "string"
+                              },
+                              "lastTransitionTime": {
+                                "description": "Last time the condition transitioned from one status to another.",
+                                "type": "string"
+                              },
+                              "message": {
+                                "description": "Human-readable message indicating details about last transition.",
+                                "type": "string"
+                              },
+                              "reason": {
+                                "description": "Unique, one-word, CamelCase reason for the condition's last transition.",
+                                "type": "string"
+                              },
+                              "status": {
+                                "description": "Status is the status of the condition.\nCan be True, False, Unknown.",
+                                "type": "string"
+                              },
+                              "type": {
+                                "description": "Type is the type of the condition.",
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "nullable": true,
+                          "type": "array"
+                        },
+                        "diskDriver": {
+                          "type": "string"
+                        },
+                        "diskName": {
+                          "type": "string"
+                        },
+                        "diskPath": {
+                          "type": "string"
+                        },
+                        "diskType": {
+                          "type": "string"
+                        },
+                        "diskUUID": {
+                          "type": "string"
+                        },
+                        "filesystemType": {
+                          "type": "string"
+                        },
+                        "instanceManagerName": {
+                          "type": "string"
+                        },
+                        "scheduledBackingImage": {
+                          "additionalProperties": {
+                            "format": "int64",
+                            "type": "integer"
+                          },
+                          "nullable": true,
+                          "type": "object"
+                        },
+                        "scheduledReplica": {
+                          "additionalProperties": {
+                            "format": "int64",
+                            "type": "integer"
+                          },
+                          "nullable": true,
+                          "type": "object"
+                        },
+                        "storageAvailable": {
+                          "format": "int64",
+                          "type": "integer"
+                        },
+                        "storageMaximum": {
+                          "format": "int64",
+                          "type": "integer"
+                        },
+                        "storageScheduled": {
+                          "format": "int64",
+                          "type": "integer"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "nullable": true,
+                    "type": "object"
+                  },
+                  "region": {
+                    "type": "string"
+                  },
+                  "snapshotCheckStatus": {
+                    "properties": {
+                      "lastPeriodicCheckedAt": {
+                        "format": "date-time",
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "zone": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "served": true,
+        "storage": true,
+        "subresources": {
+          "status": {}
+        }
+      }
+    ]
+  }
+}

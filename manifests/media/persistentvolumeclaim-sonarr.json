@@ -15,9 +15,9 @@
     ],
     "resources": {
       "requests": {
-        "storage": "100Mi"
+        "storage": "4Gi"
       }
     },
-    "storageClassName": "local-path"
+    "storageClassName": "longhorn"
   }
 }

@@ -1,14 +1,14 @@
 package josh
 
 import (
-	json656e63 "encoding/json"
-	yaml656e63 "encoding/yaml"
+	"encoding/json"
+	"encoding/yaml"
 )
 
 configmap: "local-path-config": {
 	apiVersion: "v1"
 	data: {
-		"config.json": json656e63.Marshal(_cue_config_json)
+		"config.json": json.Marshal(_cue_config_json)
 		let _cue_config_json = {
 			nodePathMap: [
 				{
@@ -17,7 +17,7 @@ configmap: "local-path-config": {
 				},
 			]
 		}
-		"helperPod.yaml": yaml656e63.Marshal(_cue_helperPod_yaml)
+		"helperPod.yaml": yaml.Marshal(_cue_helperPod_yaml)
 		let _cue_helperPod_yaml = {
 			apiVersion: "v1"
 			kind:       "Pod"

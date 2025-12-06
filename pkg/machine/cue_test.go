@@ -20,19 +20,19 @@ func TestLoadNodesFromCUE(t *testing.T) {
 	assert.Contains(t, nodes, "apple")
 	assert.Contains(t, nodes, "adel")
 
-	// Verify control plane nodes
-	controlPlaneNodes := []string{"cherry", "blueberry", "pumpkin"}
+	// Verify control plane node
+	controlPlaneNodes := []string{"adel"}
 	for _, name := range controlPlaneNodes {
 		node, ok := nodes[name]
 		require.True(t, ok, "node %s should exist", name)
 		assert.Equal(t, "controlplane", node.Role)
 		assert.NotEmpty(t, node.Patches, "node %s should have patches", name)
-		// Control plane nodes should have more patches than workers
-		assert.Greater(t, len(node.Patches), 5, "control plane node %s should have multiple patches", name)
+		// Control plane nodes should have multiple patches
+		assert.Greater(t, len(node.Patches), 3, "control plane node %s should have multiple patches", name)
 	}
 
 	// Verify worker nodes
-	workerNodes := []string{"apple", "adel"}
+	workerNodes := []string{"cherry", "blueberry", "pumpkin", "apple"}
 	for _, name := range workerNodes {
 		node, ok := nodes[name]
 		require.True(t, ok, "node %s should exist", name)

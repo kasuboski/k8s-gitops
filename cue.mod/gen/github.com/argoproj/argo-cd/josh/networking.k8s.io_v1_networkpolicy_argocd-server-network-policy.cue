@@ -4,6 +4,11 @@ networkpolicy: "argocd-server-network-policy": {
 	apiVersion: "networking.k8s.io/v1"
 	kind:       "NetworkPolicy"
 	metadata: {
+		labels: {
+			"app.kubernetes.io/component": "server"
+			"app.kubernetes.io/name":      "argocd-server"
+			"app.kubernetes.io/part-of":   "argocd"
+		}
 		name:      "argocd-server-network-policy"
 		namespace: "argocd"
 	}

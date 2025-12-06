@@ -29,19 +29,19 @@ clusterrole: "argocd-applicationset-controller": {
 		]
 	}, {
 		apiGroups: ["argoproj.io"]
-		resources: ["applicationsets/status"]
-		verbs: [
-			"get",
-			"patch",
-			"update",
-		]
-	}, {
-		apiGroups: ["argoproj.io"]
 		resources: ["appprojects"]
 		verbs: [
 			"get",
 			"list",
 			"watch",
+		]
+	}, {
+		apiGroups: ["argoproj.io"]
+		resources: ["applicationsets/status"]
+		verbs: [
+			"get",
+			"patch",
+			"update",
 		]
 	}, {
 		apiGroups: [""]
@@ -55,30 +55,10 @@ clusterrole: "argocd-applicationset-controller": {
 		]
 	}, {
 		apiGroups: [""]
-		resources: ["configmaps"]
-		verbs: [
-			"create",
-			"update",
-			"delete",
-			"get",
-			"list",
-			"patch",
-			"watch",
+		resources: [
+			"secrets",
+			"configmaps",
 		]
-	}, {
-		apiGroups: [""]
-		resources: ["secrets"]
-		verbs: [
-			"get",
-			"list",
-			"watch",
-		]
-	}, {
-		apiGroups: [
-			"apps",
-			"extensions",
-		]
-		resources: ["deployments"]
 		verbs: [
 			"get",
 			"list",
@@ -87,14 +67,15 @@ clusterrole: "argocd-applicationset-controller": {
 	}, {
 		apiGroups: ["coordination.k8s.io"]
 		resources: ["leases"]
+		verbs: ["create"]
+	}, {
+		apiGroups: ["coordination.k8s.io"]
+		resourceNames: ["58ac56fa.applicationsets.argoproj.io"]
+		resources: ["leases"]
 		verbs: [
-			"create",
-			"delete",
 			"get",
-			"list",
-			"patch",
 			"update",
-			"watch",
+			"create",
 		]
 	}]
 }

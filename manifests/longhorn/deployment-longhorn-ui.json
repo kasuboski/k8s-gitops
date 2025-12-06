@@ -1,0 +1,111 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "labels": {
+      "app": "longhorn-ui",
+      "app.kubernetes.io/instance": "longhorn",
+      "app.kubernetes.io/name": "longhorn",
+      "app.kubernetes.io/version": "v1.10.1",
+      "k8s.joshcorp.co/app": "longhorn"
+    },
+    "name": "longhorn-ui",
+    "namespace": "longhorn-system"
+  },
+  "spec": {
+    "replicas": 1,
+    "selector": {
+      "matchLabels": {
+        "app": "longhorn-ui"
+      }
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "longhorn-ui",
+          "app.kubernetes.io/instance": "longhorn",
+          "app.kubernetes.io/name": "longhorn",
+          "app.kubernetes.io/version": "v1.10.1"
+        }
+      },
+      "spec": {
+        "affinity": {
+          "podAntiAffinity": {
+            "preferredDuringSchedulingIgnoredDuringExecution": [
+              {
+                "podAffinityTerm": {
+                  "labelSelector": {
+                    "matchExpressions": [
+                      {
+                        "key": "app",
+                        "operator": "In",
+                        "values": [
+                          "longhorn-ui"
+                        ]
+                      }
+                    ]
+                  },
+                  "topologyKey": "kubernetes.io/hostname"
+                },
+                "weight": 1
+              }
+            ]
+          }
+        },
+        "containers": [
+          {
+            "env": [
+              {
+                "name": "LONGHORN_MANAGER_IP",
+                "value": "http://longhorn-backend:9500"
+              },
+              {
+                "name": "LONGHORN_UI_PORT",
+                "value": "8000"
+              }
+            ],
+            "image": "longhornio/longhorn-ui:v1.10.1",
+            "imagePullPolicy": "IfNotPresent",
+            "name": "longhorn-ui",
+            "ports": [
+              {
+                "containerPort": 8000,
+                "name": "http"
+              }
+            ],
+            "volumeMounts": [
+              {
+                "mountPath": "/var/cache/nginx/",
+                "name": "nginx-cache"
+              },
+              {
+                "mountPath": "/var/config/nginx/",
+                "name": "nginx-config"
+              },
+              {
+                "mountPath": "/var/run/",
+                "name": "var-run"
+              }
+            ]
+          }
+        ],
+        "priorityClassName": "longhorn-critical",
+        "serviceAccountName": "longhorn-ui-service-account",
+        "volumes": [
+          {
+            "emptyDir": {},
+            "name": "nginx-cache"
+          },
+          {
+            "emptyDir": {},
+            "name": "nginx-config"
+          },
+          {
+            "emptyDir": {},
+            "name": "var-run"
+          }
+        ]
+      }
+    }
+  }
+}

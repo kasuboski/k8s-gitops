@@ -50,9 +50,9 @@ persistentvolumeclaim: [Name=string]: {
 	metadata: labels: "app.kubernetes.io/name": Name
 	metadata: labels: app:                      Name
 	spec: {
-		storageClassName: string | *"local-path"
+		storageClassName: string | *"longhorn"
 		accessModes: [...string] | *["ReadWriteOnce"]
-		resources: requests: storage: string | *"100Mi"
+		resources: requests: storage: string | *"1Gi"
 	}
 }
 

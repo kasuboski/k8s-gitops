@@ -1,6 +1,6 @@
 package v1
 
-import yaml656e63 "encoding/yaml"
+import "encoding/yaml"
 
 customresourcedefinition: "backendlbpolicies.gateway.networking.k8s.io": {
 	apiVersion: "apiextensions.k8s.io/v1"
@@ -27742,7 +27742,7 @@ customresourcedefinition: "envoyproxies.gateway.envoyproxy.io": {
 																			description: "cephFS represents a Ceph FS mount on the host that shares a pod's lifetime"
 																			properties: {
 																				monitors: {
-																					description: yaml656e63.Marshal(_cue_description)
+																					description: yaml.Marshal(_cue_description)
 																					let _cue_description = {
 																						"monitors is Required": "Monitors is a collection of Ceph monitors"
 																						"More info":            "https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it"
@@ -27764,7 +27764,7 @@ customresourcedefinition: "envoyproxies.gateway.envoyproxy.io": {
 																					type: "boolean"
 																				}
 																				secretFile: {
-																					description: yaml656e63.Marshal(_cue_xdescription)
+																					description: yaml.Marshal(_cue_xdescription)
 																					let _cue_xdescription = {
 																						"secretFile is Optional": "SecretFile is the path to key ring for User, default is /etc/ceph/user.secret"
 																						"More info":              "https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it"
@@ -27772,7 +27772,7 @@ customresourcedefinition: "envoyproxies.gateway.envoyproxy.io": {
 																					type: "string"
 																				}
 																				secretRef: {
-																					description: yaml656e63.Marshal(_cue_xxdescription)
+																					description: yaml.Marshal(_cue_xxdescription)
 																					let _cue_xxdescription = {
 																						"secretRef is Optional": "SecretRef is reference to the authentication secret for User, default is empty."
 																						"More info":             "https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it"
@@ -27794,7 +27794,7 @@ customresourcedefinition: "envoyproxies.gateway.envoyproxy.io": {
 																					"x-kubernetes-map-type": "atomic"
 																				}
 																				user: {
-																					description: yaml656e63.Marshal(_cue_xxxdescription)
+																					description: yaml.Marshal(_cue_xxxdescription)
 																					let _cue_xxxdescription = {
 																						"user is optional": "User is the rados user name, default is admin"
 																						"More info":        "https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it"
@@ -33916,7 +33916,7 @@ customresourcedefinition: "envoyproxies.gateway.envoyproxy.io": {
 																			description: "cephFS represents a Ceph FS mount on the host that shares a pod's lifetime"
 																			properties: {
 																				monitors: {
-																					description: yaml656e63.Marshal(_cue_xxxxdescription)
+																					description: yaml.Marshal(_cue_xxxxdescription)
 																					let _cue_xxxxdescription = {
 																						"monitors is Required": "Monitors is a collection of Ceph monitors"
 																						"More info":            "https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it"
@@ -33938,7 +33938,7 @@ customresourcedefinition: "envoyproxies.gateway.envoyproxy.io": {
 																					type: "boolean"
 																				}
 																				secretFile: {
-																					description: yaml656e63.Marshal(_cue_xxxxxdescription)
+																					description: yaml.Marshal(_cue_xxxxxdescription)
 																					let _cue_xxxxxdescription = {
 																						"secretFile is Optional": "SecretFile is the path to key ring for User, default is /etc/ceph/user.secret"
 																						"More info":              "https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it"
@@ -33946,7 +33946,7 @@ customresourcedefinition: "envoyproxies.gateway.envoyproxy.io": {
 																					type: "string"
 																				}
 																				secretRef: {
-																					description: yaml656e63.Marshal(_cue_xxxxxxdescription)
+																					description: yaml.Marshal(_cue_xxxxxxdescription)
 																					let _cue_xxxxxxdescription = {
 																						"secretRef is Optional": "SecretRef is reference to the authentication secret for User, default is empty."
 																						"More info":             "https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it"
@@ -33968,7 +33968,7 @@ customresourcedefinition: "envoyproxies.gateway.envoyproxy.io": {
 																					"x-kubernetes-map-type": "atomic"
 																				}
 																				user: {
-																					description: yaml656e63.Marshal(_cue_xxxxxxxdescription)
+																					description: yaml.Marshal(_cue_xxxxxxxdescription)
 																					let _cue_xxxxxxxdescription = {
 																						"user is optional": "User is the rados user name, default is admin"
 																						"More info":        "https://examples.k8s.io/volumes/cephfs/README.md#how-to-use-it"
@@ -39601,7 +39601,7 @@ serviceaccount: "envoy-gateway": {
 configmap: "envoy-gateway-config": {
 	apiVersion: "v1"
 	data: {
-		"envoy-gateway.yaml": yaml656e63.Marshal(_cue_envoy_gateway_yaml)
+		"envoy-gateway.yaml": yaml.Marshal(_cue_envoy_gateway_yaml)
 		let _cue_envoy_gateway_yaml = {
 			apiVersion: "gateway.envoyproxy.io/v1alpha1"
 			kind:       "EnvoyGateway"

@@ -5,6 +5,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	appsv1 "k8s.io/api/apps/v1"
 	storagev1 "k8s.io/api/storage/v1"
+	schedulingv1 "k8s.io/api/scheduling/v1"
 )
 
 #Resource: {
@@ -19,7 +20,7 @@ import (
 #KindGen: [for k, _ in #KindObject {k}]
 
 // cue eval -e '#KindGen'
-#Kinds: ["cronjob", "clusterrole", "clusterrolebinding", "configmap", "serviceaccount", "deployment", "customresourcedefinition", "namespace", "role", "rolebinding", "service", "job", "gatewayclass", "gateway", "apiservice", "validatingwebhookconfiguration", "daemonset", "secret", "ipaddresspool", "l2advertisement", "dopplersecret", "storageclass", "persistentvolume", "persistentvolumeclaim", "statefulset", "networkpolicy", "appproject", "httproute"]
+#Kinds: ["cronjob", "clusterrole", "clusterrolebinding", "configmap", "serviceaccount", "deployment", "customresourcedefinition", "namespace", "role", "rolebinding", "service", "job", "gatewayclass", "gateway", "apiservice", "validatingwebhookconfiguration", "daemonset", "secret", "ipaddresspool", "l2advertisement", "dopplersecret", "storageclass", "persistentvolume", "persistentvolumeclaim", "statefulset", "networkpolicy", "appproject", "httproute", "priorityclass"]
 
 #dnsNameRegex: =~"^[a-z0-9][a-z0-9\\-\\.:]{0,251}[a-z0-9]$"
 #Name:         string & #dnsNameRegex
@@ -71,6 +72,11 @@ import (
 #Schema: storageclass: [string]: storagev1.#StorageClass & {
 	apiVersion: "storage.k8s.io/v1"
 	kind:       "StorageClass"
+}
+
+#Schema: priorityclass: [string]: schedulingv1.#PriorityClass & {
+	apiVersion: "scheduling.k8s.io/v1"
+	kind:       "PriorityClass"
 }
 
 #Schema: httproute: [Name=string]: {

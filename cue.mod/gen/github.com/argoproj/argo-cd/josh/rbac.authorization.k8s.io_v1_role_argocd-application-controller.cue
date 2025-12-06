@@ -27,6 +27,7 @@ role: "argocd-application-controller": {
 		apiGroups: ["argoproj.io"]
 		resources: [
 			"applications",
+			"applicationsets",
 			"appprojects",
 		]
 		verbs: [

@@ -1,6 +1,6 @@
 package v1
 
-import yaml656e63 "encoding/yaml"
+import "encoding/yaml"
 
 namespace: "doppler-operator-system": {
 	apiVersion: "v1"
@@ -382,7 +382,7 @@ clusterrolebinding: "doppler-operator-manager-rolebinding": {
 configmap: "doppler-operator-manager-config": {
 	apiVersion: "v1"
 	data: {
-		"controller_manager_config.yaml": yaml656e63.Marshal(_cue_controller_manager_config_yaml)
+		"controller_manager_config.yaml": yaml.Marshal(_cue_controller_manager_config_yaml)
 		let _cue_controller_manager_config_yaml = {
 			apiVersion: "controller-runtime.sigs.k8s.io/v1alpha1"
 			kind:       "ControllerManagerConfig"
