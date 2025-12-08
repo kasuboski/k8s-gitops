@@ -9,8 +9,7 @@ deployment: openwebui: spec: {
 		"app.kubernetes.io/name": "openwebui"
 	}
 	template: spec: {
-		securityContext: fsGroup:               1000
-		nodeSelector: "kubernetes.io/hostname": "adel"
+		securityContext: fsGroup: 1000
 		containers: [{
 			name:  "openwebui"
 			image: "ghcr.io/open-webui/open-webui:\(_imageTag)"

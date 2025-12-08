@@ -127,6 +127,16 @@ nodePatches: {
 			network: hostname: "adel"
 		}
 	}
+
+	elsa: #Patch & {
+		machine: {
+			install: {
+				disk: "/dev/nvme0n1"
+				wipe: true
+			}
+			network: hostname: "elsa"
+		}
+	}
 }
 
 // Node definition schema
@@ -151,7 +161,7 @@ nodes: {
 			longhornPatches.ephemeralVolume,
 			longhornPatches.kubeletMounts,
 			longhornPatches.v2DataEngine,
-			longhornPatches.x86Volume,
+			longhornPatches.sataVolume,
 			nodePatches.adel, // Contains /dev/sda disk config
 		]
 	}
@@ -208,6 +218,23 @@ nodes: {
 			kubespanEnabled,
 			hardwarePatches.sdcardInstall,
 			nodePatches.apple,
+		]
+	}
+
+	// elsa - x86 worker with Longhorn storage on NVMe
+	elsa: #Node & {
+		role: "worker"
+		patches: [
+			commonPatches.kubeletCert,
+			commonPatches.kubeletIP,
+			commonPatches.austinLabels,
+			kubespanEnabled,
+			x86InstallerImage,
+			longhornPatches.ephemeralVolume,
+			longhornPatches.kubeletMounts,
+			longhornPatches.v2DataEngine,
+			longhornPatches.nvmeVolume,
+			nodePatches.elsa,
 		]
 	}
 }

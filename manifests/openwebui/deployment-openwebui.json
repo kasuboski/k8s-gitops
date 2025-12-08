@@ -77,9 +77,6 @@
             ]
           }
         ],
-        "nodeSelector": {
-          "kubernetes.io/hostname": "adel"
-        },
         "securityContext": {
           "fsGroup": 1000
         },

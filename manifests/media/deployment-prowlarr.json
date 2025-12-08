@@ -78,9 +78,6 @@
             ]
           }
         ],
-        "nodeSelector": {
-          "kubernetes.io/hostname": "adel"
-        },
         "securityContext": {
           "seccompProfile": {
             "type": "RuntimeDefault"

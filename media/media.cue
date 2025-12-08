@@ -20,9 +20,8 @@ deployment: [Name=string]: appsv1.#Deployment & {
 		strategy: type: "Recreate"
 		selector: matchLabels: "app.kubernetes.io/name": Name
 		template: {
-			metadata: labels: "app.kubernetes.io/name":   Name
-			metadata: labels: app:                        Name
-			spec: nodeSelector: "kubernetes.io/hostname": "adel"
+			metadata: labels: "app.kubernetes.io/name": Name
+			metadata: labels: app:                      Name
 			spec: securityContext: seccompProfile: type: "RuntimeDefault"
 		}
 	}

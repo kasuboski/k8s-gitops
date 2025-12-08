@@ -40,13 +40,24 @@ longhornPatches: {
 		}
 	}
 
-	// x86 Longhorn volume - uses all remaining space on SATA disk after EPHEMERAL
-	x86Volume: {
+	// SATA Longhorn volume - uses all remaining space on SATA disk after EPHEMERAL
+	sataVolume: {
 		apiVersion: "v1alpha1"
 		kind:       "UserVolumeConfig"
 		name:       "longhorn"
 		provisioning: {
 			diskSelector: match: "disk.transport == 'sata'"
+			minSize: "10GB" // Minimum required, will grow to fill remaining space
+		}
+	}
+
+	// NVMe Longhorn volume - uses all remaining space on NVMe disk after EPHEMERAL
+	nvmeVolume: {
+		apiVersion: "v1alpha1"
+		kind:       "UserVolumeConfig"
+		name:       "longhorn"
+		provisioning: {
+			diskSelector: match: "disk.transport == 'nvme'"
 			minSize: "10GB" // Minimum required, will grow to fill remaining space
 		}
 	}

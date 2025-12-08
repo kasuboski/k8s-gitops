@@ -21,6 +21,7 @@ cluster: {
 		blueberry: "192.168.86.122"
 		pumpkin:   "192.168.86.123"
 		apple:     "192.168.86.124"
+		elsa:      "192.168.86.52"
 	}
 
 	// Talosconfig defaults - which nodes to use as endpoints
