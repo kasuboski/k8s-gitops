@@ -11,6 +11,7 @@ data:
       ignoreDifferences: |
         jsonPointers:
         - /status
+        - /spec/conversion/webhook/clientConfig/caBundle
     admissionregistration.k8s.io/ValidatingWebhookConfiguration:
       ignoreDifferences: |
         jsonPointers:

@@ -11,7 +11,10 @@ configmap: "argocd-cm": {
 			"apiextensions.k8s.io/CustomResourceDefinition": {
 				ignoreDifferences: yaml.Marshal(_cue_ignoreDifferences)
 				let _cue_ignoreDifferences = {
-					jsonPointers: ["/status"]
+					jsonPointers: [
+						"/status",
+						"/spec/conversion/webhook/clientConfig/caBundle",
+					]
 				}, }
 			"admissionregistration.k8s.io/ValidatingWebhookConfiguration": {
 				ignoreDifferences: yaml.Marshal(_cue_xignoreDifferences)

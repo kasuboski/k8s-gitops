@@ -1,11 +1,12 @@
 apiVersion: v1
 data:
   admin.enabled: "false"
-  resource.customizations: |-
+  resource.customizations: |
     apiextensions.k8s.io/CustomResourceDefinition:
       ignoreDifferences: |
         jsonPointers:
         - /status
+        - /spec/conversion/webhook/clientConfig/caBundle
     admissionregistration.k8s.io/ValidatingWebhookConfiguration:
       ignoreDifferences: |
         jsonPointers:
