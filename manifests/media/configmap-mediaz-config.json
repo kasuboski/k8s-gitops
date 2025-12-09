@@ -1,0 +1,13 @@
+{
+  "apiVersion": "v1",
+  "data": {
+    "config.yaml": "filePath: /etc/mediaz/config.yaml\nlibrary:\n  downloadMountDir: /downloads\n  movie: /movies\n  tv: /tv\nserver:\n  port: 8080\nstorage:\n  filePath: /config/mediaz.sqlite"
+  },
+  "kind": "ConfigMap",
+  "metadata": {
+    "labels": {
+      "k8s.joshcorp.co/app": "media"
+    },
+    "name": "mediaz-config"
+  }
+}

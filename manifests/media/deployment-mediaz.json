@@ -1,0 +1,138 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "labels": {
+      "app": "mediaz",
+      "app.kubernetes.io/name": "mediaz",
+      "k8s.joshcorp.co/app": "media"
+    },
+    "name": "mediaz"
+  },
+  "spec": {
+    "selector": {
+      "matchLabels": {
+        "app.kubernetes.io/name": "mediaz"
+      }
+    },
+    "strategy": {
+      "type": "Recreate"
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "mediaz",
+          "app.kubernetes.io/name": "mediaz"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "env": [
+              {
+                "name": "MEDIAZ_CONFIGFILEPATH",
+                "value": "/etc/mediaz/config.yaml"
+              },
+              {
+                "name": "MEDIAZ_TMDB_APIKEY",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "key": "MEDIAZ_TMDB_APIKEY",
+                    "name": "media-secret"
+                  }
+                }
+              }
+            ],
+            "image": "ghcr.io/kasuboski/mediaz:sha-59f9e969279357aa0a68d0ff26aa74350aadf67d",
+            "livenessProbe": {
+              "failureThreshold": 5,
+              "httpGet": {
+                "path": "/healthz",
+                "port": "http"
+              },
+              "periodSeconds": 10
+            },
+            "name": "mediaz",
+            "ports": [
+              {
+                "containerPort": 8080,
+                "name": "http"
+              }
+            ],
+            "readinessProbe": {
+              "failureThreshold": 5,
+              "httpGet": {
+                "path": "/healthz",
+                "port": "http"
+              },
+              "periodSeconds": 10
+            },
+            "resources": {
+              "limits": {
+                "cpu": "500m",
+                "memory": "512Mi"
+              },
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              }
+            },
+            "securityContext": {
+              "runAsNonRoot": false
+            },
+            "volumeMounts": [
+              {
+                "mountPath": "/etc/mediaz",
+                "name": "config"
+              },
+              {
+                "mountPath": "/config",
+                "name": "db"
+              },
+              {
+                "mountPath": "/movies",
+                "name": "media",
+                "subPath": "Video/Movies"
+              },
+              {
+                "mountPath": "/tv",
+                "name": "media",
+                "subPath": "Video/TV"
+              },
+              {
+                "mountPath": "/downloads",
+                "name": "media",
+                "subPath": "downloads"
+              }
+            ]
+          }
+        ],
+        "securityContext": {
+          "seccompProfile": {
+            "type": "RuntimeDefault"
+          }
+        },
+        "volumes": [
+          {
+            "configMap": {
+              "name": "mediaz-config"
+            },
+            "name": "config"
+          },
+          {
+            "name": "db",
+            "persistentVolumeClaim": {
+              "claimName": "mediaz"
+            }
+          },
+          {
+            "name": "media",
+            "persistentVolumeClaim": {
+              "claimName": "media-storage"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

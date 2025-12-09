@@ -62,7 +62,12 @@ httproute: [Name=string]: {
 	metadata: labels: "app.kubernetes.io/name": Name
 	metadata: labels: app:                      Name
 	spec: {
-		parentRefs: [
+		parentRefs: [...{
+			group:     string | *"gateway.networking.k8s.io"
+			kind:      string | *"Gateway"
+			name:      string
+			namespace: string
+		}] | *[
 			{
 				name:      "http"
 				namespace: "envoy-gateway-system"
