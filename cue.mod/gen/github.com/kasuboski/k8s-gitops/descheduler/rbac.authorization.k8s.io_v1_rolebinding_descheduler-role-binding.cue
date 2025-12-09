@@ -1,0 +1,20 @@
+package descheduler
+
+rolebinding: "descheduler-role-binding": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "RoleBinding"
+	metadata: {
+		name:      "descheduler-role-binding"
+		namespace: "kube-system"
+	}
+	roleRef: {
+		apiGroup: "rbac.authorization.k8s.io"
+		kind:     "Role"
+		name:     "descheduler-role"
+	}
+	subjects: [{
+		kind:      "ServiceAccount"
+		name:      "descheduler-sa"
+		namespace: "kube-system"
+	}]
+}

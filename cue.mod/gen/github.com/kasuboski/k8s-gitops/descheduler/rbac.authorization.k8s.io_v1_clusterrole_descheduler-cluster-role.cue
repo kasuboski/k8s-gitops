@@ -49,9 +49,20 @@ clusterrole: "descheduler-cluster-role": {
 			"list",
 		]
 	}, {
+		apiGroups: ["policy"]
+		resources: ["poddisruptionbudgets"]
+		verbs: [
+			"get",
+			"watch",
+			"list",
+		]
+	}, {
 		apiGroups: ["coordination.k8s.io"]
 		resources: ["leases"]
-		verbs: ["create"]
+		verbs: [
+			"create",
+			"update",
+		]
 	}, {
 		apiGroups: ["coordination.k8s.io"]
 		resourceNames: ["descheduler"]
@@ -60,6 +71,16 @@ clusterrole: "descheduler-cluster-role": {
 			"get",
 			"patch",
 			"delete",
+		]
+	}, {
+		apiGroups: ["metrics.k8s.io"]
+		resources: [
+			"nodes",
+			"pods",
+		]
+		verbs: [
+			"get",
+			"list",
 		]
 	}]
 }

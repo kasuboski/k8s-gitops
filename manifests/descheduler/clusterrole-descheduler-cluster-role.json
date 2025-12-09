@@ -86,13 +86,27 @@
     },
     {
       "apiGroups": [
+        "policy"
+      ],
+      "resources": [
+        "poddisruptionbudgets"
+      ],
+      "verbs": [
+        "get",
+        "watch",
+        "list"
+      ]
+    },
+    {
+      "apiGroups": [
         "coordination.k8s.io"
       ],
       "resources": [
         "leases"
       ],
       "verbs": [
-        "create"
+        "create",
+        "update"
       ]
     },
     {
@@ -109,6 +123,19 @@
         "get",
         "patch",
         "delete"
+      ]
+    },
+    {
+      "apiGroups": [
+        "metrics.k8s.io"
+      ],
+      "resources": [
+        "nodes",
+        "pods"
+      ],
+      "verbs": [
+        "get",
+        "list"
       ]
     }
   ]

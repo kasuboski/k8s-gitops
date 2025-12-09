@@ -1,0 +1,19 @@
+package descheduler
+
+role: "descheduler-role": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "Role"
+	metadata: {
+		name:      "descheduler-role"
+		namespace: "kube-system"
+	}
+	rules: [{
+		apiGroups: [""]
+		resources: ["secrets"]
+		verbs: [
+			"get",
+			"list",
+			"watch",
+		]
+	}]
+}

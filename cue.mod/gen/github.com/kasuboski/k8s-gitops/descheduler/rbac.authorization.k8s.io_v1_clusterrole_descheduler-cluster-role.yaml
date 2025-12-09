@@ -50,11 +50,20 @@ rules:
   - watch
   - list
 - apiGroups:
+  - policy
+  resources:
+  - poddisruptionbudgets
+  verbs:
+  - get
+  - watch
+  - list
+- apiGroups:
   - coordination.k8s.io
   resources:
   - leases
   verbs:
   - create
+  - update
 - apiGroups:
   - coordination.k8s.io
   resourceNames:
@@ -65,3 +74,11 @@ rules:
   - get
   - patch
   - delete
+- apiGroups:
+  - metrics.k8s.io
+  resources:
+  - nodes
+  - pods
+  verbs:
+  - get
+  - list

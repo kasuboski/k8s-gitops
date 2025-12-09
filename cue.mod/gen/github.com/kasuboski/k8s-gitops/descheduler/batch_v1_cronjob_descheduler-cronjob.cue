@@ -20,7 +20,7 @@ cronjob: "descheduler-cronjob": {
 						"3",
 					]
 					command: ["/bin/descheduler"]
-					image: "registry.k8s.io/descheduler/descheduler:v0.30.1"
+					image: "registry.k8s.io/descheduler/descheduler:v0.34.0"
 					livenessProbe: {
 						failureThreshold: 3
 						httpGet: {
