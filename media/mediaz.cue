@@ -56,7 +56,7 @@ deployment: mediaz: spec: template: spec: {
 			mountPath: "/movies"
 		}, {
 			name:      "media"
-			subPath:   "Video/TV"
+			subPath:   "Video/TV Shows"
 			mountPath: "/tv"
 		}, {
 			name:      "media"

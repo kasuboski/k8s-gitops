@@ -97,7 +97,7 @@
               {
                 "mountPath": "/tv",
                 "name": "media",
-                "subPath": "Video/TV"
+                "subPath": "Video/TV Shows"
               },
               {
                 "mountPath": "/downloads",
