@@ -1,20 +1,25 @@
 package machines
 
-// Longhorn storage patches - required for persistent storage on x86 nodes
+// Longhorn storage patches - required for persistent storage
 longhornPatches: {
+	// Base ephemeral volume configuration
 	// EPHEMERAL volume must be fixed size to leave room for Longhorn UserVolumeConfig
 	// EPHEMERAL contains /var: container data, images, logs, etcd
 	// NOTE: Cannot be expanded after initial provisioning - size generously!
-	ephemeralVolume: {
+	_ephemeralBase: {
 		apiVersion: "v1alpha1"
 		kind:       "VolumeConfig"
 		name:       "EPHEMERAL"
 		provisioning: {
-			diskSelector: match: "system_disk" // Same as default
 			minSize: "2GB"
 			maxSize: "80GB" // Generous for images, etcd, logs - cannot expand later!
 			grow:    false
 		}
+	}
+
+	// x86 ephemeral volume on system disk
+	ephemeralVolume: _ephemeralBase & {
+		provisioning: diskSelector: match: "system_disk"
 	}
 
 	// Kubelet mounts for Longhorn (all nodes using Longhorn)
@@ -58,6 +63,22 @@ longhornPatches: {
 		name:       "longhorn"
 		provisioning: {
 			diskSelector: match: "disk.transport == 'nvme'"
+			minSize: "10GB" // Minimum required, will grow to fill remaining space
+		}
+	}
+
+	// Raspberry Pi ephemeral volume on USB
+	rpiEphemeralUSB: _ephemeralBase & {
+		provisioning: diskSelector: match: "disk.transport == 'usb'"
+	}
+
+	// USB Longhorn volume for Raspberry Pi - uses remaining space on USB drive after EPHEMERAL
+	usbVolume: {
+		apiVersion: "v1alpha1"
+		kind:       "UserVolumeConfig"
+		name:       "longhorn"
+		provisioning: {
+			diskSelector: match: "disk.transport == 'usb'"
 			minSize: "10GB" // Minimum required, will grow to fill remaining space
 		}
 	}

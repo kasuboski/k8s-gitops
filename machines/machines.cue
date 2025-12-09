@@ -81,22 +81,16 @@ x86InstallerImage: #Patch & {
 	machine: install: image: "factory.talos.dev/installer/\(cluster.talos.schematics.x86):\(cluster.talos.version)"
 }
 
+// Image Factory installer image for Raspberry Pi nodes with extensions
+rpiInstallerImage: #Patch & {
+	machine: install: image: "factory.talos.dev/installer/\(cluster.talos.schematics.rpi):\(cluster.talos.version)"
+}
+
 // Hardware-specific patches
 hardwarePatches: {
 	// SD card install for Raspberry Pi nodes
 	sdcardInstall: #Patch & {
 		machine: install: disk: "/dev/mmcblk0"
-	}
-
-	// USB ephemeral storage (only for RPi nodes with USB drives)
-	ephemeralUSB: {
-		apiVersion: "v1alpha1"
-		kind:       "VolumeConfig"
-		name:       "EPHEMERAL"
-		provisioning: {
-			diskSelector: match: "disk.transport == 'usb'"
-			minSize: "2GB"
-		}
 	}
 }
 
@@ -166,7 +160,7 @@ nodes: {
 		]
 	}
 
-	// cherry - Raspberry Pi worker with USB ephemeral storage
+	// cherry - Raspberry Pi worker with USB ephemeral storage and Longhorn
 	cherry: #Node & {
 		role: "worker"
 		patches: [
@@ -174,13 +168,16 @@ nodes: {
 			commonPatches.kubeletIP,
 			commonPatches.austinLabels,
 			kubespanEnabled,
+			rpiInstallerImage,
 			hardwarePatches.sdcardInstall,
-			hardwarePatches.ephemeralUSB,
+			longhornPatches.rpiEphemeralUSB,
+			longhornPatches.kubeletMounts,
+			longhornPatches.usbVolume,
 			nodePatches.cherry,
 		]
 	}
 
-	// blueberry - Raspberry Pi worker with USB ephemeral storage
+	// blueberry - Raspberry Pi worker with USB ephemeral storage and Longhorn
 	blueberry: #Node & {
 		role: "worker"
 		patches: [
@@ -188,13 +185,16 @@ nodes: {
 			commonPatches.kubeletIP,
 			commonPatches.austinLabels,
 			kubespanEnabled,
+			rpiInstallerImage,
 			hardwarePatches.sdcardInstall,
-			hardwarePatches.ephemeralUSB,
+			longhornPatches.rpiEphemeralUSB,
+			longhornPatches.kubeletMounts,
+			longhornPatches.usbVolume,
 			nodePatches.blueberry,
 		]
 	}
 
-	// pumpkin - Raspberry Pi worker with USB ephemeral storage
+	// pumpkin - Raspberry Pi worker with USB ephemeral storage and Longhorn
 	pumpkin: #Node & {
 		role: "worker"
 		patches: [
@@ -202,13 +202,16 @@ nodes: {
 			commonPatches.kubeletIP,
 			commonPatches.austinLabels,
 			kubespanEnabled,
+			rpiInstallerImage,
 			hardwarePatches.sdcardInstall,
-			hardwarePatches.ephemeralUSB,
+			longhornPatches.rpiEphemeralUSB,
+			longhornPatches.kubeletMounts,
+			longhornPatches.usbVolume,
 			nodePatches.pumpkin,
 		]
 	}
 
-	// apple - Raspberry Pi worker (SD card only, no USB)
+	// apple - Raspberry Pi worker (SD card only, no USB storage)
 	apple: #Node & {
 		role: "worker"
 		patches: [
@@ -216,6 +219,7 @@ nodes: {
 			commonPatches.kubeletIP,
 			commonPatches.austinLabels,
 			kubespanEnabled,
+			rpiInstallerImage,
 			hardwarePatches.sdcardInstall,
 			nodePatches.apple,
 		]
