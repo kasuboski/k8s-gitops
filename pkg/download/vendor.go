@@ -125,16 +125,10 @@ func VendorHelm(ctx context.Context, pkg string, h Helm) error {
 		defer os.Remove(valuesFile)
 	}
 
-	// Run helm template
+	// Run helm template and write output to file
 	err = RunHelmTemplate(ctx, pkg, out, h, valuesFile)
 	if err != nil {
 		return err
-	}
-
-	// Flatten helm output directory structure
-	err = flattenHelmOutput(out)
-	if err != nil {
-		return fmt.Errorf("failed to flatten helm output: %w", err)
 	}
 
 	// Convert YAML to CUE (same as kustomize/download)
@@ -171,11 +165,8 @@ func createTempValuesFile(values map[string]interface{}) (string, error) {
 }
 
 func RunHelmTemplate(ctx context.Context, pkg, outputDir string, h Helm, valuesFile string) error {
-	// Determine release name (default to last segment of pkg)
+	// Release name is required in CUE schema
 	releaseName := h.ReleaseName
-	if releaseName == "" {
-		releaseName = path.Base(pkg)
-	}
 
 	// Determine namespace (default to "default")
 	namespace := h.Namespace
@@ -183,13 +174,12 @@ func RunHelmTemplate(ctx context.Context, pkg, outputDir string, h Helm, valuesF
 		namespace = "default"
 	}
 
-	// Build helm template command
+	// Build helm template command (no --output-dir, capture stdout)
 	args := []string{
 		"template",
 		releaseName,
 		h.Chart,
 		"--namespace", namespace,
-		"--output-dir", outputDir,
 		"--dependency-update",
 	}
 
@@ -212,59 +202,21 @@ func RunHelmTemplate(ctx context.Context, pkg, outputDir string, h Helm, valuesF
 		args = append(args, "--skip-tests")
 	}
 
-	// Execute command
+	// Execute command and capture stdout
 	c := exec.CommandContext(ctx, "helm", args...)
-	o, err := c.CombinedOutput()
+	output, err := c.Output()
 	if err != nil {
-		return fmt.Errorf("failed running helm template: %s: %w", string(o), err)
+		// Get stderr for error message
+		if exitErr, ok := err.(*exec.ExitError); ok {
+			return fmt.Errorf("failed running helm template: %s: %w", string(exitErr.Stderr), err)
+		}
+		return fmt.Errorf("failed running helm template: %w", err)
 	}
 
-	return nil
-}
-
-func flattenHelmOutput(outputDir string) error {
-	// Helm creates <chart-name>/templates/*.yaml
-	// We need to flatten this to outputDir/*.yaml
-
-	entries, err := os.ReadDir(outputDir)
-	if err != nil {
-		return fmt.Errorf("couldn't read output dir: %w", err)
-	}
-
-	for _, entry := range entries {
-		if !entry.IsDir() {
-			continue
-		}
-
-		chartDir := path.Join(outputDir, entry.Name())
-		templatesDir := path.Join(chartDir, "templates")
-
-		// Check if templates directory exists
-		if _, err := os.Stat(templatesDir); os.IsNotExist(err) {
-			continue
-		}
-
-		// Move all files from templates/ to outputDir
-		files, err := os.ReadDir(templatesDir)
-		if err != nil {
-			return fmt.Errorf("couldn't read templates dir: %w", err)
-		}
-
-		for _, file := range files {
-			if file.IsDir() {
-				continue
-			}
-			src := path.Join(templatesDir, file.Name())
-			dst := path.Join(outputDir, file.Name())
-			if err := os.Rename(src, dst); err != nil {
-				return fmt.Errorf("couldn't move file: %w", err)
-			}
-		}
-
-		// Remove the chart directory structure
-		if err := os.RemoveAll(chartDir); err != nil {
-			return fmt.Errorf("couldn't remove chart dir: %w", err)
-		}
+	// Write multi-document YAML output to single file
+	outputFile := path.Join(outputDir, "manifests.yaml")
+	if err := os.WriteFile(outputFile, output, 0644); err != nil {
+		return fmt.Errorf("failed writing helm output: %w", err)
 	}
 
 	return nil

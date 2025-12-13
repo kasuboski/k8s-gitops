@@ -8,6 +8,9 @@ package apps
 	// Chart reference - supports OCI (oci://...), traditional repos, local paths, URLs
 	chart: string
 
+	// Release name used in helm template command
+	releaseName: string
+
 	// Optional: chart version (e.g., "1.2.3", "^2.0.0", ">= 1.0.0")
 	version?: string
 
@@ -18,9 +21,6 @@ package apps
 	// Optional: inline Helm values as CUE structures
 	// Values will be marshaled to YAML for helm template
 	values?: {...}
-
-	// Optional: release name (defaults to last segment of pkg name)
-	releaseName?: string
 
 	// Optional: namespace for manifests (defaults to "default")
 	namespace?: string
@@ -52,15 +52,21 @@ vendor: "github.com/kasuboski/k8s-gitops/descheduler": kustomize: path:         
 vendor: "github.com/metallb/metallb": kustomize: path:                                 "networking/metallb"
 vendor: "github.com/pl4nty/cloudflare-kubernetes-gateway/cloudflare": kustomize: path: "github.com/pl4nty/cloudflare-kubernetes-gateway//config/default?ref=v0.7.0"
 
-// Test Helm chart vendor (metrics-server from traditional repo)
-// Uncomment to test Helm vendoring
+// Example: Helm chart vendor (metrics-server from traditional repo)
 // vendor: "test/metrics-server/v1": helm: {
-// 	chart: "metrics-server"
-// 	repo: "https://kubernetes-sigs.github.io/metrics-server/"
-// 	version: "3.11.0"
+// 	chart:       "metrics-server"
 // 	releaseName: "metrics-server"
-// 	namespace: "kube-system"
+// 	repo:        "https://kubernetes-sigs.github.io/metrics-server/"
+// 	version:     "3.11.0"
+// 	namespace:   "kube-system"
 // }
+
+vendor: "github.com/victoriametrics/victoria-metrics-k8s-stack/v1": helm: {
+	chart:       "oci://ghcr.io/victoriametrics/helm-charts/victoria-metrics-k8s-stack"
+	version:     "0.65.1"
+	releaseName: "victoria-metrics"
+	namespace:   "victoria-metrics"
+}
 
 vendorList: [...#Vendor]
 vendorList: [for _, v in vendor {v}]
