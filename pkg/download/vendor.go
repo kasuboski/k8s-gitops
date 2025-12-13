@@ -213,10 +213,68 @@ func RunHelmTemplate(ctx context.Context, pkg, outputDir string, h Helm, valuesF
 		return fmt.Errorf("failed running helm template: %w", err)
 	}
 
-	// Write multi-document YAML output to single file
-	outputFile := path.Join(outputDir, "manifests.yaml")
-	if err := os.WriteFile(outputFile, output, 0644); err != nil {
-		return fmt.Errorf("failed writing helm output: %w", err)
+	// Split multi-document YAML into separate files
+	if err := splitHelmYAML(output, outputDir); err != nil {
+		return fmt.Errorf("failed splitting helm output: %w", err)
+	}
+
+	return nil
+}
+
+func splitHelmYAML(data []byte, outputDir string) error {
+	// Parse multi-document YAML and write each document to a separate file
+	decoder := yaml.NewDecoder(strings.NewReader(string(data)))
+	fileIndex := 0
+
+	for {
+		var doc map[string]interface{}
+		if err := decoder.Decode(&doc); err != nil {
+			if err.Error() == "EOF" {
+				break
+			}
+			return fmt.Errorf("document decode failed: %w", err)
+		}
+
+		// Skip empty documents
+		if len(doc) == 0 {
+			continue
+		}
+
+		// Extract metadata for filename
+		apiVersion, _ := doc["apiVersion"].(string)
+		kind, _ := doc["kind"].(string)
+
+		var name string
+		if metadata, ok := doc["metadata"].(map[string]interface{}); ok {
+			name, _ = metadata["name"].(string)
+		}
+
+		// Generate filename: {apiVersion}_{kind}_{name}.yaml
+		// Replace slashes in apiVersion (e.g., apps/v1 -> apps_v1)
+		filename := fmt.Sprintf("%s_%s_%s.yaml",
+			strings.ReplaceAll(apiVersion, "/", "_"),
+			strings.ToLower(kind),
+			name,
+		)
+
+		// Fallback to index-based naming if we can't extract metadata
+		if apiVersion == "" || kind == "" || name == "" {
+			filename = fmt.Sprintf("resource_%d.yaml", fileIndex)
+		}
+
+		// Marshal document back to YAML
+		out, err := yaml.Marshal(doc)
+		if err != nil {
+			return fmt.Errorf("couldn't marshal document: %w", err)
+		}
+
+		// Write to file
+		filePath := path.Join(outputDir, filename)
+		if err := os.WriteFile(filePath, out, 0644); err != nil {
+			return fmt.Errorf("couldn't write file %s: %w", filename, err)
+		}
+
+		fileIndex++
 	}
 
 	return nil
