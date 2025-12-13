@@ -1,0 +1,105 @@
+package v1
+
+configmap: "vmalertmanager-victoria-metrics-victoria-metrics-k8s-stack-monzo-tpl": {
+	apiVersion: "v1"
+	data: "monzo.tmpl": """
+		# This builds the silence URL. We exclude the alertname in the range
+		# to avoid the issue of having trailing comma separator (%2C) at the end
+		# of the generated URL
+		{{ define "__alert_silence_link" -}}
+		    {{ .ExternalURL }}/#/silences/new?filter=%7B
+		    {{- range .CommonLabels.SortedPairs -}}
+		        {{- if ne .Name "alertname" -}}
+		            {{- .Name }}%3D"{{- .Value | urlquery -}}"%2C%20
+		        {{- end -}}
+		    {{- end -}}
+		    alertname%3D"{{ .CommonLabels.alertname }}"%7D
+		{{- end }}
+
+		{{ define "__alert_severity_prefix" -}}
+		    {{ if ne .Status "firing" -}}
+		    :lgtm:
+		    {{- else if eq .Labels.severity "critical" -}}
+		    :fire:
+		    {{- else if eq .Labels.severity "warning" -}}
+		    :warning:
+		    {{- else -}}
+		    :question:
+		    {{- end }}
+		{{- end }}
+
+		{{ define "__alert_severity_prefix_title" -}}
+		    {{ if ne .Status "firing" -}}
+		    :lgtm:
+		    {{- else if eq .CommonLabels.severity "critical" -}}
+		    :fire:
+		    {{- else if eq .CommonLabels.severity "warning" -}}
+		    :warning:
+		    {{- else if eq .CommonLabels.severity "info" -}}
+		    :information_source:
+		    {{- else -}}
+		    :question:
+		    {{- end }}
+		{{- end }}
+
+
+		{{/* First line of Slack alerts */}}
+		{{ define "slack.monzo.title" -}}
+		    [{{ .Status | toUpper -}}
+		    {{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{- end -}}
+		    ] {{ template "__alert_severity_prefix_title" . }} {{ .CommonLabels.alertname }}
+		{{- end }}
+
+
+		{{/* Color of Slack attachment (appears as line next to alert )*/}}
+		{{ define "slack.monzo.color" -}}
+		    {{ if eq .Status "firing" -}}
+		        {{ if eq .CommonLabels.severity "warning" -}}
+		            warning
+		        {{- else if eq .CommonLabels.severity "critical" -}}
+		            danger
+		        {{- else -}}
+		            #439FE0
+		        {{- end -}}
+		    {{ else -}}
+		    good
+		    {{- end }}
+		{{- end }}
+
+		{{/* Emoji to display as user icon (custom emoji supported!) */}}
+		{{ define "slack.monzo.icon_emoji" }}:waitwhat:{{ end }}
+
+		{{/* The test to display in the alert */}}
+		{{ define "slack.monzo.text" -}}
+		    {{ range .Alerts }}
+		        {{- if .Annotations.message }}
+		 • {{ .Annotations.message }}
+		        {{- end }}
+		        {{- if .Annotations.description }}
+		 • {{ .Annotations.description }}
+		        {{- end }}
+		    {{- end }}
+		{{- end }}
+
+		{{ define "slack.monzo.link_button_text" -}}
+		    {{- if .CommonAnnotations.link_text -}}
+		        {{- .CommonAnnotations.link_text -}}
+		    {{- else -}}
+		        Link
+		    {{- end }} :link:
+		{{- end }}
+		"""
+	kind: "ConfigMap"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/component":  "victoria-metrics-k8s-stack-alertmanager"
+			"app.kubernetes.io/instance":   "victoria-metrics"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "victoria-metrics-k8s-stack"
+			"app.kubernetes.io/version":    "v0.28.1"
+			"helm.sh/chart":                "victoria-metrics-k8s-stack-0.65.1"
+		}
+		name:      "vmalertmanager-victoria-metrics-victoria-metrics-k8s-stack-monzo-tpl"
+		namespace: "victoria-metrics"
+	}
+}

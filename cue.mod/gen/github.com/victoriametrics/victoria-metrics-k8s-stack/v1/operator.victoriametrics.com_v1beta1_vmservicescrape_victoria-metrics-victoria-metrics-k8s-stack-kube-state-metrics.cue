@@ -1,0 +1,32 @@
+package v1
+
+vmservicescrape: "victoria-metrics-victoria-metrics-k8s-stack-kube-state-metrics": {
+	apiVersion: "operator.victoriametrics.com/v1beta1"
+	kind:       "VMServiceScrape"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/instance":   "victoria-metrics"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "victoria-metrics-k8s-stack"
+			"app.kubernetes.io/version":    "v1.131.0"
+			"helm.sh/chart":                "victoria-metrics-k8s-stack-0.65.1"
+		}
+		name:      "victoria-metrics-victoria-metrics-k8s-stack-kube-state-metrics"
+		namespace: "victoria-metrics"
+	}
+	spec: {
+		endpoints: [{
+			honorLabels: true
+			metricRelabelConfigs: [{
+				action: "labeldrop"
+				regex:  "(uid|container_id|image_id)"
+			}]
+			port: "http"
+		}]
+		jobLabel: "app.kubernetes.io/name"
+		selector: matchLabels: {
+			"app.kubernetes.io/instance": "victoria-metrics"
+			"app.kubernetes.io/name":     "kube-state-metrics"
+		}
+	}
+}

@@ -1,0 +1,30 @@
+package v1
+
+service: "victoria-metrics-victoria-metrics-k8s-stack-core-dns": {
+	apiVersion: "v1"
+	kind:       "Service"
+	metadata: {
+		labels: {
+			app:                            "victoria-metrics-victoria-metrics-k8s-stack-core-dns"
+			"app.kubernetes.io/instance":   "victoria-metrics"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "victoria-metrics-k8s-stack"
+			"app.kubernetes.io/version":    "v1.131.0"
+			"helm.sh/chart":                "victoria-metrics-k8s-stack-0.65.1"
+			jobLabel:                       "core-dns"
+		}
+		name:      "victoria-metrics-victoria-metrics-k8s-stack-core-dns"
+		namespace: "kube-system"
+	}
+	spec: {
+		clusterIP: "None"
+		ports: [{
+			name:       "http-metrics"
+			port:       9153
+			protocol:   "TCP"
+			targetPort: 9153
+		}]
+		selector: "k8s-app": "kube-dns"
+		type: "ClusterIP"
+	}
+}

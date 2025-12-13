@@ -29,6 +29,7 @@
           go
           kubecolor
           kubectl
+          kubernetes-helm
           kustomize_4
           yq-go
         ];

@@ -1,0 +1,23 @@
+package v1
+
+secret: "victoria-metrics-grafana": {
+	apiVersion: "v1"
+	data: {
+		"admin-password": "cURsNmNCRkQxUnB0SE0wZDVJMVNCeHVkUlJacFZMVXVyTDZsdWFzQw=="
+		"admin-user":     "YWRtaW4="
+		"ldap-toml":      ""
+	}
+	kind: "Secret"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/component": "admin-secret"
+			"app.kubernetes.io/instance":  "victoria-metrics"
+			"app.kubernetes.io/name":      "grafana"
+			"app.kubernetes.io/version":   "12.3.0"
+			"helm.sh/chart":               "grafana-10.1.5"
+		}
+		name:      "victoria-metrics-grafana"
+		namespace: "victoria-metrics"
+	}
+	type: "Opaque"
+}

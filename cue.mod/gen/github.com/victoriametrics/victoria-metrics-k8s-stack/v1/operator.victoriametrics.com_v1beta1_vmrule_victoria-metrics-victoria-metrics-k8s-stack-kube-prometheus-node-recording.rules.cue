@@ -1,0 +1,53 @@
+package v1
+
+vmrule: "victoria-metrics-victoria-metrics-k8s-stack-kube-prometheus-node-recording.rules": {
+	apiVersion: "operator.victoriametrics.com/v1beta1"
+	kind:       "VMRule"
+	metadata: {
+		labels: {
+			app:                            "victoria-metrics-k8s-stack"
+			"app.kubernetes.io/instance":   "victoria-metrics"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "victoria-metrics-k8s-stack"
+			"app.kubernetes.io/version":    "v0.28.1"
+			"helm.sh/chart":                "victoria-metrics-k8s-stack-0.65.1"
+		}
+		name:      "victoria-metrics-victoria-metrics-k8s-stack-kube-prometheus-node-recording.rules"
+		namespace: "victoria-metrics"
+	}
+	spec: groups: [{
+		name: "kube-prometheus-node-recording.rules"
+		params: {}
+		rules: [{
+			annotations: {}
+			expr: "sum(rate(node_cpu_seconds_total{mode!=\"idle\",mode!=\"iowait\",mode!=\"steal\"}[3m])) by(instance,cluster)"
+			labels: {}
+			record: "instance:node_cpu:rate:sum"
+		}, {
+			annotations: {}
+			expr: "sum(rate(node_network_receive_bytes_total[3m])) by(instance,cluster)"
+			labels: {}
+			record: "instance:node_network_receive_bytes:rate:sum"
+		}, {
+			annotations: {}
+			expr: "sum(rate(node_network_transmit_bytes_total[3m])) by(instance,cluster)"
+			labels: {}
+			record: "instance:node_network_transmit_bytes:rate:sum"
+		}, {
+			annotations: {}
+			expr: "sum(rate(node_cpu_seconds_total{mode!=\"idle\",mode!=\"iowait\",mode!=\"steal\"}[5m])) without(cpu,mode) / on(instance,cluster) group_left() count(sum(node_cpu_seconds_total) by(instance,cpu,cluster)) by(instance,cluster)"
+			labels: {}
+			record: "instance:node_cpu:ratio"
+		}, {
+			annotations: {}
+			expr: "sum(rate(node_cpu_seconds_total{mode!=\"idle\",mode!=\"iowait\",mode!=\"steal\"}[5m])) by(cluster)"
+			labels: {}
+			record: "cluster:node_cpu:sum_rate5m"
+		}, {
+			annotations: {}
+			expr: "cluster:node_cpu:sum_rate5m / count(sum(node_cpu_seconds_total) by(instance,cpu,cluster)) by(cluster)"
+			labels: {}
+			record: "cluster:node_cpu:ratio"
+		}]
+	}]
+}

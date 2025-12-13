@@ -1,0 +1,633 @@
+package v1
+
+validatingwebhookconfiguration: "victoria-metrics-victoria-metrics-operator-admission": {
+	apiVersion: "admissionregistration.k8s.io/v1"
+	kind:       "ValidatingWebhookConfiguration"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/instance":   "victoria-metrics"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "victoria-metrics-operator"
+			"app.kubernetes.io/version":    "v0.66.1"
+			"helm.sh/chart":                "victoria-metrics-operator-0.57.1"
+		}
+		name: "victoria-metrics-victoria-metrics-operator-admission"
+	}
+	webhooks: [{
+		admissionReviewVersions: ["v1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1-vlagent"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vlagents.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vlagents"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1-vlcluster"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vlclusters.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vlclusters"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1beta1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1beta1-vlogs"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vlogs.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1beta1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vlogs"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1-vlsingle"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vlsingles.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vlsingles"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1beta1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1beta1-vmagent"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vmagents.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1beta1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vmagents"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1beta1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1beta1-vmalertmanagerconfig"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vmalertmanagerconfigs.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1beta1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vmalertmanagerconfigs"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1beta1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1beta1-vmalertmanager"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vmalertmanagers.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1beta1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vmalertmanagers"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1beta1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1beta1-vmalert"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vmalerts.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1beta1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vmalerts"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1-vmanomaly"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vmanomalies.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vmanomalies"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1beta1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1beta1-vmauth"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vmauths.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1beta1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vmauths"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1beta1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1beta1-vmcluster"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vmclusters.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1beta1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vmclusters"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1beta1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1beta1-vmnodescrape"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vmnodescrapes.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1beta1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vmnodescrapes"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1beta1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1beta1-vmpodscrape"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vmpodscrapes.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1beta1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vmpodscrapes"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1beta1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1beta1-vmprobe"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vmprobes.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1beta1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vmprobes"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1beta1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1beta1-vmrule"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vmrules.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1beta1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vmrules"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1beta1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1beta1-vmscrapeconfig"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vmscrapeconfigs.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1beta1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vmscrapeconfigs"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1beta1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1beta1-vmservicescrape"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vmservicescrapes.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1beta1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vmservicescrapes"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1beta1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1beta1-vmsingle"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vmsingles.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1beta1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vmsingles"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1beta1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1beta1-vmstaticscrape"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vmstaticscrapes.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1beta1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vmstaticscrapes"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1beta1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1beta1-vmuser"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vmusers.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1beta1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vmusers"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1-vtcluster"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vtclusters.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vtclusters"]
+		}]
+		sideEffects: "None"
+	}, {
+		admissionReviewVersions: ["v1"]
+		clientConfig: {
+			caBundle: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURIakNDQWdhZ0F3SUJBZ0lSQVBsSE96MjJITDNWNlYxVzhwMzlUNGN3RFFZSktvWklodmNOQVFFTEJRQXcKR1RFWE1CVUdBMVVFQXhNT2RtMHRiM0JsY21GMGIzSXRZMkV3SGhjTk1qVXhNakV6TURNMU1ERTJXaGNOTXpVeApNakV4TURNMU1ERTJXakFaTVJjd0ZRWURWUVFERXc1MmJTMXZjR1Z5WVhSdmNpMWpZVENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS2UvQ25HdlJKK01PaE0zWnhUdUZzTzJTLzFDWFNZTkFZd2YKQjFtME0wSmIrM01kYld2NGVzd2J2VmNFc2NXdUR1ckU4bURZbEIvMW1QbmVRZjliWVdZL3dsL0tEZTBuK0xwUwo0Z3VZQ2pkYUlpemdibi92Ylo1OVFXWnluUzhTV1RWYlZ5S1gwN3lPMlpzQzlnWVA4MThLOVNKWTIwNm5EV0pLCkhxT25sWlBBYS9OWjRWcFVvT1pvaURBTDlWTUgxQjh4aHdUMUxZc3V2MFF1bTFCOHNvLzg3ZGppWXJKeUV3dCsKTlFnSVZIalQ2cTJJTmI0MWxadTZoeFpSSWxFME0vbU9OSHdtcVNMSjFEcithVno4SnNab2xCQWk1eXNDRFd5egppazFIV2FyOWRjdmFpd0lTZWo0dGhCZ2ZBZHVVRk9UcVJvbm1HZXQwVERhSDd2RmlTWkVDQXdFQUFhTmhNRjh3CkRnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGQndNQkJnZ3JCZ0VGQlFjREFqQVAKQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlE0dnBad1BST2RHOEUwYkwydVBsMUhNZFVNWnpBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFKRURwVnZFVTF0UmlpZFBqNzNHVEJVSys2eVlaUnF5SE0wcEd0VG0rClJ3OERvVEdzWWd5TCtrNzRkamU5c3EvVHJtUk5NZW9QZXlLVE04T0tsTFJlcFpJR24za3FHLytWOG9lUkNjN2IKMmR0Q2ozaHVrTVl6RTB4b0t5R2Y0d2dpZUROS3JQK1JTR1NId1ZuVVR1STRyRk9XcXpmL3RvMkJpbFVSQWl2LwpJNkQwRXg2RHVBY3gwVHE3M3lrZ0FYdXNBdjRZb3BuY1lqZ3FZNTZTaUFhMjkrOC9FbjFQTFgvQWxBd05JUnBCCkh3N21nMVUxd2E0eEJKUmFpSFBaTHI2OHZydXdlbyt2RGxtRUJjV1UrOW9WcTNtK3FzZ2U3Q3RGRVh1eFRCcmUKT0V3RythZnF1dEJQeDcxSzZJcW9ab01SZUxsd21YdVZwcndGRndJelhtTWNrZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+			service: {
+				name:      "victoria-metrics-victoria-metrics-operator"
+				namespace: "victoria-metrics"
+				path:      "/validate-operator-victoriametrics-com-v1-vtsingle"
+				port:      9443
+			}
+		}
+		failurePolicy: "Fail"
+		name:          "vtsingles.operator.victoriametrics.com"
+		objectSelector: matchExpressions: [{
+			key:      "app.kubernetes.io/name"
+			operator: "NotIn"
+			values: ["victoria-metrics-operator"]
+		}]
+		rules: [{
+			apiGroups: ["operator.victoriametrics.com"]
+			apiVersions: ["v1"]
+			operations: [
+				"CREATE",
+				"UPDATE",
+			]
+			resources: ["vtsingles"]
+		}]
+		sideEffects: "None"
+	}]
+}

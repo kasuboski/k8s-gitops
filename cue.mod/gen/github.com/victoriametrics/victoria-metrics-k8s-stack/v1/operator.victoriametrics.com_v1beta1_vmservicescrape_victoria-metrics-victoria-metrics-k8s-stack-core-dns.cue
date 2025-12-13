@@ -1,0 +1,31 @@
+package v1
+
+vmservicescrape: "victoria-metrics-victoria-metrics-k8s-stack-core-dns": {
+	apiVersion: "operator.victoriametrics.com/v1beta1"
+	kind:       "VMServiceScrape"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/instance":   "victoria-metrics"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "victoria-metrics-k8s-stack"
+			"app.kubernetes.io/version":    "v1.131.0"
+			"helm.sh/chart":                "victoria-metrics-k8s-stack-0.65.1"
+		}
+		name:      "victoria-metrics-victoria-metrics-k8s-stack-core-dns"
+		namespace: "victoria-metrics"
+	}
+	spec: {
+		endpoints: [{
+			bearerTokenFile: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+			port:            "http-metrics"
+		}]
+		jobLabel: "jobLabel"
+		namespaceSelector: matchNames: ["kube-system"]
+		selector: matchLabels: {
+			app:                          "victoria-metrics-victoria-metrics-k8s-stack-core-dns"
+			"app.kubernetes.io/instance": "victoria-metrics"
+			"app.kubernetes.io/name":     "victoria-metrics-k8s-stack"
+			jobLabel:                     "core-dns"
+		}
+	}
+}

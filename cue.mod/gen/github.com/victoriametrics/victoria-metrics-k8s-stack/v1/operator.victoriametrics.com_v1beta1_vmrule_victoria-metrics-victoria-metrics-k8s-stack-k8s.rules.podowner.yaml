@@ -1,0 +1,56 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+    labels:
+        app: victoria-metrics-k8s-stack
+        app.kubernetes.io/instance: victoria-metrics
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: victoria-metrics-k8s-stack
+        app.kubernetes.io/version: v0.28.1
+        helm.sh/chart: victoria-metrics-k8s-stack-0.65.1
+    name: victoria-metrics-victoria-metrics-k8s-stack-k8s.rules.podowner
+    namespace: victoria-metrics
+spec:
+    groups:
+        - name: k8s.rules.pod_owner
+          params: {}
+          rules:
+            - annotations: {}
+              expr: max(label_replace(label_replace(kube_pod_owner{job="kube-state-metrics",owner_kind="ReplicaSet"}, "replicaset", "$1", "owner_name", "(.*)") * on(cluster,replicaset,namespace) group_left(owner_name) topk(1, max(kube_replicaset_owner{job="kube-state-metrics",owner_kind=""}) by(cluster,replicaset,namespace,owner_name)) by(cluster,replicaset,namespace), "workload", "$1", "replicaset", "(.*)")) by(cluster,namespace,workload,pod)
+              labels:
+                workload_type: replicaset
+              record: namespace_workload_pod:kube_pod_owner:relabel
+            - annotations: {}
+              expr: max(label_replace(label_replace(kube_pod_owner{job="kube-state-metrics",owner_kind="ReplicaSet"}, "replicaset", "$1", "owner_name", "(.*)") * on(replicaset,namespace,cluster) group_left(owner_name) topk(1, max(kube_replicaset_owner{job="kube-state-metrics",owner_kind="Deployment"}) by(cluster,replicaset,namespace,owner_name)) by(cluster,replicaset,namespace), "workload", "$1", "owner_name", "(.*)")) by(cluster,namespace,workload,pod)
+              labels:
+                workload_type: deployment
+              record: namespace_workload_pod:kube_pod_owner:relabel
+            - annotations: {}
+              expr: max(label_replace(kube_pod_owner{job="kube-state-metrics",owner_kind="DaemonSet"}, "workload", "$1", "owner_name", "(.*)")) by(cluster,namespace,workload,pod)
+              labels:
+                workload_type: daemonset
+              record: namespace_workload_pod:kube_pod_owner:relabel
+            - annotations: {}
+              expr: max(label_replace(kube_pod_owner{job="kube-state-metrics",owner_kind="StatefulSet"}, "workload", "$1", "owner_name", "(.*)")) by(cluster,namespace,workload,pod)
+              labels:
+                workload_type: statefulset
+              record: namespace_workload_pod:kube_pod_owner:relabel
+            - annotations: {}
+              expr: group(label_join(group(label_join(kube_pod_owner{job="kube-state-metrics",owner_kind="Job"}, "job_name", "", "owner_name")) by(cluster,namespace,job_name,pod,owner_name) * on(cluster,namespace,job_name) group_left() group(kube_job_owner{job="kube-state-metrics",owner_kind=~"Pod|"}) by(cluster,namespace,job_name), "workload", "", "owner_name")) by(cluster,namespace,workload,pod)
+              labels:
+                workload_type: job
+              record: namespace_workload_pod:kube_pod_owner:relabel
+            - annotations: {}
+              expr: max(label_replace(kube_pod_owner{job="kube-state-metrics",owner_kind="",owner_name=""}, "workload", "$1", "pod", "(.+)")) by(cluster,namespace,workload,pod)
+              labels:
+                workload_type: barepod
+              record: namespace_workload_pod:kube_pod_owner:relabel
+            - annotations: {}
+              expr: max(label_replace(kube_pod_owner{job="kube-state-metrics",owner_kind="Node"}, "workload", "$1", "pod", "(.+)")) by(cluster,namespace,workload,pod)
+              labels:
+                workload_type: staticpod
+              record: namespace_workload_pod:kube_pod_owner:relabel
+            - annotations: {}
+              expr: group(label_join(label_join(group(label_join(kube_pod_owner{job="kube-state-metrics",owner_kind="Job"}, "job_name", "", "owner_name")) by(cluster,namespace,job_name,pod) * on(cluster,namespace,job_name) group_left(owner_kind,owner_name) group(kube_job_owner{job="kube-state-metrics",owner_kind!="Pod",owner_kind!=""}) by(cluster,namespace,job_name,owner_kind,owner_name), "workload", "", "owner_name"), "workload_type", "", "owner_kind") or label_replace(label_replace(label_replace(kube_pod_owner{job="kube-state-metrics",owner_kind="ReplicaSet"}, "replicaset", "$1", "owner_name", "(.+)") * on(cluster,namespace,replicaset) group_left(owner_kind,owner_name) group(kube_replicaset_owner{job="kube-state-metrics",owner_kind!="Deployment",owner_kind!=""}) by(cluster,namespace,replicaset,owner_kind,owner_name), "workload", "$1", "owner_name", "(.+)") or label_replace(group(kube_pod_owner{job="kube-state-metrics",owner_kind!="ReplicaSet",owner_kind!="DaemonSet",owner_kind!="StatefulSet",owner_kind!="Job",owner_kind!="Node",owner_kind!=""}) by(cluster,namespace,pod,owner_name,owner_kind), "workload", "$1", "owner_name", "(.+)"), "workload_type", "$1", "owner_kind", "(.+)")) by(cluster,namespace,workload,workload_type,pod)
+              labels: {}
+              record: namespace_workload_pod:kube_pod_owner:relabel

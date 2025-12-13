@@ -1,0 +1,1961 @@
+package v1
+
+import "encoding/json"
+
+configmap: "victoria-metrics-victoria-metrics-k8s-stack-victoriametrics-operator": {
+	apiVersion: "v1"
+	data: {
+		"victoriametrics-operator.json": json.Marshal(_cue_victoriametrics_operator_json)
+		let _cue_victoriametrics_operator_json = {
+			annotations: list: [{
+				builtIn: 1
+				datasource: {
+					type: "datasource"
+					uid:  "grafana"
+				}
+				enable:    true
+				hide:      true
+				iconColor: "rgba(0, 211, 255, 1)"
+				name:      "Annotations & Alerts"
+				target: {
+					limit:    100
+					matchAny: false
+					tags: []
+					type: "dashboard"
+				}
+				type: "dashboard"
+			}]
+			description:          "Overview for operator VictoriaMetrics v0.25.0 or higher"
+			editable:             false
+			fiscalYearStartMonth: 0
+			graphTooltip:         0
+			id:                   0
+			links: []
+			panels: [{
+				collapsed: false
+				gridPos: {
+					h: 1
+					w: 24
+					x: 0
+					y: 0
+				}
+				id:    8
+				title: "Overview"
+				type:  "row"
+			}, {
+				fieldConfig: {
+					defaults: {}
+					overrides: []}
+				gridPos: {
+					h: 3
+					w: 4
+					x: 0
+					y: 1
+				}
+				id: 24
+				options: {
+					code: {
+						language:        "plaintext"
+						showLineNumbers: false
+						showMiniMap:     false
+					}
+					content: "<div style=\"text-align: center;\">$version</div>"
+					mode:    "markdown"
+				}
+				pluginVersion: "12.3.0"
+				title:         "Version"
+				type:          "text"
+			}, {
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				description: "Number of objects at kubernetes cluster per each controller"
+				fieldConfig: {
+					defaults: {
+						color: mode: "thresholds"
+						mappings: []
+						min: 0
+						thresholds: {
+							mode: "absolute"
+							steps: [{
+								color: "green"
+								value: 0
+							}, {
+								color: "red"
+								value: 80
+							}]}}
+					overrides: []}
+				gridPos: {
+					h: 7
+					w: 20
+					x: 4
+					y: 1
+				}
+				id: 14
+				options: {
+					colorMode:              "none"
+					graphMode:              "area"
+					justifyMode:            "auto"
+					orientation:            "auto"
+					percentChangeColorMode: "standard"
+					reduceOptions: {
+						calcs: ["lastNotNull"]
+						fields: ""
+						values: false
+					}
+					showPercentChange: false
+					text: {}
+					textMode:   "auto"
+					wideLayout: true
+				}
+				pluginVersion: "12.3.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					editorMode:   "code"
+					expr:         "max(operator_controller_objects_count{job=~\"$job\",instance=~\"$instance\",cluster=~\"$cluster\"}) by(controller,cluster)"
+					legendFormat: "{{controller}}"
+					range:        true
+					refId:        "A"
+				}]
+				title: "CRD Objects count by controller"
+				type:  "stat"
+			}, {
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				fieldConfig: {
+					defaults: {
+						color: mode: "thresholds"
+						mappings: []
+						thresholds: {
+							mode: "absolute"
+							steps: [{
+								color: "green"
+								value: 0
+							}, {
+								color: "red"
+								value: 80
+							}]}
+						unit: "s"
+					}
+					overrides: []}
+				gridPos: {
+					h: 4
+					w: 4
+					x: 0
+					y: 4
+				}
+				id: 22
+				options: {
+					colorMode:              "value"
+					graphMode:              "area"
+					justifyMode:            "auto"
+					orientation:            "auto"
+					percentChangeColorMode: "standard"
+					reduceOptions: {
+						calcs: ["lastNotNull"]
+						fields: ""
+						values: false
+					}
+					showPercentChange: false
+					textMode:          "auto"
+					wideLayout:        true
+				}
+				pluginVersion: "12.3.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					editorMode:   "code"
+					exemplar:     false
+					expr:         "vm_app_uptime_seconds{job=~\"$job\",instance=~\"$instance\",cluster=~\"$cluster\"}"
+					format:       "table"
+					instant:      true
+					interval:     ""
+					legendFormat: "{{instance}}"
+					range:        false
+					refId:        "A"
+				}]
+				title: "Uptime"
+				type:  "stat"
+			}, {
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				description: " Shows per namespace watchers for Prometheus Operator objects (ServiceMonitors, PodMonitors, etc) "
+				fieldConfig: {
+					defaults: {
+						color: mode: "thresholds"
+						mappings: []
+						min: 0
+						thresholds: {
+							mode: "absolute"
+							steps: [{
+								color: "green"
+								value: 0
+							}, {
+								color: "red"
+								value: 80
+							}]}}
+					overrides: []}
+				gridPos: {
+					h: 5
+					w: 4
+					x: 0
+					y: 8
+				}
+				id: 39
+				options: {
+					colorMode:              "value"
+					graphMode:              "area"
+					justifyMode:            "auto"
+					orientation:            "auto"
+					percentChangeColorMode: "standard"
+					reduceOptions: {
+						calcs: ["lastNotNull"]
+						fields: ""
+						values: false
+					}
+					showPercentChange: false
+					textMode:          "auto"
+					wideLayout:        true
+				}
+				pluginVersion: "12.3.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					editorMode:   "code"
+					expr:         "sum(operator_prometheus_converter_active_watchers) by(cluster)"
+					instant:      false
+					legendFormat: "__auto"
+					range:        true
+					refId:        "A"
+				}]
+				title: "Prometheus Objects watchers"
+				type:  "stat"
+			}, {
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				description: " Number of operator instances with obtained leader status. \n Value above 1 indicates that instances with the same job may behave incorrectly.\n It's recommend to check Operator logs. "
+				fieldConfig: {
+					defaults: {
+						color: mode: "thresholds"
+						mappings: []
+						min: 0
+						thresholds: {
+							mode: "absolute"
+							steps: [{
+								color: "green"
+								value: 0
+							}, {
+								color: "red"
+								value: 80
+							}]}}
+					overrides: []}
+				gridPos: {
+					h: 5
+					w: 4
+					x: 4
+					y: 8
+				}
+				id: 40
+				options: {
+					colorMode:              "value"
+					graphMode:              "area"
+					justifyMode:            "auto"
+					orientation:            "auto"
+					percentChangeColorMode: "standard"
+					reduceOptions: {
+						calcs: ["lastNotNull"]
+						fields: ""
+						values: false
+					}
+					showPercentChange: false
+					textMode:          "auto"
+					wideLayout:        true
+				}
+				pluginVersion: "12.3.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					editorMode:   "code"
+					expr:         "sum(leader_election_master_status{job=~\"$job\",cluster=~\"$cluster\"}) by(cluster)"
+					instant:      false
+					legendFormat: "__auto"
+					range:        true
+					refId:        "A"
+				}]
+				title: "Elected Leaders"
+				type:  "stat"
+			}, {
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				description: " Shows number of active reconcile workers"
+				fieldConfig: {
+					defaults: {
+						color: mode: "thresholds"
+						mappings: []
+						thresholds: {
+							min:  0
+							mode: "absolute"
+							steps: [{
+								color: "green"
+								value: 0
+							}, {
+								color: "red"
+								value: 80
+							}]}}
+					overrides: []}
+				gridPos: {
+					h: 5
+					w: 4
+					x: 8
+					y: 8
+				}
+				id: 41
+				options: {
+					colorMode:              "value"
+					graphMode:              "area"
+					justifyMode:            "auto"
+					orientation:            "auto"
+					percentChangeColorMode: "standard"
+					reduceOptions: {
+						calcs: ["lastNotNull"]
+						fields: ""
+						values: false
+					}
+					showPercentChange: false
+					textMode:          "auto"
+					wideLayout:        true
+				}
+				pluginVersion: "12.3.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					editorMode:   "code"
+					expr:         "sum(controller_runtime_active_workers{job=~\"$job\",cluster=~\"$cluster\"}) by(cluster)"
+					instant:      false
+					legendFormat: "__auto"
+					range:        true
+					refId:        "A"
+				}]
+				title: "Active workers"
+				type:  "stat"
+			}, {
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				description: " Shows amount of Prometheus Operator objects processed by Operator."
+				fieldConfig: {
+					defaults: {
+						color: mode: "palette-classic"
+						custom: {
+							axisBorderShow:   false
+							axisCenteredZero: false
+							axisColorMode:    "text"
+							axisLabel:        ""
+							axisPlacement:    "auto"
+							barAlignment:     0
+							barWidthFactor:   0.6
+							drawStyle:        "line"
+							fillOpacity:      0
+							gradientMode:     "none"
+							hideFrom: {
+								legend:  false
+								tooltip: false
+								viz:     false
+							}
+							insertNulls:       false
+							lineInterpolation: "linear"
+							lineWidth:         1
+							pointSize:         5
+							scaleDistribution: type: "linear"
+							showPoints: "auto"
+							showValues: false
+							spanNulls:  false
+							stacking: {
+								group: "A"
+								mode:  "none"
+							}
+							thresholdsStyle: mode: "off"
+						}
+						mappings: []
+						thresholds: {
+							mode: "absolute"
+							steps: [{
+								color: "green"
+								value: 0
+							}, {
+								color: "red"
+								value: 80
+							}]}}
+					overrides: []}
+				gridPos: {
+					h: 5
+					w: 12
+					x: 12
+					y: 8
+				}
+				id: 38
+				options: {
+					legend: {
+						calcs: ["max", "mean"]
+						displayMode: "table"
+						placement:   "bottom"
+						showLegend:  true
+					}
+					tooltip: {
+						hideZeros: false
+						mode:      "single"
+						sort:      "none"
+					}}
+				pluginVersion: "12.3.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					editorMode:   "code"
+					expr:         "sum(rate(operator_prometheus_converter_watch_events_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval])) by(event_type,object_type_name,cluster)"
+					instant:      false
+					legendFormat: "{{object_type_name}} {{event_type}}"
+					range:        true
+					refId:        "A"
+				}]
+				title: "Prometheus Converter Watch events"
+				type:  "timeseries"
+			}, {
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				description: ""
+				fieldConfig: {
+					defaults: {
+						color: mode: "thresholds"
+						custom: {
+							align: "auto"
+							cellOptions: type: "auto"
+							footer: reducers: []
+							inspect: false
+						}
+						mappings: []
+						thresholds: {
+							mode: "absolute"
+							steps: [{
+								color: "green"
+								value: 0
+							}, {
+								color: "red"
+								value: 80
+							}]}}
+					overrides: []}
+				gridPos: {
+					h: 5
+					w: 12
+					x: 0
+					y: 13
+				}
+				id: 43
+				options: {
+					cellHeight: "sm"
+					showHeader: true
+				}
+				pluginVersion: "12.3.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					editorMode:   "code"
+					exemplar:     false
+					expr:         "sum(flag{is_set=\"true\",job=~\"$job\",instance=~\"$instance\",cluster=~\"$cluster\"}) by(job,instance,name,value,cluster)"
+					format:       "table"
+					instant:      true
+					legendFormat: "{{object_type_name}} {{event_type}}"
+					range:        false
+					refId:        "A"
+				}]
+				title: "Non-default flags"
+				transformations: [{
+					id: "groupBy"
+					options: fields: {
+						instance: {
+							aggregations: ["uniqueValues"]
+							operation: "aggregate"
+						}
+						job: {
+							aggregations: []
+							operation: "groupby"
+						}
+						name: {
+							aggregations: []
+							operation: "groupby"
+						}
+						value: {
+							aggregations: []
+							operation: "groupby"
+						}}}]
+				type: "table"
+			}, {
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				description: ""
+				fieldConfig: {
+					defaults: {
+						color: mode: "thresholds"
+						custom: {
+							align: "auto"
+							cellOptions: type: "auto"
+							footer: reducers: []
+							inspect: false
+						}
+						mappings: []
+						thresholds: {
+							mode: "absolute"
+							steps: [{
+								color: "green"
+								value: 0
+							}, {
+								color: "red"
+								value: 80
+							}]}}
+					overrides: []}
+				gridPos: {
+					h: 5
+					w: 12
+					x: 12
+					y: 13
+				}
+				id: 45
+				options: {
+					cellHeight: "sm"
+					showHeader: true
+				}
+				pluginVersion: "12.3.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					editorMode:   "code"
+					exemplar:     false
+					expr:         "sum(config_parameter{job=~\"$job\",instance=~\"$instance\",value!=\"\",cluster=~\"$cluster\"}) by(job,instance,name,value,cluster)"
+					format:       "table"
+					instant:      true
+					legendFormat: "{{object_type_name}} {{event_type}}"
+					range:        false
+					refId:        "A"
+				}]
+				title: "Global settings"
+				transformations: [{
+					id: "groupBy"
+					options: fields: {
+						instance: {
+							aggregations: ["uniqueValues"]
+							operation: "aggregate"
+						}
+						job: aggregations: []
+						name: {
+							aggregations: []
+							operation: "groupby"
+						}
+						value: {
+							aggregations: []
+							operation: "groupby"
+						}}}]
+				type: "table"
+			}, {
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				fieldConfig: {
+					defaults: {
+						color: mode: "palette-classic"
+						custom: {
+							axisBorderShow:   false
+							axisCenteredZero: false
+							axisColorMode:    "text"
+							axisLabel:        ""
+							axisPlacement:    "auto"
+							barAlignment:     0
+							barWidthFactor:   0.6
+							drawStyle:        "line"
+							fillOpacity:      10
+							gradientMode:     "none"
+							hideFrom: {
+								legend:  false
+								tooltip: false
+								viz:     false
+							}
+							insertNulls:       false
+							lineInterpolation: "linear"
+							lineWidth:         1
+							pointSize:         5
+							scaleDistribution: type: "linear"
+							showPoints: "never"
+							showValues: false
+							spanNulls:  false
+							stacking: {
+								group: "A"
+								mode:  "none"
+							}
+							thresholdsStyle: mode: "off"
+						}
+						mappings: []
+						thresholds: {
+							mode: "absolute"
+							steps: [{
+								color: "green"
+								value: 0
+							}, {
+								color: "red"
+								value: 80
+							}]}
+						unit: "short"
+					}
+					overrides: []}
+				gridPos: {
+					h: 13
+					w: 12
+					x: 0
+					y: 18
+				}
+				id: 12
+				options: {
+					legend: {
+						calcs: ["mean", "max"]
+						displayMode: "table"
+						placement:   "bottom"
+						showLegend:  true
+					}
+					tooltip: {
+						hideZeros: false
+						mode:      "multi"
+						sort:      "none"
+					}}
+				pluginVersion: "12.3.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					editorMode:   "code"
+					expr:         "sum(rate(controller_runtime_reconcile_total{job=~\"$job\",instance=~\"$instance\",result=~\"requeue_after|requeue|success\",cluster=~\"$cluster\"}[$__rate_interval])) by(controller,cluster)"
+					legendFormat: "{{controller}}"
+					range:        true
+					refId:        "A"
+				}]
+				title: "Reconciliation rate by controller"
+				type:  "timeseries"
+			}, {
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				description: "Shows the rate of logging the messages by their level. Unexpected spike in rate is a good reason to check logs."
+				fieldConfig: {
+					defaults: {
+						color: mode: "palette-classic"
+						custom: {
+							axisBorderShow:   false
+							axisCenteredZero: false
+							axisColorMode:    "text"
+							axisLabel:        ""
+							axisPlacement:    "auto"
+							barAlignment:     0
+							barWidthFactor:   0.6
+							drawStyle:        "line"
+							fillOpacity:      10
+							gradientMode:     "none"
+							hideFrom: {
+								legend:  false
+								tooltip: false
+								viz:     false
+							}
+							insertNulls:       false
+							lineInterpolation: "linear"
+							lineWidth:         1
+							pointSize:         5
+							scaleDistribution: type: "linear"
+							showPoints: "never"
+							showValues: false
+							spanNulls:  false
+							stacking: {
+								group: "A"
+								mode:  "none"
+							}
+							thresholdsStyle: mode: "off"
+						}
+						mappings: []
+						thresholds: {
+							mode: "absolute"
+							steps: [{
+								color: "green"
+								value: 0
+							}, {
+								color: "red"
+								value: 80
+							}]}
+						unit: "short"
+					}
+					overrides: []}
+				gridPos: {
+					h: 13
+					w: 12
+					x: 12
+					y: 18
+				}
+				id: 16
+				options: {
+					legend: {
+						calcs: ["mean", "max"]
+						displayMode: "table"
+						placement:   "bottom"
+						showLegend:  true
+					}
+					tooltip: {
+						hideZeros: false
+						mode:      "multi"
+						sort:      "none"
+					}}
+				pluginVersion: "12.3.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					editorMode:   "code"
+					expr:         "sum(rate(operator_log_messages_total{job=~\"$job\",instance=~\"$instance\",cluster=~\"$cluster\"}[$__rate_interval])) by(level,cluster)"
+					legendFormat: "{{label_name}}"
+					range:        true
+					refId:        "A"
+				}]
+				title: "Log message rate"
+				type:  "timeseries"
+			}, {
+				collapsed: false
+				gridPos: {
+					h: 1
+					w: 24
+					x: 0
+					y: 31
+				}
+				id:    6
+				title: "Troubleshooting"
+				type:  "row"
+			}, {
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				description: "Non zero metrics indicates about error with CR object definition (typos or incorrect values) or errors with kubernetes API connection."
+				fieldConfig: {
+					defaults: {
+						color: mode: "palette-classic"
+						custom: {
+							axisBorderShow:   false
+							axisCenteredZero: false
+							axisColorMode:    "text"
+							axisLabel:        ""
+							axisPlacement:    "auto"
+							barAlignment:     0
+							barWidthFactor:   0.6
+							drawStyle:        "line"
+							fillOpacity:      10
+							gradientMode:     "none"
+							hideFrom: {
+								legend:  false
+								tooltip: false
+								viz:     false
+							}
+							insertNulls:       false
+							lineInterpolation: "linear"
+							lineWidth:         1
+							pointSize:         5
+							scaleDistribution: type: "linear"
+							showPoints: "never"
+							showValues: false
+							spanNulls:  false
+							stacking: {
+								group: "A"
+								mode:  "none"
+							}
+							thresholdsStyle: mode: "off"
+						}
+						mappings: []
+						thresholds: {
+							mode: "absolute"
+							steps: [{
+								color: "green"
+								value: 0
+							}, {
+								color: "red"
+								value: 80
+							}]}
+						unit: "short"
+					}
+					overrides: []}
+				gridPos: {
+					h: 8
+					w: 12
+					x: 0
+					y: 32
+				}
+				id: 10
+				options: {
+					legend: {
+						calcs: ["lastNotNull", "max"]
+						displayMode: "table"
+						placement:   "bottom"
+						showLegend:  true
+					}
+					tooltip: {
+						hideZeros: false
+						mode:      "multi"
+						sort:      "none"
+					}}
+				pluginVersion: "12.3.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					editorMode:   "code"
+					exemplar:     false
+					expr:         "sum(rate(controller_runtime_reconcile_errors_total{job=~\"$job\",instance=~\"$instance\",cluster=~\"$cluster\"}[$__rate_interval])) by(controller,cluster) > 0"
+					instant:      false
+					legendFormat: "{{controller}}"
+					range:        true
+					refId:        "A"
+				}, {
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					editorMode:   "code"
+					expr:         "sum(rate(controller_runtime_reconcile_total{job=~\"$job\",instance=~\"$instance\",result=\"error\",cluster=~\"$cluster\"}[$__rate_interval])) by(controller,cluster) > 0"
+					hide:         false
+					legendFormat: "result errors: {{controller}}"
+					range:        true
+					refId:        "B"
+				}]
+				title: "reconcile errors by controller"
+				type:  "timeseries"
+			}, {
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				description: "Operator limits number of reconcile configuration events to 5 events per 2 seconds by default."
+				fieldConfig: {
+					defaults: {
+						color: mode: "palette-classic"
+						custom: {
+							axisBorderShow:   false
+							axisCenteredZero: false
+							axisColorMode:    "text"
+							axisLabel:        ""
+							axisPlacement:    "auto"
+							barAlignment:     0
+							barWidthFactor:   0.6
+							drawStyle:        "line"
+							fillOpacity:      10
+							gradientMode:     "none"
+							hideFrom: {
+								legend:  false
+								tooltip: false
+								viz:     false
+							}
+							insertNulls:       false
+							lineInterpolation: "linear"
+							lineWidth:         1
+							pointSize:         5
+							scaleDistribution: type: "linear"
+							showPoints: "never"
+							showValues: false
+							spanNulls:  false
+							stacking: {
+								group: "A"
+								mode:  "none"
+							}
+							thresholdsStyle: mode: "off"
+						}
+						mappings: []
+						thresholds: {
+							mode: "absolute"
+							steps: [{
+								color: "green"
+								value: 0
+							}, {
+								color: "red"
+								value: 80
+							}]}
+						unit: "short"
+					}
+					overrides: []}
+				gridPos: {
+					h: 8
+					w: 12
+					x: 12
+					y: 32
+				}
+				id: 18
+				options: {
+					legend: {
+						calcs: ["mean", "max"]
+						displayMode: "table"
+						placement:   "bottom"
+						showLegend:  true
+					}
+					tooltip: {
+						hideZeros: false
+						mode:      "multi"
+						sort:      "none"
+					}}
+				pluginVersion: "12.3.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					editorMode:   "code"
+					expr:         "sum(rate(operator_reconcile_throttled_events_total[$__rate_interval])) by(controller,cluster)"
+					legendFormat: "{{controller}}"
+					range:        true
+					refId:        "A"
+				}]
+				title: "throttled reconciliation config events"
+				type:  "timeseries"
+			}, {
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				description: "Number of objects waiting in the queue for reconciliation. Non-zero values indicate that operator cannot process CR objects changes with the given resources."
+				fieldConfig: {
+					defaults: {
+						color: mode: "palette-classic"
+						custom: {
+							axisBorderShow:   false
+							axisCenteredZero: false
+							axisColorMode:    "text"
+							axisLabel:        ""
+							axisPlacement:    "auto"
+							barAlignment:     0
+							barWidthFactor:   0.6
+							drawStyle:        "line"
+							fillOpacity:      10
+							gradientMode:     "none"
+							hideFrom: {
+								legend:  false
+								tooltip: false
+								viz:     false
+							}
+							insertNulls:       false
+							lineInterpolation: "linear"
+							lineWidth:         1
+							pointSize:         5
+							scaleDistribution: type: "linear"
+							showPoints: "never"
+							showValues: false
+							spanNulls:  false
+							stacking: {
+								group: "A"
+								mode:  "none"
+							}
+							thresholdsStyle: mode: "off"
+						}
+						mappings: []
+						thresholds: {
+							mode: "absolute"
+							steps: [{
+								color: "green"
+								value: 0
+							}, {
+								color: "red"
+								value: 80
+							}]}
+						unit: "short"
+					}
+					overrides: []}
+				gridPos: {
+					h: 11
+					w: 12
+					x: 0
+					y: 40
+				}
+				id: 20
+				options: {
+					legend: {
+						calcs: ["max", "mean"]
+						displayMode: "table"
+						placement:   "bottom"
+						showLegend:  true
+					}
+					tooltip: {
+						hideZeros: false
+						mode:      "multi"
+						sort:      "none"
+					}}
+				pluginVersion: "12.3.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					editorMode:   "code"
+					expr:         "max(workqueue_depth{job=~\"$job\",instance=~\"$instance\",cluster=~\"$cluster\"}) by(name,cluster)"
+					legendFormat: "{{label_name}}"
+					range:        true
+					refId:        "A"
+				}]
+				title: "Working queue depth"
+				type:  "timeseries"
+			}, {
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				description: " For controllers with StatefulSet it's ok to see latency greater then 3 seconds. It could be vmalertmanager,vmcluster or vmagent in statefulMode.\n\n For other controllers, latency greater then 2 second may indicate issues with kubernetes cluster or operator's performance.\n "
+				fieldConfig: {
+					defaults: {
+						color: mode: "palette-classic"
+						custom: {
+							axisBorderShow:   false
+							axisCenteredZero: false
+							axisColorMode:    "text"
+							axisLabel:        ""
+							axisPlacement:    "auto"
+							barAlignment:     0
+							barWidthFactor:   0.6
+							drawStyle:        "line"
+							fillOpacity:      10
+							gradientMode:     "none"
+							hideFrom: {
+								legend:  false
+								tooltip: false
+								viz:     false
+							}
+							insertNulls:       false
+							lineInterpolation: "linear"
+							lineWidth:         1
+							pointSize:         5
+							scaleDistribution: type: "linear"
+							showPoints: "never"
+							showValues: false
+							spanNulls:  false
+							stacking: {
+								group: "A"
+								mode:  "none"
+							}
+							thresholdsStyle: mode: "off"
+						}
+						mappings: []
+						thresholds: {
+							mode: "absolute"
+							steps: [{
+								color: "green"
+								value: 0
+							}, {
+								color: "red"
+								value: 80
+							}]}
+						unit: "s"
+					}
+					overrides: []}
+				gridPos: {
+					h: 11
+					w: 12
+					x: 12
+					y: 40
+				}
+				id: 26
+				options: {
+					legend: {
+						calcs: ["mean", "max"]
+						displayMode: "table"
+						placement:   "bottom"
+						showLegend:  true
+						sortBy:      "Mean"
+						sortDesc:    true
+					}
+					tooltip: {
+						hideZeros: false
+						mode:      "multi"
+						sort:      "none"
+					}}
+				pluginVersion: "12.3.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					editorMode:   "code"
+					expr:         "histogram_quantile(0.99, sum(rate(controller_runtime_reconcile_time_seconds_bucket{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])) by(le,controller,cluster))"
+					legendFormat: "q.99 {{controller}}"
+					range:        true
+					refId:        "A"
+				}]
+				title: "Reconciliation latency by controller"
+				type:  "timeseries"
+			}, {
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				description: "Number of HTTP requests to the Kubernetes API server break down by code and method"
+				fieldConfig: {
+					defaults: {
+						color: mode: "palette-classic"
+						custom: {
+							axisBorderShow:   false
+							axisCenteredZero: false
+							axisColorMode:    "text"
+							axisLabel:        ""
+							axisPlacement:    "auto"
+							barAlignment:     0
+							barWidthFactor:   0.6
+							drawStyle:        "line"
+							fillOpacity:      0
+							gradientMode:     "none"
+							hideFrom: {
+								legend:  false
+								tooltip: false
+								viz:     false
+							}
+							insertNulls:       false
+							lineInterpolation: "linear"
+							lineWidth:         1
+							pointSize:         5
+							scaleDistribution: type: "linear"
+							showPoints: "auto"
+							showValues: false
+							spanNulls:  false
+							stacking: {
+								group: "A"
+								mode:  "none"
+							}
+							thresholdsStyle: mode: "off"
+						}
+						mappings: []
+						thresholds: {
+							mode: "absolute"
+							steps: [{
+								color: "green"
+								value: 0
+							}, {
+								color: "red"
+								value: 80
+							}]}}
+					overrides: []}
+				gridPos: {
+					h: 8
+					w: 12
+					x: 0
+					y: 51
+				}
+				id: 36
+				options: {
+					legend: {
+						calcs: ["max", "mean"]
+						displayMode: "table"
+						placement:   "bottom"
+						showLegend:  true
+					}
+					tooltip: {
+						hideZeros: false
+						mode:      "single"
+						sort:      "none"
+					}}
+				pluginVersion: "12.3.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					editorMode:   "code"
+					expr:         "sum(rate(rest_client_requests_total{job=~\"$job\",cluster=~\"$cluster\"}[$__interval])) by(method,code,cluster)"
+					instant:      false
+					legendFormat: "{{method}} {{code}}"
+					range:        true
+					refId:        "A"
+				}]
+				title: "Rest client requests"
+				type:  "timeseries"
+			}, {
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				description: "Shows how many ongoing reconcile events are taking place, where:\n* `max` - equal to the value of flag`-controller.maxConcurrentReconciles`;\n* `current` - current number of reconcile workers processing CRD objects.\n\nWhen `current` hits `max` constantly, it means operator cannot process events in time. It should be either increased value for flag `-controller.maxConcurrentReconciles` or allocated  additional CPU resources to the operator."
+				fieldConfig: {
+					defaults: {
+						color: mode: "palette-classic"
+						custom: {
+							axisBorderShow:   false
+							axisCenteredZero: false
+							axisColorMode:    "text"
+							axisLabel:        ""
+							axisPlacement:    "auto"
+							barAlignment:     0
+							barWidthFactor:   0.6
+							drawStyle:        "line"
+							fillOpacity:      0
+							gradientMode:     "none"
+							hideFrom: {
+								legend:  false
+								tooltip: false
+								viz:     false
+							}
+							insertNulls:       false
+							lineInterpolation: "linear"
+							lineWidth:         1
+							pointSize:         5
+							scaleDistribution: type: "linear"
+							showPoints: "auto"
+							showValues: false
+							spanNulls:  false
+							stacking: {
+								group: "A"
+								mode:  "none"
+							}
+							thresholdsStyle: mode: "off"
+						}
+						mappings: []
+						thresholds: {
+							mode: "absolute"
+							steps: [{
+								color: "green"
+								value: 0
+							}, {
+								color: "red"
+								value: 80
+							}]}}
+					overrides: [{
+						matcher: {
+							id:      "byName"
+							options: "Max"
+						}
+						properties: [{
+							id:    "custom.axisColorMode"
+							value: "text"
+						}, {
+							id: "color"
+							value: {
+								fixedColor: "dark-red"
+								mode:       "fixed"
+							}}]}]}
+				gridPos: {
+					h: 8
+					w: 12
+					x: 12
+					y: 51
+				}
+				id: 42
+				options: {
+					legend: {
+						calcs: []
+						displayMode: "list"
+						placement:   "bottom"
+						showLegend:  true
+					}
+					tooltip: {
+						hideZeros: false
+						mode:      "single"
+						sort:      "none"
+					}}
+				pluginVersion: "12.3.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					editorMode:   "code"
+					expr:         "max(max_over_time(controller_runtime_active_workers{job=~\"$job\",cluster=~\"$cluster\"}[$__interval])) by(cluster)"
+					instant:      false
+					legendFormat: "Current"
+					range:        true
+					refId:        "A"
+				}, {
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					editorMode:   "code"
+					expr:         "min(controller_runtime_max_concurrent_reconciles{job=~\"$job\",cluster=~\"$cluster\"}) by(cluster)"
+					hide:         false
+					instant:      false
+					legendFormat: "Max"
+					range:        true
+					refId:        "B"
+				}]
+				title: "Concurrent reconcile ($instance)"
+				type:  "timeseries"
+			}, {
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				description: "Shows the time goroutines have spent in runnable state before actually running. The lower is better.\n\nHigh values or values exceeding the threshold is usually a sign of insufficient CPU resources or CPU throttling. \n\nVerify that service has enough CPU resources. Otherwise, the service could work unreliably with delays in processing."
+				fieldConfig: {
+					defaults: {
+						color: mode: "palette-classic"
+						custom: {
+							axisBorderShow:   false
+							axisCenteredZero: false
+							axisColorMode:    "text"
+							axisLabel:        ""
+							axisPlacement:    "auto"
+							barAlignment:     0
+							barWidthFactor:   0.6
+							drawStyle:        "line"
+							fillOpacity:      0
+							gradientMode:     "none"
+							hideFrom: {
+								legend:  false
+								tooltip: false
+								viz:     false
+							}
+							insertNulls:       false
+							lineInterpolation: "linear"
+							lineWidth:         1
+							pointSize:         5
+							scaleDistribution: type: "linear"
+							showPoints: "auto"
+							showValues: false
+							spanNulls:  false
+							stacking: {
+								group: "A"
+								mode:  "none"
+							}
+							thresholdsStyle: mode: "off"
+						}
+						mappings: []
+						thresholds: {
+							mode: "absolute"
+							steps: [{
+								color: "green"
+								value: 0
+							}, {
+								color: "red"
+								value: 80
+							}]}
+						unit: "s"
+					}
+					overrides: []}
+				gridPos: {
+					h: 8
+					w: 12
+					x: 0
+					y: 59
+				}
+				id: 37
+				options: {
+					legend: {
+						calcs: []
+						displayMode: "list"
+						placement:   "bottom"
+						showLegend:  true
+					}
+					tooltip: {
+						hideZeros: false
+						mode:      "single"
+						sort:      "none"
+					}}
+				pluginVersion: "12.3.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					editorMode:   "code"
+					expr:         "max(histogram_quantile(0.99, sum(rate(go_sched_latencies_seconds_bucket{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])) by(job,instance,le,cluster))) by(job,cluster)"
+					instant:      false
+					legendFormat: "__auto"
+					range:        true
+					refId:        "A"
+				}]
+				title: "Go scheduling latency"
+				type:  "timeseries"
+			}, {
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				description: " Requests latency to the Kubernetes API server."
+				fieldConfig: {
+					defaults: {
+						color: mode: "palette-classic"
+						custom: {
+							axisBorderShow:   false
+							axisCenteredZero: false
+							axisColorMode:    "text"
+							axisLabel:        ""
+							axisPlacement:    "auto"
+							barAlignment:     0
+							barWidthFactor:   0.6
+							drawStyle:        "line"
+							fillOpacity:      0
+							gradientMode:     "none"
+							hideFrom: {
+								legend:  false
+								tooltip: false
+								viz:     false
+							}
+							insertNulls:       false
+							lineInterpolation: "linear"
+							lineWidth:         1
+							pointSize:         5
+							scaleDistribution: type: "linear"
+							showPoints: "auto"
+							showValues: false
+							spanNulls:  false
+							stacking: {
+								group: "A"
+								mode:  "none"
+							}
+							thresholdsStyle: mode: "off"
+						}
+						mappings: []
+						thresholds: {
+							mode: "absolute"
+							steps: [{
+								color: "green"
+								value: 0
+							}, {
+								color: "red"
+								value: 80
+							}]}
+						unit: "s"
+					}
+					overrides: []}
+				gridPos: {
+					h: 8
+					w: 12
+					x: 12
+					y: 59
+				}
+				id: 35
+				options: {
+					legend: {
+						calcs: ["max", "mean"]
+						displayMode: "table"
+						placement:   "bottom"
+						showLegend:  true
+					}
+					tooltip: {
+						hideZeros: false
+						mode:      "single"
+						sort:      "none"
+					}}
+				pluginVersion: "12.3.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					editorMode:   "code"
+					expr:         "histogram_quantile(0.99, sum(rate(rest_client_request_duration_seconds_bucket{job=~\"$job\",cluster=~\"$cluster\"}[$__rate_interval])) by(le,method,api,cluster))"
+					instant:      false
+					legendFormat: "{{method}} {{api}}"
+					range:        true
+					refId:        "A"
+				}]
+				title: "rest client latency"
+				type:  "timeseries"
+			}, {
+				collapsed: true
+				gridPos: {
+					h: 1
+					w: 24
+					x: 0
+					y: 67
+				}
+				id: 4
+				panels: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					fieldConfig: {
+						defaults: {
+							color: mode: "palette-classic"
+							custom: {
+								axisBorderShow:   false
+								axisCenteredZero: false
+								axisColorMode:    "text"
+								axisLabel:        ""
+								axisPlacement:    "auto"
+								barAlignment:     0
+								drawStyle:        "line"
+								fillOpacity:      10
+								gradientMode:     "none"
+								hideFrom: {
+									legend:  false
+									tooltip: false
+									viz:     false
+								}
+								insertNulls:       false
+								lineInterpolation: "linear"
+								lineWidth:         1
+								pointSize:         5
+								scaleDistribution: type: "linear"
+								showPoints: "never"
+								spanNulls:  false
+								stacking: {
+									group: "A"
+									mode:  "none"
+								}
+								thresholdsStyle: mode: "off"
+							}
+							mappings: []
+							thresholds: {
+								mode: "absolute"
+								steps: [{
+									color: "green"
+								}, {
+									color: "red"
+									value: 80
+								}]}
+							unit: "bytes"
+						}
+						overrides: []}
+					gridPos: {
+						h: 8
+						w: 12
+						x: 0
+						y: 63
+					}
+					id: 28
+					options: {
+						legend: {
+							calcs: ["mean", "lastNotNull", "max"]
+							displayMode: "table"
+							placement:   "bottom"
+							showLegend:  true
+						}
+						tooltip: {
+							mode: "multi"
+							sort: "none"
+						}}
+					pluginVersion: "10.4.0"
+					targets: [{
+						datasource: {
+							type: "prometheus"
+							uid:  "$ds"
+						}
+						editorMode:   "code"
+						expr:         "sum(go_memstats_sys_bytes{job=~\"$job\",instance=~\"$instance\",cluster=~\"$cluster\"}) by(cluster)"
+						legendFormat: "requested from system"
+						range:        true
+						refId:        "A"
+					}, {
+						datasource: {
+							type: "prometheus"
+							uid:  "$ds"
+						}
+						editorMode:   "code"
+						expr:         "sum(go_memstats_heap_inuse_bytes{job=~\"$job\",instance=~\"$instance\",cluster=~\"$cluster\"}) by(cluster)"
+						hide:         false
+						legendFormat: "heap inuse"
+						range:        true
+						refId:        "B"
+					}, {
+						datasource: {
+							type: "prometheus"
+							uid:  "$ds"
+						}
+						editorMode:   "code"
+						expr:         "sum(go_memstats_stack_inuse_bytes{job=~\"$job\",instance=~\"$instance\",cluster=~\"$cluster\"}) by(cluster)"
+						hide:         false
+						legendFormat: "stack inuse"
+						range:        true
+						refId:        "C"
+					}, {
+						datasource: {
+							type: "prometheus"
+							uid:  "$ds"
+						}
+						editorMode:   "code"
+						expr:         "sum(process_resident_memory_bytes{job=~\"$job\",instance=~\"$instance\",cluster=~\"$cluster\"}) by(cluster)"
+						hide:         false
+						legendFormat: "resident"
+						range:        true
+						refId:        "D"
+					}]
+					title: "Memory usage ($instance)"
+					type:  "timeseries"
+				}, {
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					fieldConfig: {
+						defaults: {
+							color: mode: "palette-classic"
+							custom: {
+								axisBorderShow:   false
+								axisCenteredZero: false
+								axisColorMode:    "text"
+								axisLabel:        ""
+								axisPlacement:    "auto"
+								barAlignment:     0
+								drawStyle:        "line"
+								fillOpacity:      10
+								gradientMode:     "none"
+								hideFrom: {
+									legend:  false
+									tooltip: false
+									viz:     false
+								}
+								insertNulls:       false
+								lineInterpolation: "linear"
+								lineWidth:         1
+								pointSize:         5
+								scaleDistribution: type: "linear"
+								showPoints: "never"
+								spanNulls:  false
+								stacking: {
+									group: "A"
+									mode:  "none"
+								}
+								thresholdsStyle: mode: "off"
+							}
+							mappings: []
+							thresholds: {
+								mode: "absolute"
+								steps: [{
+									color: "green"
+								}, {
+									color: "red"
+									value: 80
+								}]}
+							unit: "short"
+						}
+						overrides: []}
+					gridPos: {
+						h: 8
+						w: 12
+						x: 12
+						y: 63
+					}
+					id: 30
+					options: {
+						legend: {
+							calcs: []
+							displayMode: "list"
+							placement:   "bottom"
+							showLegend:  true
+						}
+						tooltip: {
+							mode: "multi"
+							sort: "none"
+						}}
+					pluginVersion: "10.4.0"
+					targets: [{
+						datasource: {
+							type: "prometheus"
+							uid:  "$ds"
+						}
+						editorMode:   "code"
+						expr:         "sum(rate(process_cpu_seconds_total{job=~\"$job\",instance=~\"$instance\",cluster=~\"$cluster\"}[$__rate_interval])) by(cluster)"
+						legendFormat: "CPU cores used"
+						range:        true
+						refId:        "A"
+					}]
+					title: "CPU ($instance)"
+					type:  "timeseries"
+				}, {
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					fieldConfig: {
+						defaults: {
+							color: mode: "palette-classic"
+							custom: {
+								axisBorderShow:   false
+								axisCenteredZero: false
+								axisColorMode:    "text"
+								axisLabel:        ""
+								axisPlacement:    "auto"
+								barAlignment:     0
+								drawStyle:        "line"
+								fillOpacity:      10
+								gradientMode:     "none"
+								hideFrom: {
+									legend:  false
+									tooltip: false
+									viz:     false
+								}
+								insertNulls:       false
+								lineInterpolation: "linear"
+								lineWidth:         1
+								pointSize:         5
+								scaleDistribution: type: "linear"
+								showPoints: "never"
+								spanNulls:  false
+								stacking: {
+									group: "A"
+									mode:  "none"
+								}
+								thresholdsStyle: mode: "off"
+							}
+							mappings: []
+							thresholds: {
+								mode: "absolute"
+								steps: [{
+									color: "green"
+								}, {
+									color: "red"
+									value: 80
+								}]}
+							unit: "short"
+						}
+						overrides: []}
+					gridPos: {
+						h: 8
+						w: 12
+						x: 0
+						y: 71
+					}
+					id: 32
+					options: {
+						legend: {
+							calcs: []
+							displayMode: "list"
+							placement:   "bottom"
+							showLegend:  true
+						}
+						tooltip: {
+							mode: "multi"
+							sort: "none"
+						}}
+					pluginVersion: "10.4.0"
+					targets: [{
+						datasource: {
+							type: "prometheus"
+							uid:  "$ds"
+						}
+						editorMode:   "code"
+						expr:         "sum(go_goroutines{job=~\"$job\",instance=~\"$instance\",cluster=~\"$cluster\"}) by(cluster)"
+						legendFormat: "goroutines"
+						range:        true
+						refId:        "A"
+					}]
+					title: "Goroutines ($instance)"
+					type:  "timeseries"
+				}, {
+					datasource: {
+						type: "prometheus"
+						uid:  "$ds"
+					}
+					fieldConfig: {
+						defaults: {
+							color: mode: "palette-classic"
+							custom: {
+								axisBorderShow:   false
+								axisCenteredZero: false
+								axisColorMode:    "text"
+								axisLabel:        ""
+								axisPlacement:    "auto"
+								barAlignment:     0
+								drawStyle:        "line"
+								fillOpacity:      10
+								gradientMode:     "none"
+								hideFrom: {
+									legend:  false
+									tooltip: false
+									viz:     false
+								}
+								insertNulls:       false
+								lineInterpolation: "linear"
+								lineWidth:         1
+								pointSize:         5
+								scaleDistribution: type: "linear"
+								showPoints: "never"
+								spanNulls:  false
+								stacking: {
+									group: "A"
+									mode:  "none"
+								}
+								thresholdsStyle: mode: "off"
+							}
+							mappings: []
+							thresholds: {
+								mode: "absolute"
+								steps: [{
+									color: "green"
+								}, {
+									color: "red"
+									value: 80
+								}]}
+							unit: "s"
+						}
+						overrides: []}
+					gridPos: {
+						h: 8
+						w: 12
+						x: 12
+						y: 71
+					}
+					id: 34
+					options: {
+						legend: {
+							calcs: ["mean", "max"]
+							displayMode: "table"
+							placement:   "bottom"
+							showLegend:  true
+						}
+						tooltip: {
+							mode: "multi"
+							sort: "none"
+						}}
+					pluginVersion: "10.4.0"
+					targets: [{
+						datasource: {
+							type: "prometheus"
+							uid:  "$ds"
+						}
+						editorMode:   "code"
+						expr:         "sum(rate(go_gc_duration_seconds_sum{job=~\"$job\",instance=~\"$instance\",cluster=~\"$cluster\"}[$__rate_interval])) by(cluster) / sum(rate(go_gc_duration_seconds_count{job=~\"$job\",instance=~\"$instance\",cluster=~\"$cluster\"}[$__rate_interval])) by(cluster)"
+						legendFormat: "avg gc duration"
+						range:        true
+						refId:        "A"
+					}]
+					title: "GC duration ($instance)"
+					type:  "timeseries"
+				}]
+				title: "resources"
+				type:  "row"
+			}]
+			preload:       false
+			refresh:       ""
+			schemaVersion: 42
+			tags: ["victoriametrics", "vm-k8s-stack"]
+			templating: list: [{
+				current: {}
+				name: "ds"
+				options: []
+				query:   "prometheus"
+				refresh: 1
+				regex:   ""
+				type:    "datasource"
+			}, {
+				current: {}
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				definition: "label_values(operator_log_messages_total, job)"
+				name:       "job"
+				options: []
+				query: {
+					query: "label_values(operator_log_messages_total, job)"
+					refId: "StandardVariableQuery"
+				}
+				refresh: 2
+				regex:   ""
+				type:    "query"
+			}, {
+				current: {}
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				definition: "label_values(operator_log_messages_total{job=~\"$job\",cluster=~\"$cluster\"}, instance)"
+				includeAll: true
+				name:       "instance"
+				options: []
+				query: {
+					query: "label_values(operator_log_messages_total{job=~\"$job\",cluster=~\"$cluster\"}, instance)"
+					refId: "StandardVariableQuery"
+				}
+				refresh: 2
+				regex:   ""
+				type:    "query"
+			}, {
+				current: {}
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				definition: "label_values(vm_app_version{job=\"$job\",instance=\"$instance\",cluster=~\"$cluster\"}, version)"
+				hide:       2
+				name:       "version"
+				options: []
+				query: {
+					query: "label_values(vm_app_version{job=\"$job\",instance=\"$instance\",cluster=~\"$cluster\"}, version)"
+					refId: "StandardVariableQuery"
+				}
+				refresh: 1
+				regex:   ""
+				sort:    2
+				type:    "query"
+			}, {
+				baseFilters: []
+				datasource: {
+					type: "prometheus"
+					uid:  "$ds"
+				}
+				filters: []
+				name: "adhoc"
+				type: "adhoc"
+			}, {
+				allValue: ".*"
+				datasource: type: "prometheus"
+				hide:       2
+				includeAll: false
+				label:      "cluster"
+				multi:      false
+				name:       "cluster"
+				query:      ".*"
+				type:       "constant"
+			}]
+			time: {
+				from: "now-15m"
+				to:   "now"
+			}
+			timepicker: {}
+			timezone: "utc"
+			title:    "VictoriaMetrics - operator"
+			uid:      "1H179hunk"
+			version:  8
+		}, }
+	kind: "ConfigMap"
+	metadata: {
+		labels: {
+			app:                            "victoria-metrics-k8s-stack-grafana"
+			"app.kubernetes.io/instance":   "victoria-metrics"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "victoria-metrics-k8s-stack"
+			"app.kubernetes.io/version":    "v1.131.0"
+			grafana_dashboard:              "1"
+			"helm.sh/chart":                "victoria-metrics-k8s-stack-0.65.1"
+		}
+		name:      "victoria-metrics-victoria-metrics-k8s-stack-victoriametrics-operator"
+		namespace: "victoria-metrics"
+	}
+}
