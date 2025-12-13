@@ -1,0 +1,51 @@
+{
+  "apiVersion": "gateway.networking.k8s.io/v1",
+  "kind": "HTTPRoute",
+  "metadata": {
+    "labels": {
+      "app": "vmagent",
+      "app.kubernetes.io/instance": "victoria-metrics",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/name": "victoria-metrics-k8s-stack",
+      "app.kubernetes.io/version": "v1.131.0",
+      "helm.sh/chart": "victoria-metrics-k8s-stack-0.65.1",
+      "k8s.joshcorp.co/app": "victoriametrics"
+    },
+    "name": "vmagent-victoria-metrics-victoria-metrics-k8s-stack",
+    "namespace": "victoria-metrics"
+  },
+  "spec": {
+    "hostnames": [
+      "vmagent.joshcorp.co"
+    ],
+    "parentRefs": [
+      {
+        "group": "gateway.networking.k8s.io",
+        "kind": "Gateway",
+        "name": "http",
+        "namespace": "envoy-gateway-system"
+      }
+    ],
+    "rules": [
+      {
+        "backendRefs": [
+          {
+            "group": "",
+            "kind": "Service",
+            "name": "vmagent-victoria-metrics-victoria-metrics-k8s-stack",
+            "port": 8429,
+            "weight": 1
+          }
+        ],
+        "matches": [
+          {
+            "path": {
+              "type": "PathPrefix",
+              "value": "/"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

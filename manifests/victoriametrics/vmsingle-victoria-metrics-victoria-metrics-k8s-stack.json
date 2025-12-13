@@ -1,0 +1,37 @@
+{
+  "apiVersion": "operator.victoriametrics.com/v1beta1",
+  "kind": "VMSingle",
+  "metadata": {
+    "labels": {
+      "app.kubernetes.io/component": "victoria-metrics-k8s-stack-vmsingle",
+      "app.kubernetes.io/instance": "victoria-metrics",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/name": "victoria-metrics-k8s-stack",
+      "app.kubernetes.io/version": "v1.131.0",
+      "helm.sh/chart": "victoria-metrics-k8s-stack-0.65.1",
+      "k8s.joshcorp.co/app": "victoriametrics"
+    },
+    "name": "victoria-metrics-victoria-metrics-k8s-stack",
+    "namespace": "victoria-metrics"
+  },
+  "spec": {
+    "extraArgs": {},
+    "image": {
+      "tag": "v1.131.0"
+    },
+    "license": {},
+    "port": "8428",
+    "replicaCount": 1,
+    "retentionPeriod": "1",
+    "storage": {
+      "accessModes": [
+        "ReadWriteOnce"
+      ],
+      "resources": {
+        "requests": {
+          "storage": "20Gi"
+        }
+      }
+    }
+  }
+}
