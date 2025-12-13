@@ -1,0 +1,11 @@
+{
+  "apiVersion": "v1",
+  "kind": "Namespace",
+  "metadata": {
+    "labels": {
+      "k8s.joshcorp.co/app": "victoriametrics",
+      "pod-security.kubernetes.io/enforce": "privileged"
+    },
+    "name": "victoria-metrics"
+  }
+}
