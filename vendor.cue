@@ -71,8 +71,9 @@ vendor: "github.com/victoriametrics/victoria-metrics-k8s-stack/v1": helm: {
 			annotations: "argocd.argoproj.io/sync-options": "SkipDryRunOnMissingResource=true"
 		}
 		alertmanager: enabled: false
-		vmalert: enabled:      false
-		vmauth: enabled:       false
+		grafana: admin: existingSecret: "grafana"
+		vmalert: enabled: false
+		vmauth: enabled:  false
 		vmagent: {
 			route: {
 				enabled: true

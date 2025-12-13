@@ -26,7 +26,6 @@ deployment: "victoria-metrics-grafana": {
 				annotations: {
 					"checksum/config":                         "0e9cbd0ea8e24e32f7dfca5bab17a2ba05652642f0a09a4882833ae88e4cc4a3"
 					"checksum/sc-dashboard-provider-config":   "89ec8c9c059a6a61286174130a15d183be69b7a486acc8437afbaf5d790a0ddd"
-					"checksum/secret":                         "e5fc460a9d5302cbf90650f7c4e60c779b7c983d288368f326cd1baaf1a1e1cd"
 					"kubectl.kubernetes.io/default-container": "grafana"
 				}
 				labels: {
@@ -58,13 +57,13 @@ deployment: "victoria-metrics-grafana": {
 						name: "REQ_USERNAME"
 						valueFrom: secretKeyRef: {
 							key:  "admin-user"
-							name: "victoria-metrics-grafana"
+							name: "grafana"
 						}
 					}, {
 						name: "REQ_PASSWORD"
 						valueFrom: secretKeyRef: {
 							key:  "admin-password"
-							name: "victoria-metrics-grafana"
+							name: "grafana"
 						}
 					}, {
 						name:  "REQ_URL"
@@ -93,13 +92,13 @@ deployment: "victoria-metrics-grafana": {
 						name: "GF_SECURITY_ADMIN_USER"
 						valueFrom: secretKeyRef: {
 							key:  "admin-user"
-							name: "victoria-metrics-grafana"
+							name: "grafana"
 						}
 					}, {
 						name: "GF_SECURITY_ADMIN_PASSWORD"
 						valueFrom: secretKeyRef: {
 							key:  "admin-password"
-							name: "victoria-metrics-grafana"
+							name: "grafana"
 						}
 					}, {
 						name:  "GF_PATHS_DATA"
