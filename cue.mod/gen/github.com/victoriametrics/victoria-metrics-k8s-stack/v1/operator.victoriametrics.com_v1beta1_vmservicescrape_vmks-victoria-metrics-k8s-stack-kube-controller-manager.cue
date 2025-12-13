@@ -20,8 +20,9 @@ vmservicescrape: "vmks-victoria-metrics-k8s-stack-kube-controller-manager": {
 			port:            "http-metrics"
 			scheme:          "https"
 			tlsConfig: {
-				caFile:     "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
-				serverName: "localhost"
+				caFile:             "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+				insecureSkipVerify: true
+				serverName:         "localhost"
 			}
 		}]
 		jobLabel: "jobLabel"

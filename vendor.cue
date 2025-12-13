@@ -91,8 +91,9 @@ vendor: "github.com/victoriametrics/victoria-metrics-k8s-stack/v1": helm: {
 			port:            "http-metrics"
 			scheme:          "https"
 			tlsConfig: {
-				caFile:     "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
-				serverName: "localhost"
+				caFile:             "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+				serverName:         "localhost"
+				insecureSkipVerify: true
 			}
 		}]
 		kubeScheduler: vmScrape: spec: endpoints: [{
@@ -100,8 +101,9 @@ vendor: "github.com/victoriametrics/victoria-metrics-k8s-stack/v1": helm: {
 			port:            "http-metrics"
 			scheme:          "https"
 			tlsConfig: {
-				caFile:     "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
-				serverName: "127.0.0.1"
+				caFile:             "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+				serverName:         "127.0.0.1"
+				insecureSkipVerify: true
 			}
 		}]
 		kubeEctd: enabled: false
