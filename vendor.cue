@@ -3,7 +3,36 @@ package apps
 #Download: source: string
 
 #Kustomize: path: string
-#Upstream: {download: #Download} | {kustomize: #Kustomize}
+
+#Helm: {
+	// Chart reference - supports OCI (oci://...), traditional repos, local paths, URLs
+	chart: string
+
+	// Optional: chart version (e.g., "1.2.3", "^2.0.0", ">= 1.0.0")
+	version?: string
+
+	// Optional: repository URL for traditional Helm repos (e.g., "https://...")
+	// Required when chart is in format "reponame/chartname"
+	repo?: string
+
+	// Optional: inline Helm values as CUE structures
+	// Values will be marshaled to YAML for helm template
+	values?: {...}
+
+	// Optional: release name (defaults to last segment of pkg name)
+	releaseName?: string
+
+	// Optional: namespace for manifests (defaults to "default")
+	namespace?: string
+
+	// Optional: include CRDs in output (defaults to true)
+	includeCRDs?: bool | *true
+
+	// Optional: skip test manifests (defaults to true)
+	skipTests?: bool | *true
+}
+
+#Upstream: {download: #Download} | {kustomize: #Kustomize} | {helm: #Helm}
 
 #Vendor: {
 	pkg: string
@@ -22,6 +51,16 @@ vendor: "github.com/kasuboski/k8s-gitops/kubesystem": kustomize: path:          
 vendor: "github.com/kasuboski/k8s-gitops/descheduler": kustomize: path:                "descheduler"
 vendor: "github.com/metallb/metallb": kustomize: path:                                 "networking/metallb"
 vendor: "github.com/pl4nty/cloudflare-kubernetes-gateway/cloudflare": kustomize: path: "github.com/pl4nty/cloudflare-kubernetes-gateway//config/default?ref=v0.7.0"
+
+// Test Helm chart vendor (metrics-server from traditional repo)
+// Uncomment to test Helm vendoring
+// vendor: "test/metrics-server/v1": helm: {
+// 	chart: "metrics-server"
+// 	repo: "https://kubernetes-sigs.github.io/metrics-server/"
+// 	version: "3.11.0"
+// 	releaseName: "metrics-server"
+// 	namespace: "kube-system"
+// }
 
 vendorList: [...#Vendor]
 vendorList: [for _, v in vendor {v}]

@@ -13,12 +13,25 @@ import (
 	"cuelang.org/go/cue"
 	"cuelang.org/go/cue/cuecontext"
 	"cuelang.org/go/cue/load"
+	"gopkg.in/yaml.v3"
 )
+
+type Helm struct {
+	Chart        string
+	Version      string
+	Repo         string
+	Values       map[string]interface{}
+	ReleaseName  string
+	Namespace    string
+	IncludeCRDs  *bool
+	SkipTests    *bool
+}
 
 type Vendor struct {
 	Pkg       string
 	Download  Download
 	Kustomize Kustomize
+	Helm      Helm
 }
 
 type Download struct {
@@ -40,6 +53,9 @@ func DoVendor(ctx context.Context, vs []Vendor) error {
 		if isDownload(v) {
 			err = errors.Join(err, VendorDownload(ctx, v.Pkg, v.Download))
 		}
+		if isHelm(v) {
+			err = errors.Join(err, VendorHelm(ctx, v.Pkg, v.Helm))
+		}
 	}
 	return err
 }
@@ -50,6 +66,10 @@ func isKustomize(v Vendor) bool {
 
 func isDownload(v Vendor) bool {
 	return v.Download.Source != ""
+}
+
+func isHelm(v Vendor) bool {
+	return v.Helm.Chart != ""
 }
 
 func VendorDownload(ctx context.Context, pkg string, d Download) error {
@@ -85,6 +105,168 @@ func VendorKustomize(ctx context.Context, pkg string, k Kustomize) error {
 	if err != nil {
 		return fmt.Errorf("couldn't convert kustomize output to cue: %w", err)
 	}
+	return nil
+}
+
+func VendorHelm(ctx context.Context, pkg string, h Helm) error {
+	// Create output directory
+	out, err := createPkgDir(pkg)
+	if err != nil {
+		return err
+	}
+
+	// Create temporary values file if values provided
+	var valuesFile string
+	if h.Values != nil && len(h.Values) > 0 {
+		valuesFile, err = createTempValuesFile(h.Values)
+		if err != nil {
+			return fmt.Errorf("failed to create values file: %w", err)
+		}
+		defer os.Remove(valuesFile)
+	}
+
+	// Run helm template
+	err = RunHelmTemplate(ctx, pkg, out, h, valuesFile)
+	if err != nil {
+		return err
+	}
+
+	// Flatten helm output directory structure
+	err = flattenHelmOutput(out)
+	if err != nil {
+		return fmt.Errorf("failed to flatten helm output: %w", err)
+	}
+
+	// Convert YAML to CUE (same as kustomize/download)
+	p := path.Join(vendorDir, pkg)
+	err = ConvertYaml(ctx, p, pkg)
+	if err != nil {
+		return fmt.Errorf("couldn't convert helm output to cue: %w", err)
+	}
+
+	return nil
+}
+
+func createTempValuesFile(values map[string]interface{}) (string, error) {
+	// Marshal values to YAML
+	b, err := yaml.Marshal(values)
+	if err != nil {
+		return "", fmt.Errorf("failed to marshal values: %w", err)
+	}
+
+	// Create temp file
+	tmpFile, err := os.CreateTemp("", "helm-values-*.yaml")
+	if err != nil {
+		return "", fmt.Errorf("failed to create temp file: %w", err)
+	}
+	defer tmpFile.Close()
+
+	// Write YAML data
+	if _, err := tmpFile.Write(b); err != nil {
+		os.Remove(tmpFile.Name())
+		return "", fmt.Errorf("failed to write values: %w", err)
+	}
+
+	return tmpFile.Name(), nil
+}
+
+func RunHelmTemplate(ctx context.Context, pkg, outputDir string, h Helm, valuesFile string) error {
+	// Determine release name (default to last segment of pkg)
+	releaseName := h.ReleaseName
+	if releaseName == "" {
+		releaseName = path.Base(pkg)
+	}
+
+	// Determine namespace (default to "default")
+	namespace := h.Namespace
+	if namespace == "" {
+		namespace = "default"
+	}
+
+	// Build helm template command
+	args := []string{
+		"template",
+		releaseName,
+		h.Chart,
+		"--namespace", namespace,
+		"--output-dir", outputDir,
+		"--dependency-update",
+	}
+
+	// Add optional flags
+	if h.Version != "" {
+		args = append(args, "--version", h.Version)
+	}
+	if h.Repo != "" {
+		args = append(args, "--repo", h.Repo)
+	}
+	if valuesFile != "" {
+		args = append(args, "--values", valuesFile)
+	}
+	if h.IncludeCRDs == nil || *h.IncludeCRDs {
+		args = append(args, "--include-crds")
+	} else {
+		args = append(args, "--skip-crds")
+	}
+	if h.SkipTests == nil || *h.SkipTests {
+		args = append(args, "--skip-tests")
+	}
+
+	// Execute command
+	c := exec.CommandContext(ctx, "helm", args...)
+	o, err := c.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("failed running helm template: %s: %w", string(o), err)
+	}
+
+	return nil
+}
+
+func flattenHelmOutput(outputDir string) error {
+	// Helm creates <chart-name>/templates/*.yaml
+	// We need to flatten this to outputDir/*.yaml
+
+	entries, err := os.ReadDir(outputDir)
+	if err != nil {
+		return fmt.Errorf("couldn't read output dir: %w", err)
+	}
+
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+
+		chartDir := path.Join(outputDir, entry.Name())
+		templatesDir := path.Join(chartDir, "templates")
+
+		// Check if templates directory exists
+		if _, err := os.Stat(templatesDir); os.IsNotExist(err) {
+			continue
+		}
+
+		// Move all files from templates/ to outputDir
+		files, err := os.ReadDir(templatesDir)
+		if err != nil {
+			return fmt.Errorf("couldn't read templates dir: %w", err)
+		}
+
+		for _, file := range files {
+			if file.IsDir() {
+				continue
+			}
+			src := path.Join(templatesDir, file.Name())
+			dst := path.Join(outputDir, file.Name())
+			if err := os.Rename(src, dst); err != nil {
+				return fmt.Errorf("couldn't move file: %w", err)
+			}
+		}
+
+		// Remove the chart directory structure
+		if err := os.RemoveAll(chartDir); err != nil {
+			return fmt.Errorf("couldn't remove chart dir: %w", err)
+		}
+	}
+
 	return nil
 }
 
