@@ -299,6 +299,13 @@ func ConvertYaml(ctx context.Context, p string, pkg string) error {
 	if err != nil {
 		return err
 	}
+
+	// Remove null httpHeaders from YAML files before CUE import
+	err = sanitizeNullHttpHeaders(p)
+	if err != nil {
+		return err
+	}
+
 	// cue import yaml -p secrets -f -l 'strings.ToLower(kind)' -l 'metadata.name' -R -i secrets/doppler-operator.yaml
 	pkgName := path.Base(pkg)
 	args := []string{"import", "yaml", "-p", pkgName, "-f", "-l", "strings.ToLower(kind)", "-l", "metadata.name", "-R", "-i", "-s", "."}
@@ -389,4 +396,49 @@ func sanitizedName(name string) (bool, string) {
 		return true, strings.ReplaceAll(name, ":", "_")
 	}
 	return false, name
+}
+
+// sanitizeNullHttpHeaders removes lines containing "httpHeaders: null" from YAML files
+// This is needed because some Helm charts (e.g., Victoria Metrics) set httpHeaders: null
+// in probe definitions, which conflicts with the Kubernetes CUE schema that expects
+// httpHeaders to be a list type, not null. We treat null as if the field was omitted.
+func sanitizeNullHttpHeaders(p string) error {
+	entries, err := os.ReadDir(p)
+	if err != nil {
+		return err
+	}
+
+	var errs error
+	for _, e := range entries {
+		if e.IsDir() || !strings.HasSuffix(e.Name(), ".yaml") {
+			continue
+		}
+
+		filePath := path.Join(p, e.Name())
+		data, err := os.ReadFile(filePath)
+		if err != nil {
+			errs = errors.Join(errs, err)
+			continue
+		}
+
+		// Skip files without the problematic pattern
+		if !strings.Contains(string(data), "httpHeaders: null") {
+			continue
+		}
+
+		// Remove lines containing httpHeaders: null
+		lines := strings.Split(string(data), "\n")
+		var filtered []string
+		for _, line := range lines {
+			if !strings.Contains(line, "httpHeaders: null") {
+				filtered = append(filtered, line)
+			}
+		}
+
+		cleanData := strings.Join(filtered, "\n")
+		if err := os.WriteFile(filePath, []byte(cleanData), 0644); err != nil {
+			errs = errors.Join(errs, err)
+		}
+	}
+	return errs
 }

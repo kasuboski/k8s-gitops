@@ -83,7 +83,7 @@ vendor: "github.com/victoriametrics/victoria-metrics-k8s-stack/v1": helm: {
 						namespace: "envoy-gateway-system"
 					},
 				]
-				hostnames: "vmagent.joshcorp.co"
+				hostnames: ["vmagent.joshcorp.co"]
 			}
 		}
 		kubeEctd: enabled: false

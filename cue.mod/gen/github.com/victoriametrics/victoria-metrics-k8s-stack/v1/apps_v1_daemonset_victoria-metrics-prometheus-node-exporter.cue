@@ -67,10 +67,9 @@ daemonset: "victoria-metrics-prometheus-node-exporter": {
 					livenessProbe: {
 						failureThreshold: 3
 						httpGet: {
-							httpHeaders: null
-							path:        "/"
-							port:        "metrics"
-							scheme:      "HTTP"
+							path:   "/"
+							port:   "metrics"
+							scheme: "HTTP"
 						}
 						initialDelaySeconds: 0
 						periodSeconds:       10
@@ -86,10 +85,9 @@ daemonset: "victoria-metrics-prometheus-node-exporter": {
 					readinessProbe: {
 						failureThreshold: 3
 						httpGet: {
-							httpHeaders: null
-							path:        "/"
-							port:        "metrics"
-							scheme:      "HTTP"
+							path:   "/"
+							port:   "metrics"
+							scheme: "HTTP"
 						}
 						initialDelaySeconds: 0
 						periodSeconds:       10

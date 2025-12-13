@@ -46,10 +46,9 @@ deployment: "victoria-metrics-kube-state-metrics": {
 					livenessProbe: {
 						failureThreshold: 3
 						httpGet: {
-							httpHeaders: null
-							path:        "/livez"
-							port:        8080
-							scheme:      "HTTP"
+							path:   "/livez"
+							port:   8080
+							scheme: "HTTP"
 						}
 						initialDelaySeconds: 5
 						periodSeconds:       10
@@ -64,10 +63,9 @@ deployment: "victoria-metrics-kube-state-metrics": {
 					readinessProbe: {
 						failureThreshold: 3
 						httpGet: {
-							httpHeaders: null
-							path:        "/readyz"
-							port:        8081
-							scheme:      "HTTP"
+							path:   "/readyz"
+							port:   8081
+							scheme: "HTTP"
 						}
 						initialDelaySeconds: 5
 						periodSeconds:       10

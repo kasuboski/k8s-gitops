@@ -16,7 +16,7 @@ httproute: "vmagent-victoria-metrics-victoria-metrics-k8s-stack": {
 		namespace: "victoria-metrics"
 	}
 	spec: {
-		hostnames: "vmagent.joshcorp.co"
+		hostnames: ["vmagent.joshcorp.co"]
 		parentRefs: [{
 			name:      "http"
 			namespace: "envoy-gateway-system"
