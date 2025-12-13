@@ -26,7 +26,7 @@ deployment: "victoria-metrics-grafana": {
 				annotations: {
 					"checksum/config":                         "0e9cbd0ea8e24e32f7dfca5bab17a2ba05652642f0a09a4882833ae88e4cc4a3"
 					"checksum/sc-dashboard-provider-config":   "89ec8c9c059a6a61286174130a15d183be69b7a486acc8437afbaf5d790a0ddd"
-					"checksum/secret":                         "6da32a1583bfe4b85a1d0f0ee37537bb2486d9f32fbd2e9e896e35e4f5e583aa"
+					"checksum/secret":                         "e5fc460a9d5302cbf90650f7c4e60c779b7c983d288368f326cd1baaf1a1e1cd"
 					"kubectl.kubernetes.io/default-container": "grafana"
 				}
 				labels: {

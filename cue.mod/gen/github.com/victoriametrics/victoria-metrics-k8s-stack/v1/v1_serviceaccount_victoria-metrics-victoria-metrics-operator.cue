@@ -5,6 +5,7 @@ serviceaccount: "victoria-metrics-victoria-metrics-operator": {
 	automountServiceAccountToken: true
 	kind:                         "ServiceAccount"
 	metadata: {
+		annotations: "argocd.argoproj.io/sync-options": "SkipDryRunOnMissingResource=true"
 		labels: {
 			"app.kubernetes.io/instance":   "victoria-metrics"
 			"app.kubernetes.io/managed-by": "Helm"

@@ -4,6 +4,7 @@ role: "victoria-metrics-victoria-metrics-operator": {
 	apiVersion: "rbac.authorization.k8s.io/v1"
 	kind:       "Role"
 	metadata: {
+		annotations: "argocd.argoproj.io/sync-options": "SkipDryRunOnMissingResource=true"
 		labels: {
 			"app.kubernetes.io/instance":   "victoria-metrics"
 			"app.kubernetes.io/managed-by": "Helm"

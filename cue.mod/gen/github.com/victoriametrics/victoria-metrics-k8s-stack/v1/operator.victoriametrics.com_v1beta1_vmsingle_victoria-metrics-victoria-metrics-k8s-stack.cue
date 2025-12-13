@@ -16,7 +16,7 @@ vmsingle: "victoria-metrics-victoria-metrics-k8s-stack": {
 		namespace: "victoria-metrics"
 	}
 	spec: {
-		extraArgs: "vmalert.proxyURL": "http://vmalert-victoria-metrics-victoria-metrics-k8s-stack.victoria-metrics.svc.cluster.local.:8080"
+		extraArgs: {}
 		image: tag: "v1.131.0"
 		license: {}
 		port:            "8428"

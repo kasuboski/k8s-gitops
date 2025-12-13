@@ -4,6 +4,7 @@ vmservicescrape: "victoria-metrics-victoria-metrics-operator": {
 	apiVersion: "operator.victoriametrics.com/v1beta1"
 	kind:       "VMServiceScrape"
 	metadata: {
+		annotations: "argocd.argoproj.io/sync-options": "SkipDryRunOnMissingResource=true"
 		labels: {
 			"app.kubernetes.io/instance":   "victoria-metrics"
 			"app.kubernetes.io/managed-by": "Helm"

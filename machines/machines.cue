@@ -76,6 +76,14 @@ controlPlaneScheduling: #Patch & {
 	}
 }
 
+// Control plane metrics - expose controller manager and scheduler on 0.0.0.0
+controlPlaneMetrics: #Patch & {
+	cluster: {
+		controllerManager: extraArgs: "bind-address": "0.0.0.0"
+		scheduler: extraArgs: "bind-address":          "0.0.0.0"
+	}
+}
+
 // Image Factory installer image for x86 nodes with extensions
 x86InstallerImage: #Patch & {
 	machine: install: image: "factory.talos.dev/installer/\(cluster.talos.schematics.x86):\(cluster.talos.version)"
@@ -151,6 +159,7 @@ nodes: {
 			kubespanEnabled,
 			apiServerCertSANs,
 			controlPlaneScheduling,
+			controlPlaneMetrics,
 			x86InstallerImage,
 			longhornPatches.ephemeralVolume,
 			longhornPatches.kubeletMounts,

@@ -1,6 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+    annotations:
+        argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     labels:
         app.kubernetes.io/instance: victoria-metrics
         app.kubernetes.io/managed-by: Helm
@@ -17,6 +19,8 @@ spec:
             app.kubernetes.io/name: victoria-metrics-operator
     template:
         metadata:
+            annotations:
+                argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
             labels:
                 app.kubernetes.io/instance: victoria-metrics
                 app.kubernetes.io/managed-by: Helm

@@ -4,6 +4,7 @@ deployment: "victoria-metrics-victoria-metrics-operator": {
 	apiVersion: "apps/v1"
 	kind:       "Deployment"
 	metadata: {
+		annotations: "argocd.argoproj.io/sync-options": "SkipDryRunOnMissingResource=true"
 		labels: {
 			"app.kubernetes.io/instance":   "victoria-metrics"
 			"app.kubernetes.io/managed-by": "Helm"
@@ -21,10 +22,13 @@ deployment: "victoria-metrics-victoria-metrics-operator": {
 			"app.kubernetes.io/name":     "victoria-metrics-operator"
 		}
 		template: {
-			metadata: labels: {
-				"app.kubernetes.io/instance":   "victoria-metrics"
-				"app.kubernetes.io/managed-by": "Helm"
-				"app.kubernetes.io/name":       "victoria-metrics-operator"
+			metadata: {
+				annotations: "argocd.argoproj.io/sync-options": "SkipDryRunOnMissingResource=true"
+				labels: {
+					"app.kubernetes.io/instance":   "victoria-metrics"
+					"app.kubernetes.io/managed-by": "Helm"
+					"app.kubernetes.io/name":       "victoria-metrics-operator"
+				}
 			}
 			spec: {
 				automountServiceAccountToken: true

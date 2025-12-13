@@ -3,7 +3,7 @@ package v1
 secret: "victoria-metrics-grafana": {
 	apiVersion: "v1"
 	data: {
-		"admin-password": "cURsNmNCRkQxUnB0SE0wZDVJMVNCeHVkUlJacFZMVXVyTDZsdWFzQw=="
+		"admin-password": "WnZMendSYkQ5dm9uSTNlZ1JHSVNKbDdZZVhzVFZ5VlpxZTg1RHF6YQ=="
 		"admin-user":     "YWRtaW4="
 		"ldap-toml":      ""
 	}

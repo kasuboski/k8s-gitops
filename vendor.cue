@@ -66,6 +66,27 @@ vendor: "github.com/victoriametrics/victoria-metrics-k8s-stack/v1": helm: {
 	version:     "0.65.1"
 	releaseName: "victoria-metrics"
 	namespace:   "victoria-metrics"
+	values: {
+		"victoria-metrics-operator": {
+			annotations: "argocd.argoproj.io/sync-options": "SkipDryRunOnMissingResource=true"
+		}
+		alertmanager: enabled: false
+		vmalert: enabled:      false
+		vmauth: enabled:       false
+		vmagent: {
+			route: {
+				enabled: true
+				parentRefs: [
+					{
+						name:      "http"
+						namespace: "envoy-gateway-system"
+					},
+				]
+				hostnames: "vmagent.joshcorp.co"
+			}
+		}
+		kubeEctd: enabled: false
+	}
 }
 
 vendorList: [...#Vendor]
