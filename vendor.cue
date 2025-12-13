@@ -86,6 +86,24 @@ vendor: "github.com/victoriametrics/victoria-metrics-k8s-stack/v1": helm: {
 				hostnames: ["vmagent.joshcorp.co"]
 			}
 		}
+		kubeControllerManager: vmScrape: spec: endpoints: [{
+			bearerTokenFile: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+			port:            "http-metrics"
+			scheme:          "https"
+			tlsConfig: {
+				caFile:     "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+				serverName: "localhost"
+			}
+		}]
+		kubeScheduler: vmScrape: spec: endpoints: [{
+			bearerTokenFile: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+			port:            "http-metrics"
+			scheme:          "https"
+			tlsConfig: {
+				caFile:     "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+				serverName: "127.0.0.1"
+			}
+		}]
 		kubeEctd: enabled: false
 	}
 }

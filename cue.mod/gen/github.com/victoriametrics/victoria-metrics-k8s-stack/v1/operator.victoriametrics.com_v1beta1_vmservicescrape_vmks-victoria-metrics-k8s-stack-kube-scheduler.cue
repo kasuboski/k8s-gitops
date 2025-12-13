@@ -19,7 +19,10 @@ vmservicescrape: "vmks-victoria-metrics-k8s-stack-kube-scheduler": {
 			bearerTokenFile: "/var/run/secrets/kubernetes.io/serviceaccount/token"
 			port:            "http-metrics"
 			scheme:          "https"
-			tlsConfig: caFile: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+			tlsConfig: {
+				caFile:     "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+				serverName: "127.0.0.1"
+			}
 		}]
 		jobLabel: "jobLabel"
 		namespaceSelector: matchNames: ["kube-system"]

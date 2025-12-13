@@ -21,7 +21,7 @@ vmservicescrape: "vmks-victoria-metrics-k8s-stack-kube-controller-manager": {
 			scheme:          "https"
 			tlsConfig: {
 				caFile:     "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
-				serverName: "kubernetes"
+				serverName: "localhost"
 			}
 		}]
 		jobLabel: "jobLabel"

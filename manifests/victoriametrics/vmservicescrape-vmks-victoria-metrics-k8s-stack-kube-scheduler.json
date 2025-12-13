@@ -20,7 +20,8 @@
         "port": "http-metrics",
         "scheme": "https",
         "tlsConfig": {
-          "caFile": "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+          "caFile": "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
+          "serverName": "127.0.0.1"
         }
       }
     ],
