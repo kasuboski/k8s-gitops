@@ -1,0 +1,479 @@
+package v1
+
+import "encoding/json"
+
+configmap: "vmks-victoria-metrics-k8s-stack-etcd": {
+	apiVersion: "v1"
+	data: {
+		"etcd.json": json.Marshal(_cue_etcd_json)
+		let _cue_etcd_json = {
+			description: "etcd sample Grafana dashboard with Prometheus"
+			editable:    false
+			panels: [{
+				datasource: {
+					type: "datasource"
+					uid:  "-- Mixed --"
+				}
+				gridPos: {
+					h: 7
+					w: 6
+					x: 0
+					y: 0
+				}
+				id:       1
+				interval: "1m"
+				options: {
+					colorMode: "none"
+					graphMode: "none"
+					reduceOptions: calcs: ["lastNotNull"]}
+				pluginVersion: "v10.0.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$datasource"
+					}
+					expr:         "sum(etcd_server_has_leader{job=~\".*etcd.*\",cluster=~\"$cluster\"}) by(cluster)"
+					legendFormat: "{{cluster}} - {{namespace}}\n"
+				}]
+				title: "Up"
+				type:  "stat"
+			}, {
+				datasource: {
+					type: "datasource"
+					uid:  "-- Mixed --"
+				}
+				fieldConfig: defaults: {
+					custom: {
+						fillOpacity: 0
+						lineWidth:   2
+						showPoints:  "never"
+					}
+					unit: "ops"
+				}
+				gridPos: {
+					h: 7
+					w: 10
+					x: 6
+					y: 0
+				}
+				id:            2
+				interval:      "1m"
+				pluginVersion: "v10.0.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$datasource"
+					}
+					expr:         "sum(rate(grpc_server_started_total{job=~\".*etcd.*\",cluster=~\"$cluster\",grpc_type=\"unary\"}[$__rate_interval])) by(cluster)"
+					legendFormat: "RPC rate"
+				}, {
+					datasource: {
+						type: "prometheus"
+						uid:  "$datasource"
+					}
+					expr:         "sum(rate(grpc_server_handled_total{job=~\".*etcd.*\",cluster=~\"$cluster\",grpc_type=\"unary\",grpc_code=~\"Unknown|FailedPrecondition|ResourceExhausted|Internal|Unavailable|DataLoss|DeadlineExceeded\"}[$__rate_interval])) by(cluster)"
+					legendFormat: "RPC failed rate"
+				}]
+				title: "RPC rate"
+				type:  "timeseries"
+			}, {
+				datasource: {
+					type: "datasource"
+					uid:  "-- Mixed --"
+				}
+				fieldConfig: defaults: custom: {
+					fillOpacity: 0
+					lineWidth:   2
+					showPoints:  "never"
+				}
+				gridPos: {
+					h: 7
+					w: 8
+					x: 16
+					y: 0
+				}
+				id:            3
+				interval:      "1m"
+				pluginVersion: "v10.0.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$datasource"
+					}
+					expr:         "sum(grpc_server_started_total{job=~\".*etcd.*\",cluster=~\"$cluster\",grpc_service=\"etcdserverpb.Watch\",grpc_type=\"bidi_stream\"}) by(cluster) - sum(grpc_server_handled_total{cluster=~\"$cluster\",grpc_service=\"etcdserverpb.Watch\",grpc_type=\"bidi_stream\"}) by(cluster)"
+					legendFormat: "Watch streams"
+				}, {
+					datasource: {
+						type: "prometheus"
+						uid:  "$datasource"
+					}
+					expr:         "sum(grpc_server_started_total{job=~\".*etcd.*\",cluster=~\"$cluster\",grpc_service=\"etcdserverpb.Lease\",grpc_type=\"bidi_stream\"}) by(cluster) - sum(grpc_server_handled_total{cluster=~\"$cluster\",grpc_service=\"etcdserverpb.Lease\",grpc_type=\"bidi_stream\"}) by(cluster)"
+					legendFormat: "Lease streams"
+				}]
+				title: "Active streams"
+				type:  "timeseries"
+			}, {
+				datasource: {
+					type: "datasource"
+					uid:  "-- Mixed --"
+				}
+				fieldConfig: defaults: {
+					custom: {
+						fillOpacity: 0
+						lineWidth:   2
+						showPoints:  "never"
+					}
+					unit: "bytes"
+				}
+				gridPos: {
+					h: 7
+					w: 8
+					x: 0
+					y: 25
+				}
+				id:            4
+				interval:      "1m"
+				pluginVersion: "v10.0.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$datasource"
+					}
+					expr:         "etcd_mvcc_db_total_size_in_bytes{job=~\".*etcd.*\",cluster=~\"$cluster\"}"
+					legendFormat: "{{instance}} DB size"
+				}]
+				title: "DB size"
+				type:  "timeseries"
+			}, {
+				datasource: {
+					type: "datasource"
+					uid:  "-- Mixed --"
+				}
+				fieldConfig: defaults: {
+					custom: {
+						fillOpacity: 0
+						lineWidth:   2
+						showPoints:  "never"
+					}
+					unit: "s"
+				}
+				gridPos: {
+					h: 7
+					w: 8
+					x: 8
+					y: 25
+				}
+				id:            5
+				interval:      "1m"
+				pluginVersion: "v10.0.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$datasource"
+					}
+					expr:         "histogram_quantile(0.99, sum(rate(etcd_disk_wal_fsync_duration_seconds_bucket{job=~\".*etcd.*\",cluster=~\"$cluster\"}[$__rate_interval])) by(instance,le,cluster))"
+					legendFormat: "{{instance}} WAL fsync"
+				}, {
+					datasource: {
+						type: "prometheus"
+						uid:  "$datasource"
+					}
+					expr:         "histogram_quantile(0.99, sum(rate(etcd_disk_backend_commit_duration_seconds_bucket{job=~\".*etcd.*\",cluster=~\"$cluster\"}[$__rate_interval])) by(instance,le,cluster))"
+					legendFormat: "{{instance}} DB fsync"
+				}]
+				title: "Disk sync duration"
+				type:  "timeseries"
+			}, {
+				datasource: {
+					type: "datasource"
+					uid:  "-- Mixed --"
+				}
+				fieldConfig: defaults: {
+					custom: {
+						fillOpacity: 0
+						lineWidth:   2
+						showPoints:  "never"
+					}
+					unit: "bytes"
+				}
+				gridPos: {
+					h: 7
+					w: 8
+					x: 16
+					y: 25
+				}
+				id:            6
+				interval:      "1m"
+				pluginVersion: "v10.0.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$datasource"
+					}
+					expr:         "process_resident_memory_bytes{job=~\".*etcd.*\",cluster=~\"$cluster\"}"
+					legendFormat: "{{instance}} resident memory"
+				}]
+				title: "Memory"
+				type:  "timeseries"
+			}, {
+				datasource: {
+					type: "datasource"
+					uid:  "-- Mixed --"
+				}
+				fieldConfig: defaults: {
+					custom: {
+						fillOpacity: 0
+						lineWidth:   2
+						showPoints:  "never"
+					}
+					unit: "Bps"
+				}
+				gridPos: {
+					h: 7
+					w: 6
+					x: 0
+					y: 50
+				}
+				id:            7
+				interval:      "1m"
+				pluginVersion: "v10.0.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$datasource"
+					}
+					expr:         "rate(etcd_network_client_grpc_received_bytes_total{job=~\".*etcd.*\",cluster=~\"$cluster\"}[$__rate_interval])"
+					legendFormat: "{{instance}} client traffic in"
+				}]
+				title: "Client traffic in"
+				type:  "timeseries"
+			}, {
+				datasource: {
+					type: "datasource"
+					uid:  "-- Mixed --"
+				}
+				fieldConfig: defaults: {
+					custom: {
+						fillOpacity: 0
+						lineWidth:   2
+						showPoints:  "never"
+					}
+					unit: "Bps"
+				}
+				gridPos: {
+					h: 7
+					w: 6
+					x: 6
+					y: 50
+				}
+				id:            8
+				interval:      "1m"
+				pluginVersion: "v10.0.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$datasource"
+					}
+					expr:         "rate(etcd_network_client_grpc_sent_bytes_total{job=~\".*etcd.*\",cluster=~\"$cluster\"}[$__rate_interval])"
+					legendFormat: "{{instance}} client traffic out"
+				}]
+				title: "Client traffic out"
+				type:  "timeseries"
+			}, {
+				datasource: {
+					type: "datasource"
+					uid:  "-- Mixed --"
+				}
+				fieldConfig: defaults: {
+					custom: {
+						fillOpacity: 0
+						lineWidth:   2
+						showPoints:  "never"
+					}
+					unit: "Bps"
+				}
+				gridPos: {
+					h: 7
+					w: 6
+					x: 12
+					y: 50
+				}
+				id:            9
+				interval:      "1m"
+				pluginVersion: "v10.0.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$datasource"
+					}
+					expr:         "sum(rate(etcd_network_peer_received_bytes_total{job=~\".*etcd.*\",cluster=~\"$cluster\"}[$__rate_interval])) by(instance,cluster)"
+					legendFormat: "{{instance}} peer traffic in"
+				}]
+				title: "Peer traffic in"
+				type:  "timeseries"
+			}, {
+				datasource: {
+					type: "datasource"
+					uid:  "-- Mixed --"
+				}
+				fieldConfig: defaults: {
+					custom: {
+						fillOpacity: 0
+						lineWidth:   2
+						showPoints:  "never"
+					}
+					unit: "Bps"
+				}
+				gridPos: {
+					h: 7
+					w: 6
+					x: 18
+					y: 50
+				}
+				id:            10
+				interval:      "1m"
+				pluginVersion: "v10.0.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$datasource"
+					}
+					expr:         "sum(rate(etcd_network_peer_sent_bytes_total{job=~\".*etcd.*\",cluster=~\"$cluster\"}[$__rate_interval])) by(instance,cluster)"
+					legendFormat: "{{instance}} peer traffic out"
+				}]
+				title: "Peer traffic out"
+				type:  "timeseries"
+			}, {
+				datasource: {
+					type: "datasource"
+					uid:  "-- Mixed --"
+				}
+				fieldConfig: defaults: custom: {
+					fillOpacity: 0
+					lineWidth:   2
+					showPoints:  "never"
+				}
+				gridPos: {
+					h: 7
+					w: 8
+					x: 0
+					y: 75
+				}
+				id:            11
+				interval:      "1m"
+				pluginVersion: "v10.0.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$datasource"
+					}
+					expr:         "changes(etcd_server_leader_changes_seen_total{job=~\".*etcd.*\",cluster=~\"$cluster\"}[1d])"
+					legendFormat: "{{instance}} total leader elections per day"
+				}]
+				title: "Raft proposals"
+				type:  "timeseries"
+			}, {
+				datasource: {
+					type: "datasource"
+					uid:  "-- Mixed --"
+				}
+				fieldConfig: defaults: custom: {
+					fillOpacity: 0
+					lineWidth:   2
+					showPoints:  "never"
+				}
+				gridPos: {
+					h: 7
+					w: 8
+					x: 8
+					y: 75
+				}
+				id:            12
+				interval:      "1m"
+				pluginVersion: "v10.0.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$datasource"
+					}
+					expr:         "changes(etcd_server_leader_changes_seen_total{job=~\".*etcd.*\",cluster=~\"$cluster\"}[1d])"
+					legendFormat: "{{instance}} total leader elections per day"
+				}]
+				title: "Total leader elections per day"
+				type:  "timeseries"
+			}, {
+				datasource: {
+					type: "datasource"
+					uid:  "-- Mixed --"
+				}
+				fieldConfig: defaults: {
+					custom: {
+						fillOpacity: 0
+						lineWidth:   2
+						showPoints:  "never"
+					}
+					unit: "s"
+				}
+				gridPos: {
+					h: 7
+					w: 8
+					x: 16
+					y: 75
+				}
+				id:            13
+				interval:      "1m"
+				pluginVersion: "v10.0.0"
+				targets: [{
+					datasource: {
+						type: "prometheus"
+						uid:  "$datasource"
+					}
+					expr:         "histogram_quantile(0.99, sum(rate(etcd_network_peer_round_trip_time_seconds_bucket{job=~\".*etcd.*\",cluster=~\"$cluster\"}[$__rate_interval])) by(instance,le,cluster))"
+					legendFormat: "{{instance}} peer round trip time"
+				}]
+				title: "Peer round trip time"
+				type:  "timeseries"
+			}]
+			refresh:       "10s"
+			schemaVersion: 36
+			tags: ["etcd-mixin", "vm-k8s-stack"]
+			templating: list: [{
+				label: "Data Source"
+				name:  "datasource"
+				query: "prometheus"
+				type:  "datasource"
+			}, {
+				datasource: {
+					type: "prometheus"
+					uid:  "${datasource}"
+				}
+				hide:    2
+				label:   "cluster"
+				name:    "cluster"
+				query:   ".*"
+				refresh: 2
+				type:    "constant"
+			}]
+			time: {
+				from: "now-15m"
+				to:   "now"
+			}
+			timezone: "utc"
+			title:    "etcd"
+			uid:      "c2f4e12cdf69feb95caa41a5a1b423d9"
+		}, }
+	kind: "ConfigMap"
+	metadata: {
+		labels: {
+			app:                            "victoria-metrics-k8s-stack-grafana"
+			"app.kubernetes.io/instance":   "vmks"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "victoria-metrics-k8s-stack"
+			"app.kubernetes.io/version":    "v1.131.0"
+			grafana_dashboard:              "1"
+			"helm.sh/chart":                "victoria-metrics-k8s-stack-0.65.1"
+		}
+		name:      "vmks-victoria-metrics-k8s-stack-etcd"
+		namespace: "victoria-metrics"
+	}
+}

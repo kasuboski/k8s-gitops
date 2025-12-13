@@ -1,0 +1,31 @@
+package v1
+
+vmagent: "vmks-victoria-metrics-k8s-stack": {
+	apiVersion: "operator.victoriametrics.com/v1beta1"
+	kind:       "VMAgent"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/component":  "victoria-metrics-k8s-stack-vmagent"
+			"app.kubernetes.io/instance":   "vmks"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "victoria-metrics-k8s-stack"
+			"app.kubernetes.io/version":    "v1.131.0"
+			"helm.sh/chart":                "victoria-metrics-k8s-stack-0.65.1"
+		}
+		name:      "vmks-victoria-metrics-k8s-stack"
+		namespace: "victoria-metrics"
+	}
+	spec: {
+		externalLabels: {}
+		extraArgs: {
+			"promscrape.dropOriginalLabels": "true"
+			"promscrape.streamParse":        "true"
+		}
+		image: tag: "v1.131.0"
+		license: {}
+		port: "8429"
+		remoteWrite: [{url: "http://vmsingle-vmks-victoria-metrics-k8s-stack.victoria-metrics.svc.cluster.local.:8428/api/v1/write"}]
+		scrapeInterval:     "20s"
+		selectAllByDefault: true
+	}
+}

@@ -1,0 +1,29 @@
+package v1
+
+service: "vmks-grafana": {
+	apiVersion: "v1"
+	kind:       "Service"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/instance": "vmks"
+			"app.kubernetes.io/name":     "grafana"
+			"app.kubernetes.io/version":  "12.3.0"
+			"helm.sh/chart":              "grafana-10.1.5"
+		}
+		name:      "vmks-grafana"
+		namespace: "victoria-metrics"
+	}
+	spec: {
+		ports: [{
+			name:       "service"
+			port:       80
+			protocol:   "TCP"
+			targetPort: "grafana"
+		}]
+		selector: {
+			"app.kubernetes.io/instance": "vmks"
+			"app.kubernetes.io/name":     "grafana"
+		}
+		type: "ClusterIP"
+	}
+}

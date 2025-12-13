@@ -1,0 +1,29 @@
+{
+  "apiVersion": "operator.victoriametrics.com/v1beta1",
+  "kind": "VMServiceScrape",
+  "metadata": {
+    "labels": {
+      "app.kubernetes.io/instance": "vmks",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/name": "victoria-metrics-k8s-stack",
+      "app.kubernetes.io/version": "v1.131.0",
+      "helm.sh/chart": "victoria-metrics-k8s-stack-0.65.1",
+      "k8s.joshcorp.co/app": "victoriametrics"
+    },
+    "name": "vmks-victoria-metrics-k8s-stack-grafana",
+    "namespace": "victoria-metrics"
+  },
+  "spec": {
+    "endpoints": [
+      {
+        "port": "service"
+      }
+    ],
+    "selector": {
+      "matchLabels": {
+        "app.kubernetes.io/instance": "vmks",
+        "app.kubernetes.io/name": "grafana"
+      }
+    }
+  }
+}

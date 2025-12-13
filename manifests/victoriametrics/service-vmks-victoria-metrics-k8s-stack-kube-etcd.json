@@ -1,0 +1,33 @@
+{
+  "apiVersion": "v1",
+  "kind": "Service",
+  "metadata": {
+    "labels": {
+      "app": "vmks-victoria-metrics-k8s-stack-kube-etcd",
+      "app.kubernetes.io/instance": "vmks",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/name": "victoria-metrics-k8s-stack",
+      "app.kubernetes.io/version": "v1.131.0",
+      "helm.sh/chart": "victoria-metrics-k8s-stack-0.65.1",
+      "jobLabel": "kube-etcd",
+      "k8s.joshcorp.co/app": "victoriametrics"
+    },
+    "name": "vmks-victoria-metrics-k8s-stack-kube-etcd",
+    "namespace": "kube-system"
+  },
+  "spec": {
+    "clusterIP": "None",
+    "ports": [
+      {
+        "name": "http-metrics",
+        "port": 2379,
+        "protocol": "TCP",
+        "targetPort": 2379
+      }
+    ],
+    "selector": {
+      "component": "etcd"
+    },
+    "type": "ClusterIP"
+  }
+}

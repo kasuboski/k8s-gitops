@@ -1,0 +1,28 @@
+package v1
+
+clusterrolebinding: "vmks-kube-state-metrics": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "ClusterRoleBinding"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/component":  "metrics"
+			"app.kubernetes.io/instance":   "vmks"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "kube-state-metrics"
+			"app.kubernetes.io/part-of":    "kube-state-metrics"
+			"app.kubernetes.io/version":    "2.17.0"
+			"helm.sh/chart":                "kube-state-metrics-6.4.2"
+		}
+		name: "vmks-kube-state-metrics"
+	}
+	roleRef: {
+		apiGroup: "rbac.authorization.k8s.io"
+		kind:     "ClusterRole"
+		name:     "vmks-kube-state-metrics"
+	}
+	subjects: [{
+		kind:      "ServiceAccount"
+		name:      "vmks-kube-state-metrics"
+		namespace: "victoria-metrics"
+	}]
+}

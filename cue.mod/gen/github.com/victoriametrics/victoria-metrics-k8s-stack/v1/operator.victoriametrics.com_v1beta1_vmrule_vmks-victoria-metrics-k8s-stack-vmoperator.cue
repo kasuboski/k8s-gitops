@@ -1,0 +1,62 @@
+package v1
+
+vmrule: "vmks-victoria-metrics-k8s-stack-vmoperator": {
+	apiVersion: "operator.victoriametrics.com/v1beta1"
+	kind:       "VMRule"
+	metadata: {
+		labels: {
+			app:                            "victoria-metrics-k8s-stack"
+			"app.kubernetes.io/instance":   "vmks"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "victoria-metrics-k8s-stack"
+			"app.kubernetes.io/version":    "v0.28.1"
+			"helm.sh/chart":                "victoria-metrics-k8s-stack-0.65.1"
+		}
+		name:      "vmks-victoria-metrics-k8s-stack-vmoperator"
+		namespace: "victoria-metrics"
+	}
+	spec: groups: [{
+		name: "vmoperator"
+		params: {}
+		rules: [{
+			alert: "LogErrors"
+			annotations: {
+				dashboard:   "{{ $externalURL }}/d/1H179hunk/victoriametrics-operator?ds={{ $labels.dc }}&orgId=1&viewPanel=16"
+				description: "Operator has too many errors at logs: {{ $value}}, check operator logs"
+				summary:     "Too many errors at logs of operator: {{ $value}}"
+			}
+			expr: "sum(rate(operator_log_messages_total{level=\"error\",job=~\".*((victoria.*)|vm)-?operator\"}[5m])) by(cluster) > 0"
+			for:  "15m"
+			labels: {
+				severity: "warning"
+				show_at:  "dashboard"
+			}
+		}, {
+			alert: "ReconcileErrors"
+			annotations: {
+				dashboard:   "{{ $externalURL }}/d/1H179hunk/victoriametrics-operator?ds={{ $labels.dc }}&orgId=1&viewPanel=10"
+				description: "Operator cannot parse response from k8s api server, possible bug: {{ $value }}, check operator logs"
+				summary:     "Too many errors at reconcile loop of operator: {{ $value}}"
+			}
+			expr: "sum(rate(controller_runtime_reconcile_errors_total{job=~\".*((victoria.*)|vm)-?operator\"}[5m])) by(cluster) > 0"
+			for:  "10m"
+			labels: {
+				severity: "warning"
+				show_at:  "dashboard"
+			}
+		}, {
+			alert: "HighQueueDepth"
+			annotations: {
+				dashboard:   "{{ $externalURL }}/d/1H179hunk/victoriametrics-operator?ds={{ $labels.dc }}&orgId=1&viewPanel=20"
+				description: "Operator cannot handle reconciliation load for controller: `{{- $labels.name }}`, current depth: {{ $value }}"
+				summary:     "Too many `{{- $labels.name }}` in queue: {{ $value }}"
+			}
+			expr: "sum(workqueue_depth{job=~\".*((victoria.*)|vm)-?operator\",name=~\"(vmagent|vmalert|vmalertmanager|vmauth|vmcluster|vmnodescrape|vmpodscrape|vmprobe|vmrule|vmservicescrape|vmsingle|vmstaticscrape)\"}) by(name,cluster) > 10"
+			for:  "15m"
+			labels: {
+				severity: "warning"
+				show_at:  "dashboard"
+			}
+		}]
+	}]
+}

@@ -1,0 +1,34 @@
+package v1
+
+service: "vmks-prometheus-node-exporter": {
+	apiVersion: "v1"
+	kind:       "Service"
+	metadata: {
+		annotations: "prometheus.io/scrape": "true"
+		labels: {
+			"app.kubernetes.io/component":  "metrics"
+			"app.kubernetes.io/instance":   "vmks"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "prometheus-node-exporter"
+			"app.kubernetes.io/part-of":    "prometheus-node-exporter"
+			"app.kubernetes.io/version":    "1.10.2"
+			"helm.sh/chart":                "prometheus-node-exporter-4.49.2"
+			jobLabel:                       "node-exporter"
+		}
+		name:      "vmks-prometheus-node-exporter"
+		namespace: "victoria-metrics"
+	}
+	spec: {
+		ports: [{
+			name:       "metrics"
+			port:       9100
+			protocol:   "TCP"
+			targetPort: 9100
+		}]
+		selector: {
+			"app.kubernetes.io/instance": "vmks"
+			"app.kubernetes.io/name":     "prometheus-node-exporter"
+		}
+		type: "ClusterIP"
+	}
+}

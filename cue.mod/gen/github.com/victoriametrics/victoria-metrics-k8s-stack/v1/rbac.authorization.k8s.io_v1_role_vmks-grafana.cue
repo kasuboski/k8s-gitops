@@ -1,0 +1,17 @@
+package v1
+
+role: "vmks-grafana": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "Role"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/instance": "vmks"
+			"app.kubernetes.io/name":     "grafana"
+			"app.kubernetes.io/version":  "12.3.0"
+			"helm.sh/chart":              "grafana-10.1.5"
+		}
+		name:      "vmks-grafana"
+		namespace: "victoria-metrics"
+	}
+	rules: []
+}

@@ -1,0 +1,18 @@
+{
+  "apiVersion": "v1",
+  "data": {
+    "grafana.ini": "[analytics]\ncheck_for_updates = true\n[grafana_net]\nurl = https://grafana.net\n[log]\nmode = console\n[paths]\ndata = /var/lib/grafana/\nlogs = /var/log/grafana\nplugins = /var/lib/grafana/plugins\nprovisioning = /etc/grafana/provisioning\n[server]\ndomain = ''\n"
+  },
+  "kind": "ConfigMap",
+  "metadata": {
+    "labels": {
+      "app.kubernetes.io/instance": "vmks",
+      "app.kubernetes.io/name": "grafana",
+      "app.kubernetes.io/version": "12.3.0",
+      "helm.sh/chart": "grafana-10.1.5",
+      "k8s.joshcorp.co/app": "victoriametrics"
+    },
+    "name": "vmks-grafana",
+    "namespace": "victoria-metrics"
+  }
+}

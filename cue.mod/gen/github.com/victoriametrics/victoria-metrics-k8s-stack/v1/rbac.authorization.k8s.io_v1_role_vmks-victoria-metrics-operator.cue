@@ -1,0 +1,27 @@
+package v1
+
+role: "vmks-victoria-metrics-operator": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "Role"
+	metadata: {
+		annotations: "argocd.argoproj.io/sync-options": "SkipDryRunOnMissingResource=true"
+		labels: {
+			"app.kubernetes.io/instance":   "vmks"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "victoria-metrics-operator"
+			"app.kubernetes.io/version":    "v0.66.1"
+			"helm.sh/chart":                "victoria-metrics-operator-0.57.1"
+		}
+		name:      "vmks-victoria-metrics-operator"
+		namespace: "victoria-metrics"
+	}
+	rules: [{
+		apiGroups: ["coordination.k8s.io"]
+		resources: ["leases"]
+		verbs: [
+			"create",
+			"get",
+			"update",
+		]
+	}]
+}

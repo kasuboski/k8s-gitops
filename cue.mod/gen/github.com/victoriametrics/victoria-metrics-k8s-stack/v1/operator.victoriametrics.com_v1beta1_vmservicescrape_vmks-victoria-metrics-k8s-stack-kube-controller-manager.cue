@@ -1,0 +1,36 @@
+package v1
+
+vmservicescrape: "vmks-victoria-metrics-k8s-stack-kube-controller-manager": {
+	apiVersion: "operator.victoriametrics.com/v1beta1"
+	kind:       "VMServiceScrape"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/instance":   "vmks"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "victoria-metrics-k8s-stack"
+			"app.kubernetes.io/version":    "v1.131.0"
+			"helm.sh/chart":                "victoria-metrics-k8s-stack-0.65.1"
+		}
+		name:      "vmks-victoria-metrics-k8s-stack-kube-controller-manager"
+		namespace: "victoria-metrics"
+	}
+	spec: {
+		endpoints: [{
+			bearerTokenFile: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+			port:            "http-metrics"
+			scheme:          "https"
+			tlsConfig: {
+				caFile:     "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+				serverName: "kubernetes"
+			}
+		}]
+		jobLabel: "jobLabel"
+		namespaceSelector: matchNames: ["kube-system"]
+		selector: matchLabels: {
+			app:                          "vmks-victoria-metrics-k8s-stack-kube-controller-manager"
+			"app.kubernetes.io/instance": "vmks"
+			"app.kubernetes.io/name":     "victoria-metrics-k8s-stack"
+			jobLabel:                     "kube-controller-manager"
+		}
+	}
+}

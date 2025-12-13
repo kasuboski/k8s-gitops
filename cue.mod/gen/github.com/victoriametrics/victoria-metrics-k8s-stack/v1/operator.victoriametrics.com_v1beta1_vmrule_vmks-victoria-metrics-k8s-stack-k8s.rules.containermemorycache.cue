@@ -1,0 +1,28 @@
+package v1
+
+vmrule: "vmks-victoria-metrics-k8s-stack-k8s.rules.containermemorycache": {
+	apiVersion: "operator.victoriametrics.com/v1beta1"
+	kind:       "VMRule"
+	metadata: {
+		labels: {
+			app:                            "victoria-metrics-k8s-stack"
+			"app.kubernetes.io/instance":   "vmks"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "victoria-metrics-k8s-stack"
+			"app.kubernetes.io/version":    "v0.28.1"
+			"helm.sh/chart":                "victoria-metrics-k8s-stack-0.65.1"
+		}
+		name:      "vmks-victoria-metrics-k8s-stack-k8s.rules.containermemorycache"
+		namespace: "victoria-metrics"
+	}
+	spec: groups: [{
+		name: "k8s.rules.container_memory_cache"
+		params: {}
+		rules: [{
+			annotations: {}
+			expr: "container_memory_cache{job=\"kubelet\",metrics_path=\"/metrics/cadvisor\",image!=\"\"} * on(cluster,namespace,pod) group_left(node) topk(1, max(kube_pod_info{node!=\"\"}) by(cluster,namespace,pod,node)) by(cluster,namespace,pod)"
+			labels: {}
+			record: "node_namespace_pod_container:container_memory_cache"
+		}]
+	}]
+}

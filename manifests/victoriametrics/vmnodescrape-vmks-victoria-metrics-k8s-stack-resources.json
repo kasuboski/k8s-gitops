@@ -1,0 +1,63 @@
+{
+  "apiVersion": "operator.victoriametrics.com/v1beta1",
+  "kind": "VMNodeScrape",
+  "metadata": {
+    "labels": {
+      "app.kubernetes.io/instance": "vmks",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/name": "victoria-metrics-k8s-stack",
+      "app.kubernetes.io/version": "v1.131.0",
+      "helm.sh/chart": "victoria-metrics-k8s-stack-0.65.1",
+      "k8s.joshcorp.co/app": "victoriametrics"
+    },
+    "name": "vmks-victoria-metrics-k8s-stack-resources",
+    "namespace": "victoria-metrics"
+  },
+  "spec": {
+    "bearerTokenFile": "/var/run/secrets/kubernetes.io/serviceaccount/token",
+    "honorLabels": true,
+    "honorTimestamps": false,
+    "interval": "30s",
+    "metricRelabelConfigs": [
+      {
+        "action": "labeldrop",
+        "regex": "(uid)"
+      },
+      {
+        "action": "labeldrop",
+        "regex": "(id|name)"
+      },
+      {
+        "action": "drop",
+        "regex": "(rest_client_request_duration_seconds_bucket|rest_client_request_duration_seconds_sum|rest_client_request_duration_seconds_count)",
+        "source_labels": [
+          "__name__"
+        ]
+      }
+    ],
+    "path": "/metrics/resource",
+    "relabelConfigs": [
+      {
+        "action": "labelmap",
+        "regex": "__meta_kubernetes_node_label_(.+)"
+      },
+      {
+        "sourceLabels": [
+          "__metrics_path__"
+        ],
+        "targetLabel": "metrics_path"
+      },
+      {
+        "replacement": "kubelet",
+        "targetLabel": "job"
+      }
+    ],
+    "scheme": "https",
+    "scrapeTimeout": "5s",
+    "selector": {},
+    "tlsConfig": {
+      "caFile": "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
+      "insecureSkipVerify": true
+    }
+  }
+}

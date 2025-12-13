@@ -64,7 +64,7 @@ vendor: "github.com/pl4nty/cloudflare-kubernetes-gateway/cloudflare": kustomize:
 vendor: "github.com/victoriametrics/victoria-metrics-k8s-stack/v1": helm: {
 	chart:       "oci://ghcr.io/victoriametrics/helm-charts/victoria-metrics-k8s-stack"
 	version:     "0.65.1"
-	releaseName: "victoria-metrics"
+	releaseName: "vmks"
 	namespace:   "victoria-metrics"
 	values: {
 		"victoria-metrics-operator": {
