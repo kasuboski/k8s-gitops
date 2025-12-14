@@ -46,8 +46,7 @@ deployment: "cert-manager-cainjector": {
 					args: [
 						"--v=2",
 						"--leader-election-namespace=kube-system",
-						"--namespace=cert-manager",
-						"--enable-certificates-data-source=false",
+						"--enable-certificates-data-source=true",
 					]
 					env: [{
 						name: "POD_NAMESPACE"

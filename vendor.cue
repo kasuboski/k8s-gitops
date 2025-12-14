@@ -223,8 +223,7 @@ vendor: "github.com/cert-manager/cert-manager/v1": helm: {
 		}
 		cainjector: {
 			extraArgs: [
-				"--namespace=cert-manager",
-				"--enable-certificates-data-source=false",
+				"--enable-certificates-data-source=true",
 			]
 			replicaCount: 2
 			podDisruptionBudget: {
