@@ -1,0 +1,23 @@
+{
+  "apiVersion": "v1",
+  "kind": "PersistentVolumeClaim",
+  "metadata": {
+    "labels": {
+      "k8s.joshcorp.co/app": "victoriametrics"
+    },
+    "name": "vlog-data",
+    "namespace": "victoria-metrics"
+  },
+  "spec": {
+    "accessModes": [
+      "ReadWriteMany"
+    ],
+    "resources": {
+      "requests": {
+        "storage": "50Gi"
+      }
+    },
+    "storageClassName": "manual",
+    "volumeName": "vlog-data"
+  }
+}
