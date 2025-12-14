@@ -2,13 +2,10 @@
   "apiVersion": "cert-manager.io/v1",
   "kind": "Issuer",
   "metadata": {
-    "annotations": {
-      "argocd.argoproj.io/sync-options": "SkipDryRunOnMissingResource=true"
-    },
     "labels": {
       "k8s.joshcorp.co/app": "victoriametrics"
     },
-    "name": "vm-operator-bootstrap-issuer",
+    "name": "vmks-victoria-metrics-operator-root",
     "namespace": "victoria-metrics"
   },
   "spec": {

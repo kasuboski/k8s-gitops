@@ -67,6 +67,7 @@ vendor: "github.com/victoriametrics/victoria-metrics-k8s-stack/v1": helm: {
 	releaseName: "vmks"
 	namespace:   "victoria-metrics"
 	values: {
+		global: cluster: dnsDomain: "cluster.local"
 		"victoria-metrics-operator": {
 			annotations: "argocd.argoproj.io/sync-options": "SkipDryRunOnMissingResource=true"
 			admissionWebhooks: {
@@ -75,10 +76,6 @@ vendor: "github.com/victoriametrics/victoria-metrics-k8s-stack/v1": helm: {
 				keepTLSSecret: false
 				certManager: {
 					enabled: true
-					issuer: {
-						name: "vm-operator-issuer"
-						kind: "Issuer"
-					}
 					cert: {
 						duration:    "2160h" // 90 days
 						renewBefore: "360h"  // 15 days

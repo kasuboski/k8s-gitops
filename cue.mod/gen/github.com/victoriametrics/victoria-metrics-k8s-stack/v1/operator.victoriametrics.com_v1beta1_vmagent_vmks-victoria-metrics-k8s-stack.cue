@@ -24,7 +24,7 @@ vmagent: "vmks-victoria-metrics-k8s-stack": {
 		image: tag: "v1.131.0"
 		license: {}
 		port: "8429"
-		remoteWrite: [{url: "http://vmsingle-vmks-victoria-metrics-k8s-stack.victoria-metrics.svc.cluster.local.:8428/api/v1/write"}]
+		remoteWrite: [{url: "http://vmsingle-vmks-victoria-metrics-k8s-stack.victoria-metrics.svc.cluster.local:8428/api/v1/write"}]
 		scrapeInterval:     "20s"
 		selectAllByDefault: true
 	}

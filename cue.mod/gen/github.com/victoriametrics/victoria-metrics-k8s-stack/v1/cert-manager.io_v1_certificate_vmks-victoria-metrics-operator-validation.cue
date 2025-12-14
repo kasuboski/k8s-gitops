@@ -12,13 +12,10 @@ certificate: "vmks-victoria-metrics-operator-validation": {
 			"vmks-victoria-metrics-operator",
 			"vmks-victoria-metrics-operator.victoria-metrics",
 			"vmks-victoria-metrics-operator.victoria-metrics.svc",
-			"vmks-victoria-metrics-operator.victoria-metrics.svc.cluster.local.",
+			"vmks-victoria-metrics-operator.victoria-metrics.svc.cluster.local",
 		]
 		duration: "2160h"
-		issuerRef: {
-			kind: "Issuer"
-			name: "vm-operator-issuer"
-		}
+		issuerRef: name: "vmks-victoria-metrics-operator-issuer"
 		secretName: "vmks-victoria-metrics-operator-validation"
 	}
 }
