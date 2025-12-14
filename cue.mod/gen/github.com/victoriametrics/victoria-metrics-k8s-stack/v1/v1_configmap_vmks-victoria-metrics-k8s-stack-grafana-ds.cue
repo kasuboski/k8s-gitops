@@ -14,6 +14,12 @@ configmap: "vmks-victoria-metrics-k8s-stack-grafana-ds": {
 				name:      "VictoriaMetrics"
 				type:      "prometheus"
 				url:       "http://vmsingle-vmks-victoria-metrics-k8s-stack.victoria-metrics.svc.cluster.local:8428"
+			}, {
+				access:    "proxy"
+				isDefault: false
+				name:      "VictoriaMetrics (DS)"
+				type:      "victoriametrics-metrics-datasource"
+				url:       "http://vmsingle-vmks-victoria-metrics-k8s-stack.victoria-metrics.svc.cluster.local:8428"
 			}]
 		}, }
 	kind: "ConfigMap"

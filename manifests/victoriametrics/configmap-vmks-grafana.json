@@ -1,7 +1,8 @@
 {
   "apiVersion": "v1",
   "data": {
-    "grafana.ini": "[analytics]\ncheck_for_updates = true\n[grafana_net]\nurl = https://grafana.net\n[log]\nmode = console\n[paths]\ndata = /var/lib/grafana/\nlogs = /var/log/grafana\nplugins = /var/lib/grafana/plugins\nprovisioning = /etc/grafana/provisioning\n[server]\ndomain = ''\n"
+    "grafana.ini": "[analytics]\ncheck_for_updates = true\n[grafana_net]\nurl = https://grafana.net\n[log]\nmode = console\n[paths]\ndata = /var/lib/grafana/\nlogs = /var/log/grafana\nplugins = /var/lib/grafana/plugins\nprovisioning = /etc/grafana/provisioning\n[server]\ndomain = ''\n",
+    "plugins": "victoriametrics-metrics-datasource,victoriametrics-logs-datasource"
   },
   "kind": "ConfigMap",
   "metadata": {

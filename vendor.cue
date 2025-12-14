@@ -107,6 +107,7 @@ vendor: "github.com/victoriametrics/victoria-metrics-k8s-stack/v1": helm: {
 		}
 		alertmanager: enabled: false
 		grafana: admin: existingSecret: "grafana"
+		grafana: plugins: ["victoriametrics-metrics-datasource", "victoriametrics-logs-datasource"]
 		vmalert: enabled: false
 		vmauth: enabled:  false
 		vmagent: {

@@ -2,22 +2,25 @@ package v1
 
 configmap: "vmks-grafana": {
 	apiVersion: "v1"
-	data: "grafana.ini": """
-		[analytics]
-		check_for_updates = true
-		[grafana_net]
-		url = https://grafana.net
-		[log]
-		mode = console
-		[paths]
-		data = /var/lib/grafana/
-		logs = /var/log/grafana
-		plugins = /var/lib/grafana/plugins
-		provisioning = /etc/grafana/provisioning
-		[server]
-		domain = ''
+	data: {
+		"grafana.ini": """
+			[analytics]
+			check_for_updates = true
+			[grafana_net]
+			url = https://grafana.net
+			[log]
+			mode = console
+			[paths]
+			data = /var/lib/grafana/
+			logs = /var/log/grafana
+			plugins = /var/lib/grafana/plugins
+			provisioning = /etc/grafana/provisioning
+			[server]
+			domain = ''
 
-		"""
+			"""
+		plugins: "victoriametrics-metrics-datasource,victoriametrics-logs-datasource"
+	}
 	kind: "ConfigMap"
 	metadata: {
 		labels: {

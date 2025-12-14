@@ -24,7 +24,7 @@ deployment: "vmks-grafana": {
 		template: {
 			metadata: {
 				annotations: {
-					"checksum/config":                         "0e9cbd0ea8e24e32f7dfca5bab17a2ba05652642f0a09a4882833ae88e4cc4a3"
+					"checksum/config":                         "5aee76b1d86356e195e4d4de73c6a1d81dd5418dd4640cf21ad4603457da099d"
 					"checksum/sc-dashboard-provider-config":   "89ec8c9c059a6a61286174130a15d183be69b7a486acc8437afbaf5d790a0ddd"
 					"kubectl.kubernetes.io/default-container": "grafana"
 				}
@@ -99,6 +99,12 @@ deployment: "vmks-grafana": {
 						valueFrom: secretKeyRef: {
 							key:  "admin-password"
 							name: "grafana"
+						}
+					}, {
+						name: "GF_INSTALL_PLUGINS"
+						valueFrom: configMapKeyRef: {
+							key:  "plugins"
+							name: "vmks-grafana"
 						}
 					}, {
 						name:  "GF_PATHS_DATA"
