@@ -79,16 +79,19 @@ _vlogs: {
 			// Size-based Retention
 			retentionMaxDiskSpaceUsageBytes: "50GB"
 
-			// Storage Configuration
+			// Storage Configuration - use custom path to avoid conflict with default mount
+			extraArgs: {
+				storageDataPath: "/vl-data"
+			}
 			volumes: [{
-				name: "existing-data-volume"
+				name: "vlstorage"
 				persistentVolumeClaim: {
 					claimName: "vlog-data"
 				}
 			}]
 			volumeMounts: [{
-				name:      "existing-data-volume"
-				mountPath: "/victoria-logs-data"
+				name:      "vlstorage"
+				mountPath: "/vl-data"
 			}]
 
 			// Resource Constraints

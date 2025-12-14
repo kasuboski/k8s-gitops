@@ -9,6 +9,9 @@
     "namespace": "victoria-metrics"
   },
   "spec": {
+    "extraArgs": {
+      "storageDataPath": "/vl-data"
+    },
     "resources": {
       "limits": {
         "cpu": "2",
@@ -23,13 +26,13 @@
     "retentionPeriod": "15d",
     "volumeMounts": [
       {
-        "mountPath": "/victoria-logs-data",
-        "name": "existing-data-volume"
+        "mountPath": "/vl-data",
+        "name": "vlstorage"
       }
     ],
     "volumes": [
       {
-        "name": "existing-data-volume",
+        "name": "vlstorage",
         "persistentVolumeClaim": {
           "claimName": "vlog-data"
         }
