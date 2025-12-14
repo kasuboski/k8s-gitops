@@ -9,9 +9,6 @@
     "namespace": "victoria-metrics"
   },
   "spec": {
-    "k8sCollector": {
-      "enabled": true
-    },
     "remoteWrite": [
       {
         "url": "http://victoria-logs-server.victoria-metrics.svc:9428/insert/jsonline"

@@ -19,7 +19,7 @@
         "memory": "1Gi"
       }
     },
-    "retentionDiskSpaceUsage": "50GB",
+    "retentionMaxDiskSpaceUsageBytes": "50GB",
     "retentionPeriod": "15d",
     "storageDataPath": "/victoria-logs-data",
     "volumeMounts": [

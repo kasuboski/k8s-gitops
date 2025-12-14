@@ -77,7 +77,7 @@ _vlogs: {
 			retentionPeriod: "15d"
 
 			// Size-based Retention
-			retentionDiskSpaceUsage: "50GB"
+			retentionMaxDiskSpaceUsageBytes: "50GB"
 
 			// Storage Configuration
 			storageDataPath: "/victoria-logs-data"
@@ -116,11 +116,6 @@ _vlogs: {
 			namespace: "victoria-metrics"
 		}
 		spec: {
-			// Run as DaemonSet to collect logs from all nodes
-			k8sCollector: {
-				enabled: true
-			}
-
 			// Send logs to VLSingle
 			remoteWrite: [{
 				url: "http://victoria-logs-server.victoria-metrics.svc:9428/insert/jsonline"
