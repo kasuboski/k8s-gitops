@@ -1,0 +1,28 @@
+package v1
+
+clusterrole: "cert-manager-cluster-view": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "ClusterRole"
+	metadata: {
+		labels: {
+			app:                                                     "cert-manager"
+			"app.kubernetes.io/component":                           "controller"
+			"app.kubernetes.io/instance":                            "cert-manager"
+			"app.kubernetes.io/managed-by":                          "Helm"
+			"app.kubernetes.io/name":                                "cert-manager"
+			"app.kubernetes.io/version":                             "v1.19.2"
+			"helm.sh/chart":                                         "cert-manager-v1.19.2"
+			"rbac.authorization.k8s.io/aggregate-to-cluster-reader": "true"
+		}
+		name: "cert-manager-cluster-view"
+	}
+	rules: [{
+		apiGroups: ["cert-manager.io"]
+		resources: ["clusterissuers"]
+		verbs: [
+			"get",
+			"list",
+			"watch",
+		]
+	}]
+}

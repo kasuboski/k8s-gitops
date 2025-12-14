@@ -69,6 +69,22 @@ vendor: "github.com/victoriametrics/victoria-metrics-k8s-stack/v1": helm: {
 	values: {
 		"victoria-metrics-operator": {
 			annotations: "argocd.argoproj.io/sync-options": "SkipDryRunOnMissingResource=true"
+			admissionWebhooks: {
+				enabled:       true
+				policy:        "Fail"
+				keepTLSSecret: false
+				certManager: {
+					enabled: true
+					issuer: {
+						name: "vm-operator-issuer"
+						kind: "Issuer"
+					}
+					cert: {
+						duration:    "2160h" // 90 days
+						renewBefore: "360h"  // 15 days
+					}
+				}
+			}
 		}
 		alertmanager: enabled: false
 		grafana: admin: existingSecret: "grafana"
@@ -107,6 +123,198 @@ vendor: "github.com/victoriametrics/victoria-metrics-k8s-stack/v1": helm: {
 			}
 		}]
 		kubeEctd: enabled: false
+	}
+}
+
+vendor: "github.com/cert-manager/cert-manager/v1": helm: {
+	chart:       "oci://quay.io/jetstack/charts/cert-manager"
+	version:     "1.19.2"
+	releaseName: "cert-manager"
+	namespace:   "cert-manager"
+	values: {
+		crds: enabled: true
+		global: priorityClassName: "system-cluster-critical"
+		replicaCount: 2
+		podDisruptionBudget: {
+			enabled:     true
+			minAvailable: 1
+		}
+		automountServiceAccountToken: false
+		serviceAccount: automountServiceAccountToken: false
+		volumes: [{
+			name: "serviceaccount-token"
+			projected: {
+				defaultMode: 292
+				sources: [
+					{
+						serviceAccountToken: {
+							expirationSeconds: 3607
+							path:              "token"
+						}
+					},
+					{
+						configMap: {
+							name: "kube-root-ca.crt"
+							items: [{
+								key:  "ca.crt"
+								path: "ca.crt"
+							}]
+						}
+					},
+					{
+						downwardAPI: items: [{
+							path: "namespace"
+							fieldRef: {
+								apiVersion: "v1"
+								fieldPath:  "metadata.namespace"
+							}
+						}]
+					},
+				]
+			}
+		}]
+		volumeMounts: [{
+			mountPath: "/var/run/secrets/kubernetes.io/serviceaccount"
+			name:      "serviceaccount-token"
+			readOnly:  true
+		}]
+		webhook: {
+			replicaCount: 3
+			podDisruptionBudget: {
+				enabled:     true
+				minAvailable: 1
+			}
+			automountServiceAccountToken: false
+			serviceAccount: automountServiceAccountToken: false
+			volumes: [{
+				name: "serviceaccount-token"
+				projected: {
+					defaultMode: 292
+					sources: [
+						{
+							serviceAccountToken: {
+								expirationSeconds: 3607
+								path:              "token"
+							}
+						},
+						{
+							configMap: {
+								name: "kube-root-ca.crt"
+								items: [{
+									key:  "ca.crt"
+									path: "ca.crt"
+								}]
+							}
+						},
+						{
+							downwardAPI: items: [{
+								path: "namespace"
+								fieldRef: {
+									apiVersion: "v1"
+									fieldPath:  "metadata.namespace"
+								}
+							}]
+						},
+					]
+				}
+			}]
+			volumeMounts: [{
+				mountPath: "/var/run/secrets/kubernetes.io/serviceaccount"
+				name:      "serviceaccount-token"
+				readOnly:  true
+			}]
+		}
+		cainjector: {
+			extraArgs: [
+				"--namespace=cert-manager",
+				"--enable-certificates-data-source=false",
+			]
+			replicaCount: 2
+			podDisruptionBudget: {
+				enabled:     true
+				minAvailable: 1
+			}
+			automountServiceAccountToken: false
+			serviceAccount: automountServiceAccountToken: false
+			volumes: [{
+				name: "serviceaccount-token"
+				projected: {
+					defaultMode: 292
+					sources: [
+						{
+							serviceAccountToken: {
+								expirationSeconds: 3607
+								path:              "token"
+							}
+						},
+						{
+							configMap: {
+								name: "kube-root-ca.crt"
+								items: [{
+									key:  "ca.crt"
+									path: "ca.crt"
+								}]
+							}
+						},
+						{
+							downwardAPI: items: [{
+								path: "namespace"
+								fieldRef: {
+									apiVersion: "v1"
+									fieldPath:  "metadata.namespace"
+								}
+							}]
+						},
+					]
+				}
+			}]
+			volumeMounts: [{
+				mountPath: "/var/run/secrets/kubernetes.io/serviceaccount"
+				name:      "serviceaccount-token"
+				readOnly:  true
+			}]
+		}
+		startupapicheck: {
+			automountServiceAccountToken: false
+			serviceAccount: automountServiceAccountToken: false
+			volumes: [{
+				name: "serviceaccount-token"
+				projected: {
+					defaultMode: 292
+					sources: [
+						{
+							serviceAccountToken: {
+								expirationSeconds: 3607
+								path:              "token"
+							}
+						},
+						{
+							configMap: {
+								name: "kube-root-ca.crt"
+								items: [{
+									key:  "ca.crt"
+									path: "ca.crt"
+								}]
+							}
+						},
+						{
+							downwardAPI: items: [{
+								path: "namespace"
+								fieldRef: {
+									apiVersion: "v1"
+									fieldPath:  "metadata.namespace"
+								}
+							}]
+						},
+					]
+				}
+			}]
+			volumeMounts: [{
+				mountPath: "/var/run/secrets/kubernetes.io/serviceaccount"
+				name:      "serviceaccount-token"
+				readOnly:  true
+			}]
+		}
 	}
 }
 

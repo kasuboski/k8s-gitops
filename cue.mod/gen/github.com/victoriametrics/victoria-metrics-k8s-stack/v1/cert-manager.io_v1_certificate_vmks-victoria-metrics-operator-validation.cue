@@ -1,0 +1,24 @@
+package v1
+
+certificate: "vmks-victoria-metrics-operator-validation": {
+	apiVersion: "cert-manager.io/v1"
+	kind:       "Certificate"
+	metadata: {
+		name:      "vmks-victoria-metrics-operator-validation"
+		namespace: "victoria-metrics"
+	}
+	spec: {
+		dnsNames: [
+			"vmks-victoria-metrics-operator",
+			"vmks-victoria-metrics-operator.victoria-metrics",
+			"vmks-victoria-metrics-operator.victoria-metrics.svc",
+			"vmks-victoria-metrics-operator.victoria-metrics.svc.cluster.local.",
+		]
+		duration: "2160h"
+		issuerRef: {
+			kind: "Issuer"
+			name: "vm-operator-issuer"
+		}
+		secretName: "vmks-victoria-metrics-operator-validation"
+	}
+}

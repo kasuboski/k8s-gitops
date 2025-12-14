@@ -10,6 +10,7 @@ The cluster is described more [here](https://www.joshkasuboski.com/posts/home-k8
 ### Repository Structure
 
 - **Root CUE files** (`*.cue`) - Application definitions and schema mappings
+- **`kube.cue`** - Defines the Schema all Kubernetes resources must adhere to. Includes list of known Kinds
 - **`manifests/`** - Generated Kubernetes manifests (JSON) consumed by ArgoCD
 - **`cue.mod/gen/`** - Vendored upstream manifests converted to CUE schemas
 - **Component directories** (`networking/`, `storage/`, `media/`, etc.) - Application-specific configurations

@@ -20,7 +20,7 @@ import (
 #KindGen: [for k, _ in #KindObject {k}]
 
 // cue eval -e '#KindGen'
-#Kinds: ["cronjob", "clusterrole", "clusterrolebinding", "configmap", "serviceaccount", "deployment", "customresourcedefinition", "namespace", "role", "rolebinding", "service", "job", "gatewayclass", "gateway", "apiservice", "validatingwebhookconfiguration", "daemonset", "secret", "ipaddresspool", "l2advertisement", "dopplersecret", "storageclass", "persistentvolume", "persistentvolumeclaim", "statefulset", "networkpolicy", "appproject", "httproute", "priorityclass", "vmagent", "vmalert", "vmalertmanager", "vmnodescrape", "vmrule", "vmservicescrape", "vmsingle"]
+#Kinds: ["cronjob", "clusterrole", "clusterrolebinding", "configmap", "serviceaccount", "deployment", "customresourcedefinition", "namespace", "role", "rolebinding", "service", "job", "gatewayclass", "gateway", "apiservice", "validatingwebhookconfiguration", "mutatingwebhookconfiguration", "daemonset", "secret", "ipaddresspool", "l2advertisement", "dopplersecret", "storageclass", "persistentvolume", "persistentvolumeclaim", "statefulset", "networkpolicy", "appproject", "httproute", "priorityclass", "poddisruptionbudget", "vmagent", "vmalert", "vmalertmanager", "vmnodescrape", "vmrule", "vmservicescrape", "vmsingle", "issuer", "certificate"]
 
 #dnsNameRegex: =~"^[a-z0-9][a-z0-9\\-\\.:]{0,251}[a-z0-9]$"
 #Name:         string & #dnsNameRegex

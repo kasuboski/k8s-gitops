@@ -1,0 +1,32 @@
+package v1
+
+service: "cert-manager-cainjector": {
+	apiVersion: "v1"
+	kind:       "Service"
+	metadata: {
+		labels: {
+			app:                            "cainjector"
+			"app.kubernetes.io/component":  "cainjector"
+			"app.kubernetes.io/instance":   "cert-manager"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "cainjector"
+			"app.kubernetes.io/version":    "v1.19.2"
+			"helm.sh/chart":                "cert-manager-v1.19.2"
+		}
+		name:      "cert-manager-cainjector"
+		namespace: "cert-manager"
+	}
+	spec: {
+		ports: [{
+			name:     "http-metrics"
+			port:     9402
+			protocol: "TCP"
+		}]
+		selector: {
+			"app.kubernetes.io/component": "cainjector"
+			"app.kubernetes.io/instance":  "cert-manager"
+			"app.kubernetes.io/name":      "cainjector"
+		}
+		type: "ClusterIP"
+	}
+}

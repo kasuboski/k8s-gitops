@@ -1,0 +1,29 @@
+package v1
+
+rolebinding: "cert-manager-tokenrequest": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "RoleBinding"
+	metadata: {
+		labels: {
+			app:                            "cert-manager"
+			"app.kubernetes.io/component":  "controller"
+			"app.kubernetes.io/instance":   "cert-manager"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "cert-manager"
+			"app.kubernetes.io/version":    "v1.19.2"
+			"helm.sh/chart":                "cert-manager-v1.19.2"
+		}
+		name:      "cert-manager-tokenrequest"
+		namespace: "cert-manager"
+	}
+	roleRef: {
+		apiGroup: "rbac.authorization.k8s.io"
+		kind:     "Role"
+		name:     "cert-manager-tokenrequest"
+	}
+	subjects: [{
+		kind:      "ServiceAccount"
+		name:      "cert-manager"
+		namespace: "cert-manager"
+	}]
+}

@@ -1,0 +1,27 @@
+package v1
+
+clusterrole: "cert-manager-controller-approve:cert-manager-io": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "ClusterRole"
+	metadata: {
+		labels: {
+			app:                            "cert-manager"
+			"app.kubernetes.io/component":  "cert-manager"
+			"app.kubernetes.io/instance":   "cert-manager"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "cert-manager"
+			"app.kubernetes.io/version":    "v1.19.2"
+			"helm.sh/chart":                "cert-manager-v1.19.2"
+		}
+		name: "cert-manager-controller-approve:cert-manager-io"
+	}
+	rules: [{
+		apiGroups: ["cert-manager.io"]
+		resourceNames: [
+			"issuers.cert-manager.io/*",
+			"clusterissuers.cert-manager.io/*",
+		]
+		resources: ["signers"]
+		verbs: ["approve"]
+	}]
+}

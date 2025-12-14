@@ -1,0 +1,184 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "labels": {
+      "app": "webhook",
+      "app.kubernetes.io/component": "webhook",
+      "app.kubernetes.io/instance": "cert-manager",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/name": "webhook",
+      "app.kubernetes.io/version": "v1.19.2",
+      "helm.sh/chart": "cert-manager-v1.19.2",
+      "k8s.joshcorp.co/app": "certmanager"
+    },
+    "name": "cert-manager-webhook",
+    "namespace": "cert-manager"
+  },
+  "spec": {
+    "replicas": 3,
+    "selector": {
+      "matchLabels": {
+        "app.kubernetes.io/component": "webhook",
+        "app.kubernetes.io/instance": "cert-manager",
+        "app.kubernetes.io/name": "webhook"
+      }
+    },
+    "template": {
+      "metadata": {
+        "annotations": {
+          "prometheus.io/path": "/metrics",
+          "prometheus.io/port": "9402",
+          "prometheus.io/scrape": "true"
+        },
+        "labels": {
+          "app": "webhook",
+          "app.kubernetes.io/component": "webhook",
+          "app.kubernetes.io/instance": "cert-manager",
+          "app.kubernetes.io/managed-by": "Helm",
+          "app.kubernetes.io/name": "webhook",
+          "app.kubernetes.io/version": "v1.19.2",
+          "helm.sh/chart": "cert-manager-v1.19.2"
+        }
+      },
+      "spec": {
+        "automountServiceAccountToken": false,
+        "containers": [
+          {
+            "args": [
+              "--v=2",
+              "--secure-port=10250",
+              "--dynamic-serving-ca-secret-namespace=$(POD_NAMESPACE)",
+              "--dynamic-serving-ca-secret-name=cert-manager-webhook-ca",
+              "--dynamic-serving-dns-names=cert-manager-webhook",
+              "--dynamic-serving-dns-names=cert-manager-webhook.$(POD_NAMESPACE)",
+              "--dynamic-serving-dns-names=cert-manager-webhook.$(POD_NAMESPACE).svc"
+            ],
+            "env": [
+              {
+                "name": "POD_NAMESPACE",
+                "valueFrom": {
+                  "fieldRef": {
+                    "fieldPath": "metadata.namespace"
+                  }
+                }
+              }
+            ],
+            "image": "quay.io/jetstack/cert-manager-webhook:v1.19.2",
+            "imagePullPolicy": "IfNotPresent",
+            "livenessProbe": {
+              "failureThreshold": 3,
+              "httpGet": {
+                "path": "/livez",
+                "port": "healthcheck",
+                "scheme": "HTTP"
+              },
+              "initialDelaySeconds": 60,
+              "periodSeconds": 10,
+              "successThreshold": 1,
+              "timeoutSeconds": 1
+            },
+            "name": "cert-manager-webhook",
+            "ports": [
+              {
+                "containerPort": 10250,
+                "name": "https",
+                "protocol": "TCP"
+              },
+              {
+                "containerPort": 6080,
+                "name": "healthcheck",
+                "protocol": "TCP"
+              },
+              {
+                "containerPort": 9402,
+                "name": "http-metrics",
+                "protocol": "TCP"
+              }
+            ],
+            "readinessProbe": {
+              "failureThreshold": 3,
+              "httpGet": {
+                "path": "/healthz",
+                "port": "healthcheck",
+                "scheme": "HTTP"
+              },
+              "initialDelaySeconds": 5,
+              "periodSeconds": 5,
+              "successThreshold": 1,
+              "timeoutSeconds": 1
+            },
+            "securityContext": {
+              "allowPrivilegeEscalation": false,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              },
+              "readOnlyRootFilesystem": true
+            },
+            "volumeMounts": [
+              {
+                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                "name": "serviceaccount-token",
+                "readOnly": true
+              }
+            ]
+          }
+        ],
+        "enableServiceLinks": false,
+        "nodeSelector": {
+          "kubernetes.io/os": "linux"
+        },
+        "priorityClassName": "system-cluster-critical",
+        "securityContext": {
+          "runAsNonRoot": true,
+          "seccompProfile": {
+            "type": "RuntimeDefault"
+          }
+        },
+        "serviceAccountName": "cert-manager-webhook",
+        "volumes": [
+          {
+            "name": "serviceaccount-token",
+            "projected": {
+              "defaultMode": 292,
+              "sources": [
+                {
+                  "serviceAccountToken": {
+                    "expirationSeconds": 3607,
+                    "path": "token"
+                  }
+                },
+                {
+                  "configMap": {
+                    "items": [
+                      {
+                        "key": "ca.crt",
+                        "path": "ca.crt"
+                      }
+                    ],
+                    "name": "kube-root-ca.crt"
+                  }
+                },
+                {
+                  "downwardAPI": {
+                    "items": [
+                      {
+                        "fieldRef": {
+                          "apiVersion": "v1",
+                          "fieldPath": "metadata.namespace"
+                        },
+                        "path": "namespace"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

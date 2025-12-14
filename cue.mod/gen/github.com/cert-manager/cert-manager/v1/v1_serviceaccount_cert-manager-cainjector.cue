@@ -1,0 +1,20 @@
+package v1
+
+serviceaccount: "cert-manager-cainjector": {
+	apiVersion:                   "v1"
+	automountServiceAccountToken: false
+	kind:                         "ServiceAccount"
+	metadata: {
+		labels: {
+			app:                            "cainjector"
+			"app.kubernetes.io/component":  "cainjector"
+			"app.kubernetes.io/instance":   "cert-manager"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "cainjector"
+			"app.kubernetes.io/version":    "v1.19.2"
+			"helm.sh/chart":                "cert-manager-v1.19.2"
+		}
+		name:      "cert-manager-cainjector"
+		namespace: "cert-manager"
+	}
+}
