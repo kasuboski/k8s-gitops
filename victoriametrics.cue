@@ -127,6 +127,10 @@ _vlogs: {
 				maxDiskUsagePerURL: "1GiB"
 			}
 
+			k8sCollector: {
+				enabled: true
+			}
+
 			// Resource Constraints
 			resources: {
 				limits: {
