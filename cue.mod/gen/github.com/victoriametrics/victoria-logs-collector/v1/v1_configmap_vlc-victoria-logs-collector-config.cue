@@ -26,7 +26,7 @@ configmap: "vlc-victoria-logs-collector-config": {
 			sinks: remote_write_0: {
 				type: "http"
 				inputs: ["json_parser"]
-				uri: "http://victoria-logs-server.victoria-metrics.svc:9428/insert/jsonline"
+				uri: "http://vlsingle-victoria-logs-server.victoria-metrics.svc:9428/insert/jsonline"
 				encoding: codec: "json"
 				framing: method: "newline_delimited"
 				healthcheck: enabled: false

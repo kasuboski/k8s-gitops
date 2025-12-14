@@ -16,7 +16,7 @@ spec:
     template:
         metadata:
             annotations:
-                checksum/config: 9df34d52dbe5e4151b7d49db2c441e6e01d06b2d7559d34b8f6a26e19a6bba70
+                checksum/config: c31c2f5eacf18bd86ce09e55bcb9b506b4f4d9244c5c9d0f39637e2c60a44aae
             labels:
                 app.kubernetes.io/instance: vlc
                 app.kubernetes.io/managed-by: Helm

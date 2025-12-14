@@ -68,7 +68,7 @@ vendor: "github.com/victoriametrics/victoria-logs-collector/v1": helm: {
 	namespace:   "victoria-metrics"
 	values: {
 		remoteWrite: [{
-			url: "http://victoria-logs-server.victoria-metrics.svc:9428"
+			url: "http://vlsingle-victoria-logs-server.victoria-metrics.svc:9428"
 		}]
 		resources: {
 			limits: {
@@ -151,11 +151,11 @@ vendor: "github.com/cert-manager/cert-manager/v1": helm: {
 	releaseName: "cert-manager"
 	namespace:   "cert-manager"
 	values: {
-		crds: enabled: true
+		crds: enabled:             true
 		global: priorityClassName: "system-cluster-critical"
 		replicaCount: 2
 		podDisruptionBudget: {
-			enabled:     true
+			enabled:      true
 			minAvailable: 1
 		}
 		automountServiceAccountToken: false
@@ -200,7 +200,7 @@ vendor: "github.com/cert-manager/cert-manager/v1": helm: {
 		webhook: {
 			replicaCount: 3
 			podDisruptionBudget: {
-				enabled:     true
+				enabled:      true
 				minAvailable: 1
 			}
 			automountServiceAccountToken: false
@@ -249,7 +249,7 @@ vendor: "github.com/cert-manager/cert-manager/v1": helm: {
 			]
 			replicaCount: 2
 			podDisruptionBudget: {
-				enabled:     true
+				enabled:      true
 				minAvailable: 1
 			}
 			automountServiceAccountToken: false
