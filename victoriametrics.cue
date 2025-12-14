@@ -66,7 +66,7 @@ _vlogs: {
 
 	// VLSingle: VictoriaLogs Server
 	vlsingle: "victoria-logs-server": {
-		apiVersion: "operator.victoriametrics.com/v1beta1"
+		apiVersion: "operator.victoriametrics.com/v1"
 		kind:       "VLSingle"
 		metadata: {
 			name:      "victoria-logs-server"
@@ -109,7 +109,7 @@ _vlogs: {
 
 	// VLAgent: Log Collector
 	vlagent: "victoria-logs-agent": {
-		apiVersion: "operator.victoriametrics.com/v1beta1"
+		apiVersion: "operator.victoriametrics.com/v1"
 		kind:       "VLAgent"
 		metadata: {
 			name:      "victoria-logs-agent"
