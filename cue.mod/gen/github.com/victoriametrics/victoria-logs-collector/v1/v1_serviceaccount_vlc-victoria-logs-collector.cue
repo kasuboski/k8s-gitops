@@ -1,0 +1,18 @@
+package v1
+
+serviceaccount: "vlc-victoria-logs-collector": {
+	apiVersion:                   "v1"
+	automountServiceAccountToken: true
+	kind:                         "ServiceAccount"
+	metadata: {
+		annotations: {}
+		labels: {
+			"app.kubernetes.io/instance":   "vlc"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "victoria-logs-collector"
+			"helm.sh/chart":                "victoria-logs-collector-0.1.2"
+		}
+		name:      "vlc-victoria-logs-collector"
+		namespace: "victoria-metrics"
+	}
+}

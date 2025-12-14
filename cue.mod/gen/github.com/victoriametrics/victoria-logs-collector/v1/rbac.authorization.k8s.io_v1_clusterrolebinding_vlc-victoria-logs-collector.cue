@@ -1,0 +1,25 @@
+package v1
+
+clusterrolebinding: "vlc-victoria-logs-collector": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "ClusterRoleBinding"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/instance":   "vlc"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "victoria-logs-collector"
+			"helm.sh/chart":                "victoria-logs-collector-0.1.2"
+		}
+		name: "vlc-victoria-logs-collector"
+	}
+	roleRef: {
+		apiGroup: "rbac.authorization.k8s.io"
+		kind:     "ClusterRole"
+		name:     "vlc-victoria-logs-collector"
+	}
+	subjects: [{
+		kind:      "ServiceAccount"
+		name:      "vlc-victoria-logs-collector"
+		namespace: "victoria-metrics"
+	}]
+}

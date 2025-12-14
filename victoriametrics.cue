@@ -1,10 +1,12 @@
 package apps
 
 import "github.com/victoriametrics/victoria-metrics-k8s-stack/v1"
+import vlc "github.com/victoriametrics/victoria-logs-collector/v1"
 
 apps: victoriametrics: {
 	namespace: "victoria-metrics"
 	resources: v1
+	resources: vlc
 	resources: _vmOverride
 	resources: _vlogs
 }
@@ -103,43 +105,6 @@ _vlogs: {
 				requests: {
 					cpu:    "500m"
 					memory: "1Gi"
-				}
-			}
-		}
-	}
-
-	// VLAgent: Log Collector
-	vlagent: "victoria-logs-agent": {
-		apiVersion: "operator.victoriametrics.com/v1"
-		kind:       "VLAgent"
-		metadata: {
-			name:      "victoria-logs-agent"
-			namespace: "victoria-metrics"
-		}
-		spec: {
-			// Send logs to VLSingle
-			remoteWrite: [{
-				url: "http://victoria-logs-server.victoria-metrics.svc:9428/insert/jsonline"
-			}]
-
-			// Disk Buffer Limits (Ephemeral Storage)
-			remoteWriteSettings: {
-				maxDiskUsagePerURL: "1GiB"
-			}
-
-			k8sCollector: {
-				enabled: true
-			}
-
-			// Resource Constraints
-			resources: {
-				limits: {
-					cpu:    "1"
-					memory: "1Gi"
-				}
-				requests: {
-					cpu:    "100m"
-					memory: "256Mi"
 				}
 			}
 		}

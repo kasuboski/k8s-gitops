@@ -61,6 +61,28 @@ vendor: "github.com/pl4nty/cloudflare-kubernetes-gateway/cloudflare": kustomize:
 // 	namespace:   "kube-system"
 // }
 
+vendor: "github.com/victoriametrics/victoria-logs-collector/v1": helm: {
+	chart:       "oci://ghcr.io/victoriametrics/helm-charts/victoria-logs-collector"
+	version:     "0.1.2"
+	releaseName: "vlc"
+	namespace:   "victoria-metrics"
+	values: {
+		remoteWrite: [{
+			url: "http://victoria-logs-server.victoria-metrics.svc:9428"
+		}]
+		resources: {
+			limits: {
+				cpu:    "200m"
+				memory: "256Mi"
+			}
+			requests: {
+				cpu:    "100m"
+				memory: "128Mi"
+			}
+		}
+	}
+}
+
 vendor: "github.com/victoriametrics/victoria-metrics-k8s-stack/v1": helm: {
 	chart:       "oci://ghcr.io/victoriametrics/helm-charts/victoria-metrics-k8s-stack"
 	version:     "0.65.1"

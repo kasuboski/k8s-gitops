@@ -1,0 +1,85 @@
+package v1
+
+daemonset: "vlc-victoria-logs-collector": {
+	apiVersion: "apps/v1"
+	kind:       "DaemonSet"
+	metadata: {
+		labels: {
+			"app.kubernetes.io/instance":   "vlc"
+			"app.kubernetes.io/managed-by": "Helm"
+			"app.kubernetes.io/name":       "victoria-logs-collector"
+			"helm.sh/chart":                "victoria-logs-collector-0.1.2"
+		}
+		name:      "vlc-victoria-logs-collector"
+		namespace: "victoria-metrics"
+	}
+	spec: {
+		selector: matchLabels: {
+			"app.kubernetes.io/instance": "vlc"
+			"app.kubernetes.io/name":     "victoria-logs-collector"
+		}
+		template: {
+			metadata: {
+				annotations: "checksum/config": "9df34d52dbe5e4151b7d49db2c441e6e01d06b2d7559d34b8f6a26e19a6bba70"
+				labels: {
+					"app.kubernetes.io/instance":   "vlc"
+					"app.kubernetes.io/managed-by": "Helm"
+					"app.kubernetes.io/name":       "victoria-logs-collector"
+				}
+			}
+			spec: {
+				containers: [{
+					env: [{
+						name: "VECTOR_SELF_NODE_NAME"
+						valueFrom: fieldRef: fieldPath: "spec.nodeName"
+					}]
+					image:           "docker.io/timberio/vector:0.51.1-alpine"
+					imagePullPolicy: "IfNotPresent"
+					name:            "victoria-logs-collector"
+					resources: {
+						limits: {
+							cpu:    "200m"
+							memory: "256Mi"
+						}
+						requests: {
+							cpu:    "100m"
+							memory: "128Mi"
+						}
+					}
+					securityContext: {}
+					volumeMounts: [{
+						mountPath: "/var/log"
+						name:      "varlog"
+						readOnly:  true
+					}, {
+						mountPath: "/var/lib"
+						name:      "varlib"
+						readOnly:  true
+					}, {
+						mountPath: "/etc/vector"
+						name:      "config"
+						readOnly:  true
+					}, {
+						mountPath: "/vl-collector"
+						name:      "vl-collector-data"
+					}]
+				}]
+				securityContext: {}
+				serviceAccountName: "vlc-victoria-logs-collector"
+				volumes: [{
+					hostPath: path: "/var/log"
+					name: "varlog"
+				}, {
+					hostPath: path: "/var/lib"
+					name: "varlib"
+				}, {
+					configMap: name: "vlc-victoria-logs-collector-config"
+					name: "config"
+				}, {
+					hostPath: path: "/var/lib/vl-collector"
+					name: "vl-collector-data"
+				}]
+			}
+		}
+	}
+}
