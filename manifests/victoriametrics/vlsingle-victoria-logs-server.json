@@ -21,7 +21,6 @@
     },
     "retentionMaxDiskSpaceUsageBytes": "50GB",
     "retentionPeriod": "15d",
-    "storageDataPath": "/victoria-logs-data",
     "volumeMounts": [
       {
         "mountPath": "/victoria-logs-data",

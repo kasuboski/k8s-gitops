@@ -80,8 +80,6 @@ _vlogs: {
 			retentionMaxDiskSpaceUsageBytes: "50GB"
 
 			// Storage Configuration
-			storageDataPath: "/victoria-logs-data"
-
 			volumes: [{
 				name: "existing-data-volume"
 				persistentVolumeClaim: {
