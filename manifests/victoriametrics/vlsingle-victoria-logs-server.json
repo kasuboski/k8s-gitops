@@ -1,5 +1,5 @@
 {
-  "apiVersion": "operator.victoriametrics.com/v1beta1",
+  "apiVersion": "operator.victoriametrics.com/v1",
   "kind": "VLSingle",
   "metadata": {
     "labels": {
