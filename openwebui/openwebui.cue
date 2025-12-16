@@ -35,7 +35,7 @@ deployment: openwebui: spec: {
 				OAUTH_SCOPES:                  "openid email profile groups"
 				// Additional settings
 				DEFAULT_USER_ROLE:             "user"
-				ENABLE_LOGIN_FORM:             "true"
+				ENABLE_LOGIN_FORM:             "false"
 				OAUTH_UPDATE_PICTURE_ON_LOGIN: "true"
 			}
 			env: [for k, v in _envMap {name: k, value: v}]

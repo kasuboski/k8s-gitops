@@ -85,7 +85,7 @@
               },
               {
                 "name": "ENABLE_LOGIN_FORM",
-                "value": "true"
+                "value": "false"
               },
               {
                 "name": "OAUTH_UPDATE_PICTURE_ON_LOGIN",
