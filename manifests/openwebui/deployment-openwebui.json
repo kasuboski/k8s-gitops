@@ -36,6 +36,10 @@
                 "value": "true"
               },
               {
+                "name": "ENABLE_OAUTH_PERSISTENT_CONFIG",
+                "value": "false"
+              },
+              {
                 "name": "OAUTH_CLIENT_ID",
                 "value": "d8654a7c-e2b1-4308-b2d7-7c99d9e9401f"
               },
