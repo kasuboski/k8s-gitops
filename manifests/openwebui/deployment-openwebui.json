@@ -48,6 +48,10 @@
                 "value": "https://pocket-id.joshcorp.co/.well-known/openid-configuration"
               },
               {
+                "name": "OPENID_REDIRECT_URI",
+                "value": "https://openwebui.joshcorp.co/oauth/oidc/callback"
+              },
+              {
                 "name": "OAUTH_MERGE_ACCOUNTS_BY_EMAIL",
                 "value": "true"
               },
