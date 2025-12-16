@@ -30,6 +30,66 @@
               {
                 "name": "OLLAMA_BASE_URL",
                 "value": "https://ollama.joshcorp.co"
+              },
+              {
+                "name": "ENABLE_OAUTH_SIGNUP",
+                "value": "true"
+              },
+              {
+                "name": "OAUTH_CLIENT_ID",
+                "value": "d8654a7c-e2b1-4308-b2d7-7c99d9e9401f"
+              },
+              {
+                "name": "OAUTH_PROVIDER_NAME",
+                "value": "Pocket ID"
+              },
+              {
+                "name": "OPENID_PROVIDER_URL",
+                "value": "https://pocket-id.joshcorp.co/.well-known/openid-configuration"
+              },
+              {
+                "name": "OAUTH_MERGE_ACCOUNTS_BY_EMAIL",
+                "value": "true"
+              },
+              {
+                "name": "ENABLE_OAUTH_ROLE_MANAGEMENT",
+                "value": "true"
+              },
+              {
+                "name": "ENABLE_OAUTH_GROUP_MANAGEMENT",
+                "value": "true"
+              },
+              {
+                "name": "ENABLE_OAUTH_GROUP_CREATION",
+                "value": "true"
+              },
+              {
+                "name": "OAUTH_ALLOWED_ROLES",
+                "value": "users, admins"
+              },
+              {
+                "name": "OAUTH_ADMIN_ROLES",
+                "value": "admins"
+              },
+              {
+                "name": "OAUTH_ROLES_CLAIM",
+                "value": "groups"
+              },
+              {
+                "name": "OAUTH_SCOPES",
+                "value": "openid email profile groups"
+              },
+              {
+                "name": "DEFAULT_USER_ROLE",
+                "value": "user"
+              },
+              {
+                "name": "ENABLE_LOGIN_FORM",
+                "value": "true"
+              },
+              {
+                "name": "OAUTH_UPDATE_PICTURE_ON_LOGIN",
+                "value": "true"
               }
             ],
             "envFrom": [

@@ -17,7 +17,27 @@ deployment: openwebui: spec: {
 				name:          "http"
 				containerPort: 8080
 			}]
-			_envMap: OLLAMA_BASE_URL: "https://ollama.joshcorp.co"
+			_envMap: {
+				OLLAMA_BASE_URL: "https://ollama.joshcorp.co"
+				// OAuth configuration for Pocket ID
+				ENABLE_OAUTH_SIGNUP:           "true"
+				OAUTH_CLIENT_ID:               "d8654a7c-e2b1-4308-b2d7-7c99d9e9401f"
+				OAUTH_PROVIDER_NAME:           "Pocket ID"
+				OPENID_PROVIDER_URL:           "https://pocket-id.joshcorp.co/.well-known/openid-configuration"
+				OAUTH_MERGE_ACCOUNTS_BY_EMAIL: "true"
+				// Group management
+				ENABLE_OAUTH_ROLE_MANAGEMENT:  "true"
+				ENABLE_OAUTH_GROUP_MANAGEMENT: "true"
+				ENABLE_OAUTH_GROUP_CREATION:   "true"
+				OAUTH_ALLOWED_ROLES:           "users, admins"
+				OAUTH_ADMIN_ROLES:             "admins"
+				OAUTH_ROLES_CLAIM:             "groups"
+				OAUTH_SCOPES:                  "openid email profile groups"
+				// Additional settings
+				DEFAULT_USER_ROLE:             "user"
+				ENABLE_LOGIN_FORM:             "true"
+				OAUTH_UPDATE_PICTURE_ON_LOGIN: "true"
+			}
 			env: [for k, v in _envMap {name: k, value: v}]
 			envFrom: [
 				{
