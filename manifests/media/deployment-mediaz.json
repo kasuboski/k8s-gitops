@@ -43,7 +43,7 @@
                 }
               }
             ],
-            "image": "ghcr.io/kasuboski/mediaz:sha-59f9e969279357aa0a68d0ff26aa74350aadf67d",
+            "image": "ghcr.io/kasuboski/mediaz:sha-2a6626f52abbdd983bac6665bee16d4cdc459ecc",
             "livenessProbe": {
               "failureThreshold": 5,
               "httpGet": {
