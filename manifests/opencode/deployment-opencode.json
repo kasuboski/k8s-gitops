@@ -73,6 +73,10 @@
                 "mountPath": "/projects",
                 "name": "projects",
                 "subPath": "opencode-projects"
+              },
+              {
+                "mountPath": "/home/opencode/.local/share/opencode",
+                "name": "opencode-data"
               }
             ]
           }
@@ -85,6 +89,12 @@
             "name": "projects",
             "persistentVolumeClaim": {
               "claimName": "opencode-projects"
+            }
+          },
+          {
+            "name": "opencode-data",
+            "persistentVolumeClaim": {
+              "claimName": "opencode-data"
             }
           }
         ]

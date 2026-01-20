@@ -1,0 +1,23 @@
+{
+  "apiVersion": "v1",
+  "kind": "PersistentVolumeClaim",
+  "metadata": {
+    "labels": {
+      "app": "opencode",
+      "app.kubernetes.io/name": "opencode",
+      "k8s.joshcorp.co/app": "opencode"
+    },
+    "name": "opencode-data"
+  },
+  "spec": {
+    "accessModes": [
+      "ReadWriteOnce"
+    ],
+    "resources": {
+      "requests": {
+        "storage": "100Mi"
+      }
+    },
+    "storageClassName": "longhorn"
+  }
+}

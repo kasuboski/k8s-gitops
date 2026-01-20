@@ -41,6 +41,9 @@ deployment: opencode: spec: {
 				name:      "projects"
 				subPath:   "opencode-projects"
 				mountPath: "/projects"
+			}, {
+				name:      "opencode-data"
+				mountPath: "/home/opencode/.local/share/opencode"
 			}]
 			securityContext: {
 				allowPrivilegeEscalation: false
@@ -53,6 +56,9 @@ deployment: opencode: spec: {
 		volumes: [{
 			name: "projects"
 			persistentVolumeClaim: claimName: "opencode-projects"
+		}, {
+			name: "opencode-data"
+			persistentVolumeClaim: claimName: "opencode-data"
 		}]
 	}
 }
@@ -67,6 +73,18 @@ persistentvolumeclaim: "opencode-projects": {
 		accessModes: ["ReadWriteMany"]
 		volumeName: "storage-opencode"
 		resources: requests: storage: "1Mi"
+	}
+}
+
+persistentvolumeclaim: "opencode-data": {
+	metadata: labels: {
+		app:                      "opencode"
+		"app.kubernetes.io/name": "opencode"
+	}
+	spec: {
+		storageClassName: "longhorn"
+		accessModes: ["ReadWriteOnce"]
+		resources: requests: storage: "100Mi"
 	}
 }
 
