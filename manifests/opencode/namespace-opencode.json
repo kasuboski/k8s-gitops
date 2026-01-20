@@ -1,0 +1,10 @@
+{
+  "apiVersion": "v1",
+  "kind": "Namespace",
+  "metadata": {
+    "labels": {
+      "k8s.joshcorp.co/app": "opencode"
+    },
+    "name": "opencode"
+  }
+}

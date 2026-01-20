@@ -1,0 +1,94 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "labels": {
+      "k8s.joshcorp.co/app": "opencode"
+    },
+    "name": "opencode"
+  },
+  "spec": {
+    "selector": {
+      "matchLabels": {
+        "app.kubernetes.io/name": "opencode"
+      }
+    },
+    "strategy": {
+      "type": "Recreate"
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "opencode",
+          "app.kubernetes.io/name": "opencode"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "env": [
+              {
+                "name": "OPENCODE_SERVER_PASSWORD",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "key": "WEBUI_PASSWORD",
+                    "name": "opencode"
+                  }
+                }
+              }
+            ],
+            "image": "ghcr.io/kasuboski/opencode-container:sha-822f02a3e4d14926cfea61c6169eb4d12c501382",
+            "name": "opencode",
+            "ports": [
+              {
+                "containerPort": 4096,
+                "name": "http"
+              }
+            ],
+            "resources": {
+              "limits": {
+                "cpu": "1000m",
+                "memory": "2Gi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "512Mi"
+              }
+            },
+            "securityContext": {
+              "allowPrivilegeEscalation": false,
+              "capabilities": {
+                "drop": [
+                  "All"
+                ]
+              },
+              "runAsNonRoot": true,
+              "runAsUser": 1000,
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              }
+            },
+            "volumeMounts": [
+              {
+                "mountPath": "/projects",
+                "name": "projects",
+                "subPath": "opencode-projects"
+              }
+            ]
+          }
+        ],
+        "securityContext": {
+          "fsGroup": 1000
+        },
+        "volumes": [
+          {
+            "name": "projects",
+            "persistentVolumeClaim": {
+              "claimName": "opencode-projects"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
