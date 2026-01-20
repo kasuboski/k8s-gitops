@@ -43,7 +43,7 @@ deployment: opencode: spec: {
 				mountPath: "/projects"
 			}, {
 				name:      "opencode-data"
-				mountPath: "/home/opencode/.local/share/opencode"
+				mountPath: "/home/opencode/.local"
 			}]
 			securityContext: {
 				allowPrivilegeEscalation: false

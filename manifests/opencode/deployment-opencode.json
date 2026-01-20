@@ -75,7 +75,7 @@
                 "subPath": "opencode-projects"
               },
               {
-                "mountPath": "/home/opencode/.local/share/opencode",
+                "mountPath": "/home/opencode/.local",
                 "name": "opencode-data"
               }
             ]
