@@ -19,6 +19,6 @@
       }
     },
     "storageClassName": "manual",
-    "volumeName": "storage"
+    "volumeName": "storage-opencode"
   }
 }

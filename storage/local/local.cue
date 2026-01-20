@@ -48,3 +48,27 @@ persistentvolume: storage: spec: {
 		},
 	]
 }
+
+persistentvolume: "storage-opencode": spec: {
+	storageClassName: "manual"
+	capacity: storage: "1Mi"
+	accessModes: ["ReadWriteMany"]
+	nfs: {
+		server: "zwerg.lan"
+		path:   "/storage"
+	}
+	nodeAffinity: required: nodeSelectorTerms: [
+		{
+			matchExpressions: [{
+				key:      "topology.kubernetes.io/region"
+				operator: "In"
+				values: ["home"]
+			},
+				{
+					key:      "topology.kubernetes.io/zone"
+					operator: "In"
+					values: ["austin"]
+				}]
+		},
+	]
+}

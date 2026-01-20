@@ -65,7 +65,7 @@ persistentvolumeclaim: "opencode-projects": {
 	spec: {
 		storageClassName: "manual"
 		accessModes: ["ReadWriteMany"]
-		volumeName: "storage"
+		volumeName: "storage-opencode"
 		resources: requests: storage: "1Mi"
 	}
 }
