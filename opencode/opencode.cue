@@ -1,6 +1,6 @@
 package opencode
 
-_imageTag: "sha-1cdd6bd8ca6d7a33b4c63a29dab8a0374d5b98a0"
+_imageTag: "sha-0fe92206e1bd124fe27f15629c8d6a2a24313eca"
 
 namespace: opencode: {
 	apiVersion: "v1"
