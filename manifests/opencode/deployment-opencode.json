@@ -37,7 +37,7 @@
                 }
               }
             ],
-            "image": "ghcr.io/kasuboski/opencode-container:sha-0fe92206e1bd124fe27f15629c8d6a2a24313eca",
+            "image": "ghcr.io/kasuboski/opencode-container:fc03fe5",
             "name": "opencode",
             "ports": [
               {
