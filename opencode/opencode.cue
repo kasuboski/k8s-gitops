@@ -24,13 +24,7 @@ deployment: opencode: spec: {
 				name:          "http"
 				containerPort: 4096
 			}]
-			env: [{
-				name: "OPENCODE_SERVER_PASSWORD"
-				valueFrom: secretKeyRef: {
-					name: "opencode"
-					key:  "WEBUI_PASSWORD"
-				}
-			}]
+
 			resources: {
 				requests: cpu:    "250m"
 				requests: memory: "512Mi"
@@ -110,12 +104,6 @@ httproute: opencode: spec: {
 			kind:      "Gateway"
 			name:      "http"
 			namespace: "envoy-gateway-system"
-		},
-		{
-			group:     "gateway.networking.k8s.io"
-			kind:      "Gateway"
-			name:      "cloudflare"
-			namespace: "cloudflare-gateway"
 		},
 	]
 	hostnames: ["opencode.joshcorp.co"]

@@ -26,17 +26,6 @@
       "spec": {
         "containers": [
           {
-            "env": [
-              {
-                "name": "OPENCODE_SERVER_PASSWORD",
-                "valueFrom": {
-                  "secretKeyRef": {
-                    "key": "WEBUI_PASSWORD",
-                    "name": "opencode"
-                  }
-                }
-              }
-            ],
             "image": "ghcr.io/kasuboski/opencode-container:a735f14",
             "name": "opencode",
             "ports": [
