@@ -1,6 +1,6 @@
 package media
 
-_imageTag: "sha-8a217a1ff2a4ad6d10676a5bf92bda0db3590487"
+_imageTag: "sha-a41fad7158f53e3d7a5ba3f39211dd16977e80d4"
 deployment: mediaz: spec: template: spec: {
 	containers: [{
 		name:  "mediaz"
