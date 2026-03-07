@@ -12,3 +12,21 @@ gateway: http: {
 		allowedRoutes: namespaces: from: "All"
 	}]
 }
+
+certificate: "joshcorp-wildcard": {
+	apiVersion: "cert-manager.io/v1"
+	kind:       "Certificate"
+	spec: {
+		secretName: "joshcorp-tls"
+		issuerRef: {
+			name: "letsencrypt-prod"
+			kind: "ClusterIssuer"
+		}
+		commonName: "*.joshcorp.co"
+		dnsNames: [
+			"*.joshcorp.co",
+			"*.int.joshcorp.co",
+			"*.ts.joshcorp.co",
+		]
+	}
+}

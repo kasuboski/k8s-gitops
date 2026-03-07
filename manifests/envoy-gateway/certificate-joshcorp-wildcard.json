@@ -1,0 +1,23 @@
+{
+  "apiVersion": "cert-manager.io/v1",
+  "kind": "Certificate",
+  "metadata": {
+    "labels": {
+      "k8s.joshcorp.co/app": "envoy-gateway"
+    },
+    "name": "joshcorp-wildcard"
+  },
+  "spec": {
+    "commonName": "*.joshcorp.co",
+    "dnsNames": [
+      "*.joshcorp.co",
+      "*.int.joshcorp.co",
+      "*.ts.joshcorp.co"
+    ],
+    "issuerRef": {
+      "kind": "ClusterIssuer",
+      "name": "letsencrypt-prod"
+    },
+    "secretName": "joshcorp-tls"
+  }
+}
