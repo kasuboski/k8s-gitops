@@ -1,0 +1,14 @@
+{
+  "apiVersion": "networking.k8s.io/v1",
+  "kind": "IngressClass",
+  "metadata": {
+    "annotations": {},
+    "labels": {
+      "k8s.joshcorp.co/app": "tailscale"
+    },
+    "name": "tailscale"
+  },
+  "spec": {
+    "controller": "tailscale.com/ts-ingress"
+  }
+}

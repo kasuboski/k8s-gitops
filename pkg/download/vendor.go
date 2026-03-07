@@ -17,14 +17,14 @@ import (
 )
 
 type Helm struct {
-	Chart        string
-	Version      string
-	Repo         string
-	Values       map[string]interface{}
-	ReleaseName  string
-	Namespace    string
-	IncludeCRDs  *bool
-	SkipTests    *bool
+	Chart       string
+	Version     string
+	Repo        string
+	Values      map[string]any
+	ReleaseName string
+	Namespace   string
+	IncludeCRDs *bool
+	SkipTests   *bool
 }
 
 type Vendor struct {
@@ -117,7 +117,7 @@ func VendorHelm(ctx context.Context, pkg string, h Helm) error {
 
 	// Create temporary values file if values provided
 	var valuesFile string
-	if h.Values != nil && len(h.Values) > 0 {
+	if len(h.Values) > 0 {
 		valuesFile, err = createTempValuesFile(h.Values)
 		if err != nil {
 			return fmt.Errorf("failed to create values file: %w", err)
@@ -141,7 +141,7 @@ func VendorHelm(ctx context.Context, pkg string, h Helm) error {
 	return nil
 }
 
-func createTempValuesFile(values map[string]interface{}) (string, error) {
+func createTempValuesFile(values map[string]any) (string, error) {
 	// Marshal values to YAML
 	b, err := yaml.Marshal(values)
 	if err != nil {
@@ -222,12 +222,11 @@ func RunHelmTemplate(ctx context.Context, pkg, outputDir string, h Helm, valuesF
 }
 
 func splitHelmYAML(data []byte, outputDir string) error {
-	// Parse multi-document YAML and write each document to a separate file
 	decoder := yaml.NewDecoder(strings.NewReader(string(data)))
 	fileIndex := 0
 
 	for {
-		var doc map[string]interface{}
+		var doc map[string]any
 		if err := decoder.Decode(&doc); err != nil {
 			if err.Error() == "EOF" {
 				break
@@ -235,40 +234,35 @@ func splitHelmYAML(data []byte, outputDir string) error {
 			return fmt.Errorf("document decode failed: %w", err)
 		}
 
-		// Skip empty documents
 		if len(doc) == 0 {
 			continue
 		}
 
-		// Extract metadata for filename
+		fixNilStringValues(doc)
+
 		apiVersion, _ := doc["apiVersion"].(string)
 		kind, _ := doc["kind"].(string)
 
 		var name string
-		if metadata, ok := doc["metadata"].(map[string]interface{}); ok {
+		if metadata, ok := doc["metadata"].(map[string]any); ok {
 			name, _ = metadata["name"].(string)
 		}
 
-		// Generate filename: {apiVersion}_{kind}_{name}.yaml
-		// Replace slashes in apiVersion (e.g., apps/v1 -> apps_v1)
 		filename := fmt.Sprintf("%s_%s_%s.yaml",
 			strings.ReplaceAll(apiVersion, "/", "_"),
 			strings.ToLower(kind),
 			name,
 		)
 
-		// Fallback to index-based naming if we can't extract metadata
 		if apiVersion == "" || kind == "" || name == "" {
 			filename = fmt.Sprintf("resource_%d.yaml", fileIndex)
 		}
 
-		// Marshal document back to YAML
 		out, err := yaml.Marshal(doc)
 		if err != nil {
 			return fmt.Errorf("couldn't marshal document: %w", err)
 		}
 
-		// Write to file
 		filePath := path.Join(outputDir, filename)
 		if err := os.WriteFile(filePath, out, 0644); err != nil {
 			return fmt.Errorf("couldn't write file %s: %w", filename, err)
@@ -278,6 +272,23 @@ func splitHelmYAML(data []byte, outputDir string) error {
 	}
 
 	return nil
+}
+
+func fixNilStringValues(v any) {
+	switch val := v.(type) {
+	case map[string]any:
+		for k, v := range val {
+			if v == nil && (k == "value" || k == "name") {
+				val[k] = ""
+			} else {
+				fixNilStringValues(v)
+			}
+		}
+	case []any:
+		for _, item := range val {
+			fixNilStringValues(item)
+		}
+	}
 }
 
 func RunKustomize(ctx context.Context, pkg string, k Kustomize) error {
@@ -300,7 +311,6 @@ func ConvertYaml(ctx context.Context, p string, pkg string) error {
 		return err
 	}
 
-	// Remove null httpHeaders from YAML files before CUE import
 	err = sanitizeNullHttpHeaders(p)
 	if err != nil {
 		return err
@@ -421,12 +431,10 @@ func sanitizeNullHttpHeaders(p string) error {
 			continue
 		}
 
-		// Skip files without the problematic pattern
 		if !strings.Contains(string(data), "httpHeaders: null") {
 			continue
 		}
 
-		// Remove lines containing httpHeaders: null
 		lines := strings.Split(string(data), "\n")
 		var filtered []string
 		for _, line := range lines {

@@ -77,6 +77,99 @@ func TestVendorKustomize(t *testing.T) {
 	assert.NotNil(t, ing)
 }
 
+func TestFixNilStringValues(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    map[string]any
+		expected map[string]any
+	}{
+		{
+			name: "deployment with empty env value",
+			input: map[string]any{
+				"apiVersion": "apps/v1",
+				"kind":       "Deployment",
+				"metadata": map[string]any{
+					"name":      "operator",
+					"namespace": "tailscale",
+				},
+				"spec": map[string]any{
+					"template": map[string]any{
+						"spec": map[string]any{
+							"containers": []any{
+								map[string]any{
+									"name": "operator",
+									"env": []any{
+										map[string]any{
+											"name":  "OPERATOR_HOSTNAME",
+											"value": "tailscale-operator",
+										},
+										map[string]any{
+											"name":  "OPERATOR_LOGIN_SERVER",
+											"value": nil,
+										},
+										map[string]any{
+											"name": "OPERATOR_NAMESPACE",
+											"valueFrom": map[string]any{
+												"fieldRef": map[string]any{
+													"fieldPath": "metadata.namespace",
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			expected: map[string]any{
+				"apiVersion": "apps/v1",
+				"kind":       "Deployment",
+				"metadata": map[string]any{
+					"name":      "operator",
+					"namespace": "tailscale",
+				},
+				"spec": map[string]any{
+					"template": map[string]any{
+						"spec": map[string]any{
+							"containers": []any{
+								map[string]any{
+									"name": "operator",
+									"env": []any{
+										map[string]any{
+											"name":  "OPERATOR_HOSTNAME",
+											"value": "tailscale-operator",
+										},
+										map[string]any{
+											"name":  "OPERATOR_LOGIN_SERVER",
+											"value": "",
+										},
+										map[string]any{
+											"name": "OPERATOR_NAMESPACE",
+											"valueFrom": map[string]any{
+												"fieldRef": map[string]any{
+													"fieldPath": "metadata.namespace",
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fixNilStringValues(tt.input)
+			assert.Equal(t, tt.expected, tt.input)
+		})
+	}
+}
+
 func TestVendorDownload(t *testing.T) {
 	vendorDir = t.TempDir()
 	ctx := context.Background()

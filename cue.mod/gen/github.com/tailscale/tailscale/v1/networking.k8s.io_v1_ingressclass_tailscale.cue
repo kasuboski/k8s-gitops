@@ -1,0 +1,11 @@
+package v1
+
+ingressclass: tailscale: {
+	apiVersion: "networking.k8s.io/v1"
+	kind:       "IngressClass"
+	metadata: {
+		annotations: {}
+		name: "tailscale"
+	}
+	spec: controller: "tailscale.com/ts-ingress"
+}

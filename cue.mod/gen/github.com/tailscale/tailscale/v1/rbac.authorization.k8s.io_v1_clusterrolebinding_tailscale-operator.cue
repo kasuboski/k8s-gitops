@@ -1,0 +1,17 @@
+package v1
+
+clusterrolebinding: "tailscale-operator": {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "ClusterRoleBinding"
+	metadata: name: "tailscale-operator"
+	roleRef: {
+		apiGroup: "rbac.authorization.k8s.io"
+		kind:     "ClusterRole"
+		name:     "tailscale-operator"
+	}
+	subjects: [{
+		kind:      "ServiceAccount"
+		name:      "operator"
+		namespace: "tailscale"
+	}]
+}

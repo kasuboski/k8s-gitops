@@ -110,17 +110,15 @@ vendor: "github.com/victoriametrics/victoria-metrics-k8s-stack/v1": helm: {
 		grafana: plugins: ["victoriametrics-metrics-datasource", "victoriametrics-logs-datasource"]
 		vmalert: enabled: false
 		vmauth: enabled:  false
-		vmagent: {
-			route: {
-				enabled: true
-				parentRefs: [
-					{
-						name:      "http"
-						namespace: "envoy-gateway-system"
-					},
-				]
-				hostnames: ["vmagent.joshcorp.co"]
-			}
+		vmagent: route: {
+			enabled: true
+			parentRefs: [
+				{
+					name:      "http"
+					namespace: "envoy-gateway-system"
+				},
+			]
+			hostnames: ["vmagent.joshcorp.co"]
 		}
 		kubeControllerManager: vmScrape: spec: endpoints: [{
 			bearerTokenFile: "/var/run/secrets/kubernetes.io/serviceaccount/token"
@@ -335,6 +333,14 @@ vendor: "github.com/cert-manager/cert-manager/v1": helm: {
 			}]
 		}
 	}
+}
+
+vendor: "github.com/tailscale/tailscale/v1": helm: {
+	chart:       "tailscale/tailscale-operator"
+	version:     "1.94.2"
+	releaseName: "tailscale-operator"
+	namespace:   "tailscale"
+	values: apiServerProxyConfig: mode: "noauth"
 }
 
 vendorList: [...#Vendor]

@@ -6,6 +6,7 @@ import (
 	appsv1 "k8s.io/api/apps/v1"
 	storagev1 "k8s.io/api/storage/v1"
 	schedulingv1 "k8s.io/api/scheduling/v1"
+	networkingv1 "k8s.io/api/networking/v1"
 )
 
 #Resource: {
@@ -20,7 +21,7 @@ import (
 #KindGen: [for k, _ in #KindObject {k}]
 
 // cue eval -e '#KindGen'
-#Kinds: ["cronjob", "clusterrole", "clusterrolebinding", "configmap", "serviceaccount", "deployment", "customresourcedefinition", "namespace", "role", "rolebinding", "service", "job", "gatewayclass", "gateway", "apiservice", "validatingwebhookconfiguration", "mutatingwebhookconfiguration", "daemonset", "secret", "ipaddresspool", "l2advertisement", "dopplersecret", "storageclass", "persistentvolume", "persistentvolumeclaim", "statefulset", "networkpolicy", "appproject", "httproute", "priorityclass", "poddisruptionbudget", "vmagent", "vmalert", "vmalertmanager", "vmnodescrape", "vmrule", "vmservicescrape", "vmsingle", "vlagent", "vlsingle", "issuer", "certificate"]
+#Kinds: ["cronjob", "clusterrole", "clusterrolebinding", "configmap", "serviceaccount", "deployment", "customresourcedefinition", "namespace", "role", "rolebinding", "service", "job", "gatewayclass", "gateway", "apiservice", "validatingwebhookconfiguration", "mutatingwebhookconfiguration", "daemonset", "secret", "ipaddresspool", "l2advertisement", "dopplersecret", "storageclass", "persistentvolume", "persistentvolumeclaim", "statefulset", "networkpolicy", "appproject", "httproute", "priorityclass", "poddisruptionbudget", "vmagent", "vmalert", "vmalertmanager", "vmnodescrape", "vmrule", "vmservicescrape", "vmsingle", "vlagent", "vlsingle", "issuer", "certificate", "ingressclass"]
 
 #dnsNameRegex: =~"^[a-z0-9][a-z0-9\\-\\.:]{0,251}[a-z0-9]$"
 #Name:         string & #dnsNameRegex
@@ -77,6 +78,11 @@ import (
 #Schema: priorityclass: [string]: schedulingv1.#PriorityClass & {
 	apiVersion: "scheduling.k8s.io/v1"
 	kind:       "PriorityClass"
+}
+
+#Schema: ingressclass: [string]: networkingv1.#IngressClass & {
+	apiVersion: "networking.k8s.io/v1"
+	kind:       "IngressClass"
 }
 
 #Schema: httproute: [Name=string]: {

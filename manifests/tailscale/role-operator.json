@@ -1,0 +1,126 @@
+{
+  "apiVersion": "rbac.authorization.k8s.io/v1",
+  "kind": "Role",
+  "metadata": {
+    "labels": {
+      "k8s.joshcorp.co/app": "tailscale"
+    },
+    "name": "operator",
+    "namespace": "tailscale"
+  },
+  "rules": [
+    {
+      "apiGroups": [
+        ""
+      ],
+      "resources": [
+        "secrets",
+        "serviceaccounts",
+        "configmaps"
+      ],
+      "verbs": [
+        "create",
+        "delete",
+        "deletecollection",
+        "get",
+        "list",
+        "patch",
+        "update",
+        "watch"
+      ]
+    },
+    {
+      "apiGroups": [
+        ""
+      ],
+      "resources": [
+        "pods"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "watch",
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        ""
+      ],
+      "resources": [
+        "pods/status"
+      ],
+      "verbs": [
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "apps"
+      ],
+      "resources": [
+        "statefulsets",
+        "deployments"
+      ],
+      "verbs": [
+        "create",
+        "delete",
+        "deletecollection",
+        "get",
+        "list",
+        "patch",
+        "update",
+        "watch"
+      ]
+    },
+    {
+      "apiGroups": [
+        "discovery.k8s.io"
+      ],
+      "resources": [
+        "endpointslices"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "watch",
+        "create",
+        "update",
+        "deletecollection"
+      ]
+    },
+    {
+      "apiGroups": [
+        "rbac.authorization.k8s.io"
+      ],
+      "resources": [
+        "roles",
+        "rolebindings"
+      ],
+      "verbs": [
+        "get",
+        "create",
+        "patch",
+        "update",
+        "list",
+        "watch",
+        "deletecollection"
+      ]
+    },
+    {
+      "apiGroups": [
+        "monitoring.coreos.com"
+      ],
+      "resources": [
+        "servicemonitors"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "update",
+        "create",
+        "delete"
+      ]
+    }
+  ]
+}

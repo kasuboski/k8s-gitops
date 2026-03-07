@@ -1,0 +1,32 @@
+package v1
+
+role: proxies: {
+	apiVersion: "rbac.authorization.k8s.io/v1"
+	kind:       "Role"
+	metadata: {
+		name:      "proxies"
+		namespace: "tailscale"
+	}
+	rules: [{
+		apiGroups: [""]
+		resources: ["secrets"]
+		verbs: [
+			"create",
+			"delete",
+			"deletecollection",
+			"get",
+			"list",
+			"patch",
+			"update",
+			"watch",
+		]
+	}, {
+		apiGroups: [""]
+		resources: ["events"]
+		verbs: [
+			"create",
+			"patch",
+			"get",
+		]
+	}]
+}
