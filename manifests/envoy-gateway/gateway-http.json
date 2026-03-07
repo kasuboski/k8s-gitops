@@ -9,6 +9,13 @@
   },
   "spec": {
     "gatewayClassName": "eg",
+    "infrastructure": {
+      "parametersRef": {
+        "group": "gateway.envoyproxy.io",
+        "kind": "EnvoyProxy",
+        "name": "tailscale-proxy"
+      }
+    },
     "listeners": [
       {
         "allowedRoutes": {
