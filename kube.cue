@@ -98,7 +98,7 @@ import (
 			name:      string
 			namespace: string
 		}]
-		hostnames: [string]
+		hostnames: [...string]
 		rules: [...{
 			backendRefs: [...{
 				group:  string | *""

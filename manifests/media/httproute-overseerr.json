@@ -11,7 +11,8 @@
   },
   "spec": {
     "hostnames": [
-      "overseerr.joshcorp.co"
+      "overseerr.joshcorp.co",
+      "overseerr.int.joshcorp.co"
     ],
     "parentRefs": [
       {

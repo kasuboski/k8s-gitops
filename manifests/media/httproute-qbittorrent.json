@@ -11,7 +11,8 @@
   },
   "spec": {
     "hostnames": [
-      "qbittorrent.joshcorp.co"
+      "qbittorrent.joshcorp.co",
+      "qbittorrent.int.joshcorp.co"
     ],
     "parentRefs": [
       {

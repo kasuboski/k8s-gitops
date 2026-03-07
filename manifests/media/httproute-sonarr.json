@@ -11,7 +11,8 @@
   },
   "spec": {
     "hostnames": [
-      "sonarr.joshcorp.co"
+      "sonarr.joshcorp.co",
+      "sonarr.int.joshcorp.co"
     ],
     "parentRefs": [
       {

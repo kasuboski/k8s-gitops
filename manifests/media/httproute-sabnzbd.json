@@ -11,7 +11,8 @@
   },
   "spec": {
     "hostnames": [
-      "sabnzbd.joshcorp.co"
+      "sabnzbd.joshcorp.co",
+      "sabnzbd.int.joshcorp.co"
     ],
     "parentRefs": [
       {

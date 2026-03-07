@@ -77,7 +77,7 @@ httproute: [Name=string]: {
 				namespace: "cloudflare-gateway"
 			},
 		]
-		hostnames: [string] | *["\(Name).joshcorp.co"]
+		hostnames: [...string] | *["\(Name).joshcorp.co", "\(Name).int.joshcorp.co"]
 		rules: [
 			{
 				backendRefs: [

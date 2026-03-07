@@ -88,7 +88,8 @@ httproute: mediaz: spec: {
 			name:      "http"
 			namespace: "envoy-gateway-system"
 		},
-	]
+	],
+	hostnames: ["mediaz.int.joshcorp.co"]
 }
 
 persistentvolumeclaim: mediaz: spec: resources: requests: storage: "512Mi"

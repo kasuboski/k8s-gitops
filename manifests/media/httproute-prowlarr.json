@@ -11,7 +11,8 @@
   },
   "spec": {
     "hostnames": [
-      "prowlarr.joshcorp.co"
+      "prowlarr.joshcorp.co",
+      "prowlarr.int.joshcorp.co"
     ],
     "parentRefs": [
       {

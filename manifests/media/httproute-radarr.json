@@ -11,7 +11,8 @@
   },
   "spec": {
     "hostnames": [
-      "radarr.joshcorp.co"
+      "radarr.joshcorp.co",
+      "radarr.int.joshcorp.co"
     ],
     "parentRefs": [
       {

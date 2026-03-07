@@ -11,7 +11,8 @@
   },
   "spec": {
     "hostnames": [
-      "lidarr.joshcorp.co"
+      "lidarr.joshcorp.co",
+      "lidarr.int.joshcorp.co"
     ],
     "parentRefs": [
       {
