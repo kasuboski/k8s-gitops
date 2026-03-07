@@ -7,24 +7,24 @@
     },
     "name": "letsencrypt-prod"
   },
-  "server": "https://acme-v02.api.letsencrypt.org/directory",
-  "solvers": [
-    {
-      "dns01": {
-        "cloudflare": {
-          "apiTokenSecretRef": {
-            "key": "API_TOKEN",
-            "name": "cert-manager"
-          }
-        }
-      }
-    }
-  ],
   "spec": {
     "acme": {
       "privateKeySecretRef": {
         "name": "letsencrypt-prod"
-      }
+      },
+      "server": "https://acme-v02.api.letsencrypt.org/directory",
+      "solvers": [
+        {
+          "dns01": {
+            "cloudflare": {
+              "apiTokenSecretRef": {
+                "key": "API_TOKEN",
+                "name": "cert-manager"
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

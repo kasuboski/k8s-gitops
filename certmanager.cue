@@ -10,12 +10,16 @@ apps: certmanager: {
 _cert: clusterissuer: "letsencrypt-prod": {
 	apiVersion: "cert-manager.io/v1"
 	kind:       "ClusterIssuer"
-	spec: acme: privateKeySecretRef: name: "letsencrypt-prod"
-	server: "https://acme-v02.api.letsencrypt.org/directory"
-	solvers: [
-		{dns01: cloudflare: apiTokenSecretRef: {
-			key:  "API_TOKEN"
-			name: "cert-manager"
-		}
-		}]
+	spec: acme: {
+		privateKeySecretRef: name: "letsencrypt-prod"
+		server: "https://acme-v02.api.letsencrypt.org/directory"
+		solvers: [
+			{
+				dns01: cloudflare: apiTokenSecretRef: {
+					key:  "API_TOKEN"
+					name: "cert-manager"
+				}
+			}
+		]
+	}
 }
