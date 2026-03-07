@@ -22,6 +22,7 @@ gateway: cloudflare: {
 		name:     "https"
 		protocol: "HTTPS"
 		port:     443
+		hostname: "*.joshcorp.co"
 		allowedRoutes: namespaces: from: "All"
 	}]
 }

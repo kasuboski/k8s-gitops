@@ -16,6 +16,7 @@
             "from": "All"
           }
         },
+        "hostname": "*.joshcorp.co",
         "name": "https",
         "port": 443,
         "protocol": "HTTPS"
