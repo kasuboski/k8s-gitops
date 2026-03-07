@@ -10,7 +10,7 @@ gateway: http: {
 		infrastructure: parametersRef: {
 			group: "gateway.envoyproxy.io"
 			kind:  "EnvoyProxy"
-			name:  "tailscale-proxy"
+			name:  "tailscale"
 		}
 		listeners: [
 			{
