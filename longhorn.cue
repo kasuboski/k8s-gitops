@@ -55,7 +55,7 @@ apps: longhorn: {
 				},
 			]
 			hostnames: [
-				"longhorn.joshcorp.co",
+				"longhorn.int.joshcorp.co",
 			]
 			rules: [
 				{
@@ -82,9 +82,7 @@ apps: longhorn: {
 	}
 }
 
-_override: namespace: "longhorn-system": {
-	metadata: labels: "pod-security.kubernetes.io/enforce": "privileged"
-}
+_override: namespace: "longhorn-system": metadata: labels: "pod-security.kubernetes.io/enforce": "privileged"
 
 // Fix service nodePort - v1 has null which conflicts with K8s schema
 // Must completely redefine the service without nodePort field

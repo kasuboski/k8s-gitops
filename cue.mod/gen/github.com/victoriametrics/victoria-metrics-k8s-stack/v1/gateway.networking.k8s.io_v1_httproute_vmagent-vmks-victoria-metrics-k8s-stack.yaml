@@ -12,7 +12,7 @@ metadata:
     namespace: victoria-metrics
 spec:
     hostnames:
-        - vmagent.joshcorp.co
+        - vmagent.int.joshcorp.co
     parentRefs:
         - name: http
           namespace: envoy-gateway-system

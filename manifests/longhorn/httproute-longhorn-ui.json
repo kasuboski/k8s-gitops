@@ -12,7 +12,7 @@
   },
   "spec": {
     "hostnames": [
-      "longhorn.joshcorp.co"
+      "longhorn.int.joshcorp.co"
     ],
     "parentRefs": [
       {

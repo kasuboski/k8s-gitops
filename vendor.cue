@@ -118,7 +118,7 @@ vendor: "github.com/victoriametrics/victoria-metrics-k8s-stack/v1": helm: {
 					namespace: "envoy-gateway-system"
 				},
 			]
-			hostnames: ["vmagent.joshcorp.co"]
+			hostnames: ["vmagent.int.joshcorp.co"]
 		}
 		kubeControllerManager: vmScrape: spec: endpoints: [{
 			bearerTokenFile: "/var/run/secrets/kubernetes.io/serviceaccount/token"
@@ -150,10 +150,10 @@ vendor: "github.com/cert-manager/cert-manager/v1": helm: {
 	releaseName: "cert-manager"
 	namespace:   "cert-manager"
 	values: {
-		crds: enabled:             true
-		config: enableGatewayAPI:  true
+		crds: enabled:            true
+		config: enableGatewayAPI: true
 		// hit cloudflare only for DNS01 challenges - where my domain is
-		dns01RecursiveNameservers: "1.1.1.1:53,1.0.0.1:53"
+		dns01RecursiveNameservers:     "1.1.1.1:53,1.0.0.1:53"
 		dns01RecursiveNameserversOnly: true
 		global: priorityClassName: "system-cluster-critical"
 		replicaCount: 2

@@ -106,7 +106,7 @@ httproute: opencode: spec: {
 			namespace: "envoy-gateway-system"
 		},
 	]
-	hostnames: ["opencode.joshcorp.co"]
+	hostnames: ["opencode.int.joshcorp.co"]
 	rules: [{
 		backendRefs: [{
 			group:  ""
