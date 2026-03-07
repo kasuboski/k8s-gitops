@@ -19,6 +19,26 @@
         "name": "http",
         "port": 80,
         "protocol": "HTTP"
+      },
+      {
+        "allowedRoutes": {
+          "namespaces": {
+            "from": "All"
+          }
+        },
+        "hostname": "*.joshcorp.co",
+        "name": "https",
+        "port": 443,
+        "protocol": "HTTPS",
+        "tls": {
+          "certificateRefs": [
+            {
+              "kind": "Secret",
+              "name": "joshcorp-tls"
+            }
+          ],
+          "mode": "Terminate"
+        }
       }
     ]
   }

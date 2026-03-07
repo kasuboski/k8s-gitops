@@ -5,12 +5,30 @@ gateway: http: {
 	kind:       "Gateway"
 	metadata: name:         "http"
 	spec: gatewayClassName: "eg"
-	spec: listeners: [{
-		name:     "http"
-		protocol: "HTTP"
-		port:     80
-		allowedRoutes: namespaces: from: "All"
-	}]
+	spec: listeners: [
+		{
+			name:     "http"
+			protocol: "HTTP"
+			port:     80
+			allowedRoutes: namespaces: from: "All"
+		},
+		{
+			name:     "https"
+			protocol: "HTTPS"
+			port:     443
+			hostname: "*.joshcorp.co"
+			tls: {
+				mode: "Terminate"
+				certificateRefs: [
+					{
+						name: "joshcorp-tls"
+						kind: "Secret"
+					},
+				]
+			}
+			allowedRoutes: namespaces: from: "All"
+		},
+	]
 }
 
 certificate: "joshcorp-wildcard": {
