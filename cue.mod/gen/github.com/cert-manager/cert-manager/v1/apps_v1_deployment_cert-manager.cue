@@ -45,6 +45,7 @@ deployment: "cert-manager": {
 				containers: [{
 					args: [
 						"--v=2",
+						"--config=/var/cert-manager/config/config.yaml",
 						"--cluster-resource-namespace=$(POD_NAMESPACE)",
 						"--leader-election-namespace=kube-system",
 						"--acme-http01-solver-image=quay.io/jetstack/cert-manager-acmesolver:v1.19.2",
@@ -84,6 +85,9 @@ deployment: "cert-manager": {
 						readOnlyRootFilesystem: true
 					}
 					volumeMounts: [{
+						mountPath: "/var/cert-manager/config"
+						name:      "config"
+					}, {
 						mountPath: "/var/run/secrets/kubernetes.io/serviceaccount"
 						name:      "serviceaccount-token"
 						readOnly:  true
@@ -98,6 +102,9 @@ deployment: "cert-manager": {
 				}
 				serviceAccountName: "cert-manager"
 				volumes: [{
+					configMap: name: "cert-manager"
+					name: "config"
+				}, {
 					name: "serviceaccount-token"
 					projected: {
 						defaultMode: 292

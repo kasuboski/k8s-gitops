@@ -151,6 +151,7 @@ vendor: "github.com/cert-manager/cert-manager/v1": helm: {
 	namespace:   "cert-manager"
 	values: {
 		crds: enabled:             true
+		config: enableGatewayAPI:  true
 		global: priorityClassName: "system-cluster-critical"
 		replicaCount: 2
 		podDisruptionBudget: {
