@@ -2,6 +2,7 @@ package apps
 
 import (
 	"github.com/tailscale/tailscale/v1"
+	corev1 "k8s.io/api/core/v1"
 )
 
 apps: tailscale: {
@@ -24,4 +25,9 @@ _binds: clusterrolebinding: "josh-tailscale": {
 			name:     "josh.kasuboski@gmail.com"
 		},
 	]
+}
+
+_binds: namespace: tailscale: corev1.#Namespace & {
+	// needed just for the proxy
+	metadata: labels: "pod-security.kubernetes.io/enforce": "privileged"
 }
