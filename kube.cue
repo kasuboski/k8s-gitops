@@ -21,7 +21,7 @@ import (
 #KindGen: [for k, _ in #KindObject {k}]
 
 // cue eval -e '#KindGen'
-#Kinds: ["cronjob", "clusterrole", "clusterrolebinding", "configmap", "serviceaccount", "deployment", "customresourcedefinition", "namespace", "role", "rolebinding", "service", "job", "gatewayclass", "gateway", "apiservice", "validatingwebhookconfiguration", "mutatingwebhookconfiguration", "daemonset", "secret", "ipaddresspool", "l2advertisement", "dopplersecret", "storageclass", "persistentvolume", "persistentvolumeclaim", "statefulset", "networkpolicy", "appproject", "httproute", "priorityclass", "poddisruptionbudget", "vmagent", "vmalert", "vmalertmanager", "vmnodescrape", "vmrule", "vmservicescrape", "vmsingle", "vlagent", "vlsingle", "issuer", "certificate", "ingressclass"]
+#Kinds: ["cronjob", "clusterrole", "clusterrolebinding", "configmap", "serviceaccount", "deployment", "customresourcedefinition", "namespace", "role", "rolebinding", "service", "job", "gatewayclass", "gateway", "apiservice", "validatingwebhookconfiguration", "mutatingwebhookconfiguration", "daemonset", "secret", "ipaddresspool", "l2advertisement", "dopplersecret", "storageclass", "persistentvolume", "persistentvolumeclaim", "statefulset", "networkpolicy", "appproject", "httproute", "priorityclass", "poddisruptionbudget", "vmagent", "vmalert", "vmalertmanager", "vmnodescrape", "vmrule", "vmservicescrape", "vmsingle", "vlagent", "vlsingle", "clusterissuer", "issuer", "certificate", "ingressclass"]
 
 #dnsNameRegex: =~"^[a-z0-9][a-z0-9\\-\\.:]{0,251}[a-z0-9]$"
 #Name:         string & #dnsNameRegex
