@@ -2,6 +2,12 @@ package envoy_gateway
 
 import "encoding/json"
 
+#httpsHosts: [
+	{hostname: "*.joshcorp.co", name: "https"},
+	{hostname: "*.int.joshcorp.co", name: "https-int"},
+	{hostname: "*.ts.joshcorp.co", name: "https-ts"},
+]
+
 gateway: http: {
 	apiVersion: "gateway.networking.k8s.io/v1"
 	kind:       "Gateway"
@@ -19,11 +25,11 @@ gateway: http: {
 				port:     80
 				allowedRoutes: namespaces: from: "All"
 			},
-			{
-				name:     "https"
+			for _, v in #httpsHosts {
+				name:     v.name
 				protocol: "HTTPS"
 				port:     443
-				hostname: "*.joshcorp.co"
+				hostname: v.hostname
 				tls: {
 					mode: "Terminate"
 					certificateRefs: [

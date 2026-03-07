@@ -47,6 +47,48 @@
           ],
           "mode": "Terminate"
         }
+      },
+      {
+        "allowedRoutes": {
+          "namespaces": {
+            "from": "All"
+          }
+        },
+        "hostname": "*.int.joshcorp.co",
+        "name": "https-int",
+        "port": 443,
+        "protocol": "HTTPS",
+        "tls": {
+          "certificateRefs": [
+            {
+              "group": "",
+              "kind": "Secret",
+              "name": "joshcorp-tls"
+            }
+          ],
+          "mode": "Terminate"
+        }
+      },
+      {
+        "allowedRoutes": {
+          "namespaces": {
+            "from": "All"
+          }
+        },
+        "hostname": "*.ts.joshcorp.co",
+        "name": "https-ts",
+        "port": 443,
+        "protocol": "HTTPS",
+        "tls": {
+          "certificateRefs": [
+            {
+              "group": "",
+              "kind": "Secret",
+              "name": "joshcorp-tls"
+            }
+          ],
+          "mode": "Terminate"
+        }
       }
     ]
   }
