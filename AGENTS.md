@@ -9,4 +9,4 @@ After revendoring you can run `./k8s generate manifests` to update the `manifest
 
 Using `cue vet` on individual files is helpful to narrow down errors.
 
-The cloudflare-gateway/cloudflare Gateway ends up exposed to the internet. The envoy-gateway-system/http Gateway is only exposed to my local network.
+The cloudflare-gateway/cloudflare Gateway ends up exposed to the internet. The envoy-gateway-system/http Gateway is only exposed to my tailscale network.
