@@ -2,7 +2,7 @@
 
 set -ex
 
-APPS="cloudflare-gateway media default openwebui opencode tailscale"
+APPS="cloudflare-gateway media default openwebui opencode tailscale cert-manager"
 
 for a in $APPS
 do
