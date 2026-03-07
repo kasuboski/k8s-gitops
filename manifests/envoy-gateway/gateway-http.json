@@ -33,6 +33,7 @@
         "tls": {
           "certificateRefs": [
             {
+              "group": "",
               "kind": "Secret",
               "name": "joshcorp-tls"
             }

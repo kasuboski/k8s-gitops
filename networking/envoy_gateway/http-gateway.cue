@@ -23,6 +23,7 @@ gateway: http: {
 					{
 						name: "joshcorp-tls"
 						kind: "Secret"
+						group: ""
 					},
 				]
 			}
