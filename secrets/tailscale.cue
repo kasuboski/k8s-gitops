@@ -13,5 +13,6 @@ dopplersecret: "tailscale": {
 			name:      "operator-oauth"
 			namespace: "tailscale"
 		}
+		nameTransformer: "lower-snake" // tailscale operator wants client_id not CLIENT_ID
 	}
 }
