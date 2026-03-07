@@ -152,6 +152,9 @@ vendor: "github.com/cert-manager/cert-manager/v1": helm: {
 	values: {
 		crds: enabled:             true
 		config: enableGatewayAPI:  true
+		// hit cloudflare only for DNS01 challenges - where my domain is
+		dns01RecursiveNameservers: "1.1.1.1:53,1.0.0.1:53"
+		dns01RecursiveNameserversOnly: true
 		global: priorityClassName: "system-cluster-critical"
 		replicaCount: 2
 		podDisruptionBudget: {

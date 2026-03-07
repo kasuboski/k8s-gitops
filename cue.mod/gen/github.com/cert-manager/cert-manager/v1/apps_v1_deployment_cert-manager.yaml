@@ -42,6 +42,8 @@ spec:
                     - --leader-election-namespace=kube-system
                     - --acme-http01-solver-image=quay.io/jetstack/cert-manager-acmesolver:v1.19.2
                     - --max-concurrent-challenges=60
+                    - --dns01-recursive-nameservers-only=true
+                    - --dns01-recursive-nameservers=1.1.1.1:53,1.0.0.1:53
                   env:
                     - name: POD_NAMESPACE
                       valueFrom:
