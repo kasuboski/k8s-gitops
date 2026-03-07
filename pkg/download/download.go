@@ -35,7 +35,7 @@ func canonicalizeYaml(dst string) error {
 	}
 	defer f.Close()
 
-	temp, err := os.CreateTemp("", filepath.Base(dst))
+	temp, err := os.CreateTemp(filepath.Dir(dst), filepath.Base(dst)+".tmp")
 	if err != nil {
 		return fmt.Errorf("couldn't create temp file: %w", err)
 	}

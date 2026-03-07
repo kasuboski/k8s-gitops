@@ -1,0 +1,65 @@
+{
+  "apiVersion": "admissionregistration.k8s.io/v1",
+  "kind": "MutatingWebhookConfiguration",
+  "metadata": {
+    "annotations": {
+      "helm.sh/hook": "pre-install, pre-upgrade",
+      "helm.sh/hook-weight": "-1"
+    },
+    "labels": {
+      "app.kubernetes.io/component": "topology-injector",
+      "app.kubernetes.io/instance": "eg",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/name": "gateway-helm",
+      "app.kubernetes.io/version": "latest",
+      "helm.sh/chart": "gateway-helm-v0.0.0-latest",
+      "k8s.joshcorp.co/app": "envoy-gateway"
+    },
+    "name": "envoy-gateway-topology-injector.envoy-gateway-system"
+  },
+  "webhooks": [
+    {
+      "admissionReviewVersions": [
+        "v1"
+      ],
+      "clientConfig": {
+        "service": {
+          "name": "envoy-gateway",
+          "namespace": "envoy-gateway-system",
+          "path": "/inject-pod-topology",
+          "port": 9443
+        }
+      },
+      "failurePolicy": "Ignore",
+      "name": "topology.webhook.gateway.envoyproxy.io",
+      "namespaceSelector": {
+        "matchExpressions": [
+          {
+            "key": "kubernetes.io/metadata.name",
+            "operator": "In",
+            "values": [
+              "envoy-gateway-system"
+            ]
+          }
+        ]
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "apiVersions": [
+            "v1"
+          ],
+          "operations": [
+            "CREATE"
+          ],
+          "resources": [
+            "pods/binding"
+          ]
+        }
+      ],
+      "sideEffects": "None"
+    }
+  ]
+}

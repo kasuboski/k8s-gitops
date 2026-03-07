@@ -20,12 +20,15 @@
       ],
       "resources": [
         "serviceaccounts",
-        "services"
+        "services",
+        "configmaps"
       ],
       "verbs": [
         "create",
         "get",
+        "list",
         "delete",
+        "deletecollection",
         "patch"
       ]
     },
@@ -41,6 +44,7 @@
         "create",
         "get",
         "delete",
+        "deletecollection",
         "patch"
       ]
     },
@@ -56,8 +60,23 @@
       "verbs": [
         "create",
         "get",
+        "list",
         "delete",
+        "deletecollection",
         "patch"
+      ]
+    },
+    {
+      "apiGroups": [
+        "certificates.k8s.io"
+      ],
+      "resources": [
+        "clustertrustbundles"
+      ],
+      "verbs": [
+        "list",
+        "get",
+        "watch"
       ]
     }
   ]

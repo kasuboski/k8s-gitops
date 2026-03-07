@@ -1,0 +1,49 @@
+{
+  "apiVersion": "rbac.authorization.k8s.io/v1",
+  "kind": "ClusterRole",
+  "metadata": {
+    "annotations": {
+      "helm.sh/hook": "pre-install, pre-upgrade",
+      "helm.sh/hook-weight": "-1"
+    },
+    "labels": {
+      "app.kubernetes.io/instance": "eg",
+      "app.kubernetes.io/managed-by": "Helm",
+      "app.kubernetes.io/name": "gateway-helm",
+      "app.kubernetes.io/version": "latest",
+      "helm.sh/chart": "gateway-helm-v0.0.0-latest",
+      "k8s.joshcorp.co/app": "envoy-gateway"
+    },
+    "name": "eg-gateway-helm-certgen:envoy-gateway-system"
+  },
+  "rules": [
+    {
+      "apiGroups": [
+        "admissionregistration.k8s.io"
+      ],
+      "resources": [
+        "mutatingwebhookconfigurations"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "watch"
+      ]
+    },
+    {
+      "apiGroups": [
+        "admissionregistration.k8s.io"
+      ],
+      "resourceNames": [
+        "envoy-gateway-topology-injector.envoy-gateway-system"
+      ],
+      "resources": [
+        "mutatingwebhookconfigurations"
+      ],
+      "verbs": [
+        "update",
+        "patch"
+      ]
+    }
+  ]
+}

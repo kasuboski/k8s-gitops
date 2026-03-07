@@ -57,7 +57,7 @@
                 "value": "cluster.local"
               }
             ],
-            "image": "envoyproxy/gateway:v1.1.2",
+            "image": "envoyproxy/gateway:v1.7.0",
             "imagePullPolicy": "IfNotPresent",
             "livenessProbe": {
               "httpGet": {
@@ -84,6 +84,10 @@
               {
                 "containerPort": 19001,
                 "name": "metrics"
+              },
+              {
+                "containerPort": 9443,
+                "name": "webhook"
               }
             ],
             "readinessProbe": {
@@ -96,7 +100,6 @@
             },
             "resources": {
               "limits": {
-                "cpu": "500m",
                 "memory": "1024Mi"
               },
               "requests": {
@@ -105,7 +108,19 @@
               }
             },
             "securityContext": {
-              "allowPrivilegeEscalation": false
+              "allowPrivilegeEscalation": false,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              },
+              "privileged": false,
+              "runAsGroup": 65532,
+              "runAsNonRoot": true,
+              "runAsUser": 65532,
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              }
             },
             "volumeMounts": [
               {
@@ -123,7 +138,6 @@
         ],
         "imagePullSecrets": [],
         "securityContext": {
-          "runAsNonRoot": true,
           "seccompProfile": {
             "type": "RuntimeDefault"
           }

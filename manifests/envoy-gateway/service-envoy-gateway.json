@@ -35,12 +35,18 @@
         "name": "metrics",
         "port": 19001,
         "targetPort": 19001
+      },
+      {
+        "name": "webhook",
+        "port": 9443,
+        "targetPort": 9443
       }
     ],
     "selector": {
       "app.kubernetes.io/instance": "eg",
       "app.kubernetes.io/name": "gateway-helm",
       "control-plane": "envoy-gateway"
-    }
+    },
+    "type": "ClusterIP"
   }
 }

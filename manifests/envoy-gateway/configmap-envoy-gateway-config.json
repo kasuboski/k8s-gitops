@@ -1,7 +1,7 @@
 {
   "apiVersion": "v1",
   "data": {
-    "envoy-gateway.yaml": "apiVersion: gateway.envoyproxy.io/v1alpha1\nkind: EnvoyGateway\ngateway:\n  controllerName: gateway.envoyproxy.io/gatewayclass-controller\nlogging:\n  level:\n    default: info\nprovider:\n  kubernetes:\n    rateLimitDeployment:\n      container:\n        image: docker.io/envoyproxy/ratelimit:26f28d78\n      patch:\n        type: StrategicMerge\n        value:\n          spec:\n            template:\n              spec:\n                containers:\n                  - imagePullPolicy: IfNotPresent\n                    name: envoy-ratelimit\n    shutdownManager:\n      image: envoyproxy/gateway:v1.1.2\n  type: Kubernetes\n"
+    "envoy-gateway.yaml": "apiVersion: gateway.envoyproxy.io/v1alpha1\nkind: EnvoyGateway\nextensionApis: {}\ngateway:\n  controllerName: gateway.envoyproxy.io/gatewayclass-controller\nlogging:\n  level:\n    default: info\nprovider:\n  kubernetes:\n    rateLimitDeployment:\n      container:\n        image: docker.io/envoyproxy/ratelimit:3fb70258\n      patch:\n        type: StrategicMerge\n        value:\n          spec:\n            template:\n              spec:\n                containers:\n                  - imagePullPolicy: IfNotPresent\n                    name: envoy-ratelimit\n    shutdownManager:\n      image: envoyproxy/gateway:v1.7.0\n  type: Kubernetes\n"
   },
   "kind": "ConfigMap",
   "metadata": {
