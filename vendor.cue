@@ -340,7 +340,7 @@ vendor: "github.com/tailscale/tailscale/v1": helm: {
 	version:     "1.94.2"
 	releaseName: "tailscale-operator"
 	namespace:   "tailscale"
-	values: apiServerProxyConfig: mode: "noauth"
+	values: apiServerProxyConfig: mode: "true"
 }
 
 vendorList: [...#Vendor]

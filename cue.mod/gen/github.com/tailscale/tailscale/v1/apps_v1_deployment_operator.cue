@@ -50,7 +50,7 @@ deployment: operator: {
 						value: "tag:k8s"
 					}, {
 						name:  "APISERVER_PROXY"
-						value: "noauth"
+						value: "true"
 					}, {
 						name:  "PROXY_FIREWALL_MODE"
 						value: "auto"

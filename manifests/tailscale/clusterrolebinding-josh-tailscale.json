@@ -1,0 +1,22 @@
+{
+  "apiVersion": "rbac.authorization.k8s.io/v1",
+  "kind": "ClusterRoleBinding",
+  "metadata": {
+    "labels": {
+      "k8s.joshcorp.co/app": "tailscale"
+    },
+    "name": "josh-tailscale"
+  },
+  "roleRef": {
+    "apiGroup": "rbac.authorization.k8s.io",
+    "kind": "ClusterRole",
+    "name": "cluster-admin"
+  },
+  "subjects": [
+    {
+      "apiGroup": "rbac.authorization.k8s.io",
+      "kind": "User",
+      "name": "josh.kasuboski@gmail.com"
+    }
+  ]
+}
