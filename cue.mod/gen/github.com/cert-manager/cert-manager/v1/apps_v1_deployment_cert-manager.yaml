@@ -12,7 +12,7 @@ metadata:
     name: cert-manager
     namespace: cert-manager
 spec:
-    replicas: 2
+    replicas: 1
     selector:
         matchLabels:
             app.kubernetes.io/component: controller

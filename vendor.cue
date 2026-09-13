@@ -156,9 +156,9 @@ vendor: "github.com/cert-manager/cert-manager/v1": helm: {
 		dns01RecursiveNameservers:     "1.1.1.1:53,1.0.0.1:53"
 		dns01RecursiveNameserversOnly: true
 		global: priorityClassName: "system-cluster-critical"
-		replicaCount: 2
+		replicaCount: 1
 		podDisruptionBudget: {
-			enabled:      true
+			enabled:      false
 			minAvailable: 1
 		}
 		automountServiceAccountToken: false
@@ -201,9 +201,9 @@ vendor: "github.com/cert-manager/cert-manager/v1": helm: {
 			readOnly:  true
 		}]
 		webhook: {
-			replicaCount: 3
+			replicaCount: 1
 			podDisruptionBudget: {
-				enabled:      true
+				enabled:      false
 				minAvailable: 1
 			}
 			automountServiceAccountToken: false
@@ -250,9 +250,9 @@ vendor: "github.com/cert-manager/cert-manager/v1": helm: {
 			extraArgs: [
 				"--enable-certificates-data-source=true",
 			]
-			replicaCount: 2
+			replicaCount: 1
 			podDisruptionBudget: {
-				enabled:      true
+				enabled:      false
 				minAvailable: 1
 			}
 			automountServiceAccountToken: false
@@ -340,7 +340,8 @@ vendor: "github.com/cert-manager/cert-manager/v1": helm: {
 }
 
 vendor: "github.com/tailscale/tailscale/v1": helm: {
-	chart:       "tailscale/tailscale-operator"
+	chart:       "tailscale-operator"
+	repo:        "https://pkgs.tailscale.com/helmcharts"
 	version:     "1.94.2"
 	releaseName: "tailscale-operator"
 	namespace:   "tailscale"

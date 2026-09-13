@@ -17,7 +17,7 @@ deployment: "cert-manager-webhook": {
 		namespace: "cert-manager"
 	}
 	spec: {
-		replicas: 3
+		replicas: 1
 		selector: matchLabels: {
 			"app.kubernetes.io/component": "webhook"
 			"app.kubernetes.io/instance":  "cert-manager"

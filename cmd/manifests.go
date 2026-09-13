@@ -57,6 +57,10 @@ var manifestsCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
+		if err := removeStaleAppDirs("manifests"); err != nil {
+			log.Fatal(err)
+		}
+
 		for app, resources := range res {
 			appPath := path.Join("manifests", app)
 			err := os.RemoveAll(appPath)
@@ -78,6 +82,22 @@ var manifestsCmd = &cobra.Command{
 			}
 		}
 	},
+}
+
+func removeStaleAppDirs(root string) error {
+	entries, err := os.ReadDir(root)
+	if err != nil {
+		return fmt.Errorf("failed to read manifests directory: %w", err)
+	}
+	for _, entry := range entries {
+		if !entry.IsDir() || entry.Name() == "apps" {
+			continue
+		}
+		if err := os.RemoveAll(path.Join(root, entry.Name())); err != nil {
+			return fmt.Errorf("failed to remove stale app directory %q: %w", entry.Name(), err)
+		}
+	}
+	return nil
 }
 
 func init() {

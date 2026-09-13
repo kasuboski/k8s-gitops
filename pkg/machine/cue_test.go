@@ -13,12 +13,13 @@ func TestLoadNodesFromCUE(t *testing.T) {
 	require.NotNil(t, nodes)
 
 	// Verify we have the expected nodes
-	assert.Len(t, nodes, 5)
+	assert.Len(t, nodes, 6)
 	assert.Contains(t, nodes, "cherry")
 	assert.Contains(t, nodes, "blueberry")
 	assert.Contains(t, nodes, "pumpkin")
 	assert.Contains(t, nodes, "apple")
 	assert.Contains(t, nodes, "adel")
+	assert.Contains(t, nodes, "elsa")
 
 	// Verify control plane node
 	controlPlaneNodes := []string{"adel"}
@@ -32,7 +33,7 @@ func TestLoadNodesFromCUE(t *testing.T) {
 	}
 
 	// Verify worker nodes
-	workerNodes := []string{"cherry", "blueberry", "pumpkin", "apple"}
+	workerNodes := []string{"cherry", "blueberry", "pumpkin", "apple", "elsa"}
 	for _, name := range workerNodes {
 		node, ok := nodes[name]
 		require.True(t, ok, "node %s should exist", name)

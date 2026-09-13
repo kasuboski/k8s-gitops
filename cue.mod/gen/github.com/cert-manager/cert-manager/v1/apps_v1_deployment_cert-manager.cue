@@ -17,7 +17,7 @@ deployment: "cert-manager": {
 		namespace: "cert-manager"
 	}
 	spec: {
-		replicas: 2
+		replicas: 1
 		selector: matchLabels: {
 			"app.kubernetes.io/component": "controller"
 			"app.kubernetes.io/instance":  "cert-manager"
