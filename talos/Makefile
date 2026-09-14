@@ -61,7 +61,7 @@ bootstrap:
 
 .PHONY: validate
 validate:
-	@test -n "$(NODE)" || (echo "NODE is required. Usage: make validate NODE=cherry" && exit 1)
+	@test -n "$(NODE)" || (echo "NODE is required. Usage: make validate NODE=adel" && exit 1)
 	@test -f $(RESULT_FOLDER)/$(NODE).yaml || (echo "Config for $(NODE) not found. Run 'make configs' first." && exit 1)
 	talosctl validate --strict -c $(RESULT_FOLDER)/$(NODE).yaml -m metal
 

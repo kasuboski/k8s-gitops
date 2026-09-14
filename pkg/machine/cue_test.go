@@ -13,13 +13,8 @@ func TestLoadNodesFromCUE(t *testing.T) {
 	require.NotNil(t, nodes)
 
 	// Verify we have the expected nodes
-	assert.Len(t, nodes, 6)
-	assert.Contains(t, nodes, "cherry")
-	assert.Contains(t, nodes, "blueberry")
-	assert.Contains(t, nodes, "pumpkin")
-	assert.Contains(t, nodes, "apple")
+	assert.Len(t, nodes, 1)
 	assert.Contains(t, nodes, "adel")
-	assert.Contains(t, nodes, "elsa")
 
 	// Verify control plane node
 	controlPlaneNodes := []string{"adel"}
@@ -31,15 +26,6 @@ func TestLoadNodesFromCUE(t *testing.T) {
 		// Control plane nodes should have multiple patches
 		assert.Greater(t, len(node.Patches), 3, "control plane node %s should have multiple patches", name)
 	}
-
-	// Verify worker nodes
-	workerNodes := []string{"cherry", "blueberry", "pumpkin", "apple", "elsa"}
-	for _, name := range workerNodes {
-		node, ok := nodes[name]
-		require.True(t, ok, "node %s should exist", name)
-		assert.Equal(t, "worker", node.Role)
-		assert.NotEmpty(t, node.Patches, "node %s should have patches", name)
-	}
 }
 
 func TestCUENodeConfigPatches(t *testing.T) {
@@ -47,11 +33,11 @@ func TestCUENodeConfigPatches(t *testing.T) {
 	require.NoError(t, err)
 
 	// Test that patches are loaded as map[string]interface{}
-	cherry := nodes["cherry"]
-	require.NotEmpty(t, cherry.Patches)
+	adel := nodes["adel"]
+	require.NotEmpty(t, adel.Patches)
 
 	// Each patch should be a valid map
-	for i, patch := range cherry.Patches {
+	for i, patch := range adel.Patches {
 		assert.IsType(t, map[string]interface{}{}, patch, "patch %d should be a map", i)
 		// Patches should have either 'machine' or 'cluster' or other top-level keys
 		assert.NotEmpty(t, patch, "patch %d should not be empty", i)

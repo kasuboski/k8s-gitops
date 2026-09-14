@@ -20,7 +20,7 @@ This repository manages a Talos Linux Kubernetes cluster using declarative CUE c
 **Current Cluster Configuration:**
 
 - **Control Plane:** 1 node (adel) - x86 Intel machine
-- **Workers:** 4 nodes (cherry, blueberry, pumpkin, apple) - Raspberry Pi devices
+- **Workers:** None; workloads schedule on the control-plane node
 - **Networking:** KubeSpan mesh networking with Sidero Labs discovery service
 - **API Access:** DNS-based via `k8s-api.joshcorp.co`
 
@@ -84,7 +84,7 @@ This repository manages a Talos Linux Kubernetes cluster using declarative CUE c
 - Minimum: 2 CPU cores, 4GB RAM, 20GB disk
 - Network: Static or DHCP with reserved IP
 
-**Workers (Raspberry Pi):**
+**Optional Workers (Raspberry Pi):**
 - Raspberry Pi 4 or 5 (4GB+ RAM recommended)
 - MicroSD card (32GB+ Class 10 or better)
 - Optional: USB drive for ephemeral storage

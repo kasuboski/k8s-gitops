@@ -55,31 +55,4 @@ longhornPatches: {
 			minSize: "10GB" // Minimum required, will grow to fill remaining space
 		}
 	}
-
-	// NVMe Longhorn volume - uses all remaining space on NVMe disk after EPHEMERAL
-	nvmeVolume: {
-		apiVersion: "v1alpha1"
-		kind:       "UserVolumeConfig"
-		name:       "longhorn"
-		provisioning: {
-			diskSelector: match: "disk.transport == 'nvme'"
-			minSize: "10GB" // Minimum required, will grow to fill remaining space
-		}
-	}
-
-	// Raspberry Pi ephemeral volume on USB
-	rpiEphemeralUSB: _ephemeralBase & {
-		provisioning: diskSelector: match: "disk.transport == 'usb'"
-	}
-
-	// USB Longhorn volume for Raspberry Pi - uses remaining space on USB drive after EPHEMERAL
-	usbVolume: {
-		apiVersion: "v1alpha1"
-		kind:       "UserVolumeConfig"
-		name:       "longhorn"
-		provisioning: {
-			diskSelector: match: "disk.transport == 'usb'"
-			minSize: "10GB" // Minimum required, will grow to fill remaining space
-		}
-	}
 }
